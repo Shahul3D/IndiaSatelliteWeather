@@ -5,6 +5,10 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase.DisplayType;
 
 import java.io.File;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.shahul3d.indiasatelliteweather.utils.DownloadFileFromURL;
@@ -29,6 +34,7 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 
 
 	ImageViewTouch mImage;
+	TextView mapDateTime;
 	private Menu optionsMenu;
 	DownloadFileFromURL downloadMapTask;
 	SharedPreferences preference_General = null;
@@ -60,6 +66,7 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.fragment_view_map, container, false);
 		mImage = (ImageViewTouch) view.findViewById(R.id.imageViewTouch);
+		mapDateTime = (TextView) view.findViewById(R.id.map_datetime);
 		// Default image configurations
 		// mImage.setDisplayType( DisplayType.FIT_IF_BIGGER );
 		mImage.setDisplayType(DisplayType.NONE);
@@ -97,9 +104,15 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 		String imagePath = getActivity().getExternalFilesDir(Context.STORAGE_SERVICE).getAbsolutePath() + File.separator + "map.jpg";
 		Uri imageUri = Uri.parse(imagePath);
 		final int size = -1; // use the original image size
+		//TODO: check the existence of file before decode.
 		Bitmap bitmap = DecodeUtils.decode(getActivity().getApplicationContext(), imageUri, size, size);
 		if (null != bitmap) {
 			mImage.setImageBitmap(bitmap, null, ImageViewTouchBase.ZOOM_INVALID, ImageViewTouchBase.ZOOM_INVALID);
+		}
+		
+		if(mapDateTime != null)
+		{
+			mapDateTime.setText(getFormattedLastModifiedTime());
 		}
 	}
 
@@ -143,6 +156,23 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 		return lastModTime;
 	}
 
+	public String getFormattedLastModifiedTime() {
+		String formattedTime = "";
+		long lastModTime = getLastModifiedTime();
+	
+		if (lastModTime > 0) {
+			// Calendar indianTime = new
+			// GregorianCalendar(TimeZone.getTimeZone("GMT+5:30"));
+			Calendar indianTime = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
+			indianTime.setTimeInMillis(getLastModifiedTime());
+			formattedTime = "As on "+ String.format(Locale.US, "%tb %te, %tl:%tM %tp ",	indianTime, indianTime, indianTime, indianTime,indianTime);
+			//For Debug. date with seconds
+			// formattedTime = "As on "+ String.format(Locale.US,"%tb %te, %tl:%tM:%tS %tp  ",indianTime, indianTime, indianTime,indianTime,indianTime,indianTime);
+			indianTime = null;
+		}
+		return formattedTime;
+	}
+	
 	public static boolean storageReady() {
 
 		String cardstatus = Environment.getExternalStorageState();
