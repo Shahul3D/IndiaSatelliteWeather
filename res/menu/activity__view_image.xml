@@ -2,7 +2,7 @@
 
     <item
         android:id="@+id/refresh_item"
-        android:icon="@android:drawable/ic_menu_rotate"
+        android:icon="@drawable/ic_action_refresh"
         android:showAsAction="ifRoom"
         android:title="Reload">
     </item>

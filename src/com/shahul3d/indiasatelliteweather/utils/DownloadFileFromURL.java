@@ -61,15 +61,27 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 			}
 //			int lenghtOfFile = connection.getContentLength();
 //			Log.d("shahul", "Res Length" + lenghtOfFile);
-			InputStream fin = null;
+			InputStream fin = null;	
 			FileOutputStream fout = null;
 			ByteArrayOutputStream out = null;
 
 			fin = connection.getInputStream();
 			out = new ByteArrayOutputStream();
 			byte[] buffer = new byte[1024];
+			
+			// for progress update
+			long total = 0;
+			int lenghtOfFile = connection.getContentLength();
+
+			// download the file
 			for (int count; (count = fin.read(buffer)) != -1;) {
 				out.write(buffer, 0, count);
+				total += count;
+				if(lenghtOfFile > 0)
+				{
+					// update status, only if total length is known
+					publishProgress((int) (total * 100 / lenghtOfFile));
+				}
 			}
 			byte[] response = out.toByteArray();
 
@@ -94,6 +106,7 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 				mapFragment.updateLastModifiedTime(res_update_time);
 				down_status = 1;
 			} catch (Exception e) {
+				publishProgress(100);
 				Log.e("Error in image processing: ", e.getMessage());
 				e.printStackTrace();
 			} finally {
@@ -105,24 +118,9 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 					out.close();
 			}
 
-			// for progress update
-			// int lenghtOfFile = conection.getContentLength();
-			//
-			// // download the file
-			// InputStream input = new BufferedInputStream(url.openStream(),
-			// 8192);
-			// // Output stream
-			// OutputStream output = new
-			// FileOutputStream("/sdcard/downloadedfile.jpg");
-			// byte data[] = new byte[1024];
-			// long total = 0;
-			// while ((count = input.read(data)) != -1) {
-			// total += count;
-			// // publishing the progress....
-			// // After this onProgressUpdate will be called
-			// publishProgress(""+(int)((total*100)/lenghtOfFile));
 
 		} catch (Exception e) {
+			publishProgress(100);
 			Log.e("Error in connection: ", e.getMessage());
 			e.printStackTrace();
 		}
@@ -130,10 +128,7 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 	}
 
 	 protected void onProgressUpdate(Integer... progress) {
-		 if(progress[0] == 10)
-		 {
-			Toast.makeText(mapFragment.getActivity(), "Update Available! Starting download..", Toast.LENGTH_SHORT).show();
-		 }
+		 mapFragment.updateDownloadProgress(progress[0]);
 	 }
 
 	@Override

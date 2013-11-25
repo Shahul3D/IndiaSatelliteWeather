@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,11 +34,26 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 
 
 
-	ImageViewTouch mImage;
-	TextView mapDateTime;
+	private ImageViewTouch mImage;
+	private TextView mapDateTime;
 	private Menu optionsMenu;
 	DownloadFileFromURL downloadMapTask;
 	SharedPreferences preference_General = null;
+	private ActivityListenerInterface mListener;
+
+	public static interface ActivityListenerInterface {
+		public abstract void updateProgress(int progress);
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			this.mListener = (ActivityListenerInterface) activity;
+		} catch (final ClassCastException e) {
+			throw new ClassCastException(activity.toString() +" must implement ActivityListenerInterface");
+		}
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +115,13 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		//Releasing the weak reference of the activity.
+		mListener = null;
+	}
 
 	public void updateMap() {
 		String imagePath = getActivity().getExternalFilesDir(Context.STORAGE_SERVICE).getAbsolutePath() + File.separator + "map.jpg";
@@ -108,11 +131,19 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 		Bitmap bitmap = DecodeUtils.decode(getActivity().getApplicationContext(), imageUri, size, size);
 		if (null != bitmap) {
 			mImage.setImageBitmap(bitmap, null, ImageViewTouchBase.ZOOM_INVALID, ImageViewTouchBase.ZOOM_INVALID);
-		}
 		
-		if(mapDateTime != null)
+			if(mapDateTime != null)
+			{
+				mapDateTime.setText(getFormattedLastModifiedTime());
+			}
+		}
+	}
+	
+	public void updateDownloadProgress(int progress)
+	{
+		if(mListener != null)
 		{
-			mapDateTime.setText(getFormattedLastModifiedTime());
+			mListener.updateProgress(progress);
 		}
 	}
 
@@ -204,22 +235,5 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	// Log.d("shahul", "fragment initiated");
 	// }
 
-	// private OnCompleteListener mListener;
-
-	// public static interface OnCompleteListener {
-	// public abstract void onComplete();
-	// }
-
-	// @Override
-	// public void onAttach(Activity activity) {
-	// super.onAttach(activity);
-	// try {
-	// this.mListener = (OnCompleteListener)activity;
-	// }
-	// catch (final ClassCastException e) {
-	// throw new ClassCastException(activity.toString() +
-	// " must implement OnCompleteListener");
-	// }
-	// }
 
 }

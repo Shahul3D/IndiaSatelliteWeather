@@ -17,6 +17,7 @@
         android:layout_marginBottom="10dip"
         android:background="#AA000000"
         android:padding="5dip"
+        android:text="Loading.."
         android:textColor="#ffffffff" />
 
 </FrameLayout>
