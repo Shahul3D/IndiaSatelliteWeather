@@ -19,4 +19,4 @@ It very well equipped with data caching capabilities and will never download any
 ![Current Progress Screenshot](https://raw.github.com/Shahul3D/IndiaSatelliteWeather/master/Screenshot.png)
 
 ### Try the Development build
-IndiaSatelliteWeather-Dev-Build as on Nov25, 11:35PM: https://github.com/Shahul3D/IndiaSatelliteWeather/raw/master/IndiaSatelliteWeather_1.0.apk
+IndiaSatelliteWeather-Dev-Build as on Nov27, 01:00 AM: https://github.com/Shahul3D/IndiaSatelliteWeather/raw/master/IndiaSatelliteWeather_1.0.apk
