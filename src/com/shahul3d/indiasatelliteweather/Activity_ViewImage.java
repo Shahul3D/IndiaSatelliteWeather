@@ -1,14 +1,14 @@
 package com.shahul3d.indiasatelliteweather;
 
-import com.shahul3d.indiasatelliteweather.Fragment_ViewMap.ActivityListenerInterface;
-
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Window;
 
-public class Activity_ViewImage extends FragmentActivity implements ActivityListenerInterface{
+import com.shahul3d.indiasatelliteweather.Fragment_ViewMap.ActivityListenerInterface;
+import com.shahul3d.indiasatelliteweather.utils.TrackedFragmentActivity;
+
+public class Activity_ViewImage extends TrackedFragmentActivity implements ActivityListenerInterface{
 
 	private Fragment_ViewMap mapFragment;
 
@@ -30,7 +30,7 @@ public class Activity_ViewImage extends FragmentActivity implements ActivityList
 			fm.beginTransaction().add(R.id.frame_mapfragment, mapFragment, "mapFragment").commit();
 		}
 	}
-
+	
 	@Override
 	public void updateProgress(int progress) {
 		if (progress > 99) {
