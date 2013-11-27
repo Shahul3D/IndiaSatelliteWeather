@@ -5,12 +5,14 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,19 +22,21 @@ import com.squareup.okhttp.OkHttpClient;
 public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 
 	private OkHttpClient okHttpClient = new OkHttpClient();
-	Fragment_ViewMap mapFragment;
+	//Creating weak reference to the Fragment to avoid leaking memory.
+	private WeakReference<Fragment_ViewMap> mapFragment;
 	private String sd_card_path;
 
 	public DownloadFileFromURL(Fragment_ViewMap myfrag, String sd_path) {
 		// TODO: direct communication with the fragment should be avoided.
-		mapFragment = myfrag;
+		mapFragment = new WeakReference<Fragment_ViewMap>(myfrag);
 		sd_card_path = sd_path;
 	}
 
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		mapFragment.setRefreshActionButtonState(true);
+		if (mapFragment != null && mapFragment.get() != null)
+			mapFragment.get().setRefreshActionButtonState(true);
 	}
 
 	@Override
@@ -52,8 +56,8 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 			// compare it with the current image's update time. If both are
 			// same, then no need download the same image again.
 			long res_update_time = connection.getHeaderFieldDate("Last-Modified", 0);
-			Log.d("shahul", "current modified time: " + res_update_time	+ "  VS previous: " + mapFragment.getLastModifiedTime());
-			if (res_update_time == mapFragment.getLastModifiedTime()) {
+//			Log.d("shahul", "current modified time: " + res_update_time	+ "  VS previous: " + mapFragment.get().getLastModifiedTime());
+			if ((mapFragment != null && mapFragment.get() != null) && (res_update_time == mapFragment.get().getLastModifiedTime())) {
 				// We have the latest version. No need to downlaod again.
 				connection.disconnect();
 				return 2;
@@ -95,12 +99,14 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 			outFileOutStream.flush();
 			outFileOutStream.close();
 
-			boolean success = temp_file.renameTo(new File(sd_card_path,	"map.jpg"));
+//			boolean success = 
+			temp_file.renameTo(new File(sd_card_path,	"map.jpg"));
 			//Log.d("shahul", "Map  saved to: " + temp_file.getAbsolutePath()	+ ". Overwritten? = " + success);
 
 			// TODO: direct communication with the fragment should be avoided.
 			// Updating the current image's modified time in the preference.
-			mapFragment.updateLastModifiedTime(res_update_time);
+			if (mapFragment != null && mapFragment.get() != null)
+				mapFragment.get().updateLastModifiedTime(res_update_time);
 			down_status = 1;
 
 		} catch (Exception e) {
@@ -125,26 +131,41 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 	}
 
 	protected void onProgressUpdate(Integer... progress) {
-		mapFragment.updateDownloadProgress(progress[0]);
+		if (mapFragment != null && mapFragment.get() != null)
+			mapFragment.get().updateDownloadProgress(progress[0]);
 	}
 
 	@Override
 	protected void onPostExecute(Integer result) {
 
-		// Error
-		if (result < 0) {
-			Toast.makeText(mapFragment.getActivity(),"Unable to retrive the MAP!", Toast.LENGTH_SHORT).show();
+		if (mapFragment != null && mapFragment.get() != null) {
+			// Error
+			if (result < 0) {
+				Toast.makeText(mapFragment.get().getActivity(),"Unable to retrive the MAP!", Toast.LENGTH_SHORT).show();
+			}
+			// MAP downloaded successfully
+			else if (result == 1) {
+				mapFragment.get().updateMap();
+				Toast.makeText(mapFragment.get().getActivity(),"Map Successfully Updated", Toast.LENGTH_SHORT).show();
+			}
+			// NO update available
+			else if (result == 2) {
+				Toast.makeText(mapFragment.get().getActivity(),"No update available!", Toast.LENGTH_SHORT).show();
+			}
+			mapFragment.get().setRefreshActionButtonState(false);
 		}
-		// MAP downloaded successfully
-		else if (result == 1) {
-			mapFragment.updateMap();
-			Toast.makeText(mapFragment.getActivity(),"Map Successfully Updated", Toast.LENGTH_SHORT).show();
-		}
-		// NO update available
-		else if (result == 2) {
-			Toast.makeText(mapFragment.getActivity(), "No update available!", Toast.LENGTH_SHORT).show();
-		}
-		mapFragment.setRefreshActionButtonState(false);
 		Log.d("shahul", "Download MAP completed with result: " + result);
 	}
+	
+	public static boolean storageReady() {
+
+		String cardstatus = Environment.getExternalStorageState();
+		if (cardstatus.equals(Environment.MEDIA_REMOVED) || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE) || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
+				|| cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 }
