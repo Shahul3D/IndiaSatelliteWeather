@@ -12,8 +12,6 @@ import java.net.URL;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.shahul3d.indiasatelliteweather.Fragment_ViewMap;
@@ -64,7 +62,7 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 			}
 			publishProgress(10); // Updating the user about the download.
 			// Log.d("shahul", "Res code" + connection.getResponseCode());
-			if (connection.getResponseCode() != 200) {
+			if (connection.getResponseCode() != 200 || !CommonUtils.storageReady()) {
 				connection.disconnect();
 				return -1;
 			}
@@ -108,9 +106,9 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 			if (mapFragment != null && mapFragment.get() != null)
 				mapFragment.get().updateLastModifiedTime(res_update_time);
 			down_status = 1;
-
 		} catch (Exception e) {
-			Log.e("Error in retrieving the Map: ", e.getMessage());
+			CommonUtils.printLog("Error in retrieving the Map: "+ e.getMessage());
+			CommonUtils.trackException("DownloadMapError", e);
 			e.printStackTrace();
 		} finally {
 			// removes progress visibility.
@@ -123,7 +121,9 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 				if (outArrrayIPStream != null)
 					outArrrayIPStream.close();
 			} catch (IOException e) {
-				Log.e("Error in closing file connections: ", e.getMessage());
+				
+				CommonUtils.printLog("Error in closing file connections: "+ e.getMessage());
+				CommonUtils.trackException("Error in closing file connections", e);
 				e.printStackTrace();
 			}
 		}
@@ -154,18 +154,7 @@ public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {
 			}
 			mapFragment.get().setRefreshActionButtonState(false);
 		}
-		Log.d("shahul", "Download MAP completed with result: " + result);
+		CommonUtils.printLog("Download MAP completed with result: " + result);
 	}
 	
-	public static boolean storageReady() {
-
-		String cardstatus = Environment.getExternalStorageState();
-		if (cardstatus.equals(Environment.MEDIA_REMOVED) || cardstatus.equals(Environment.MEDIA_UNMOUNTABLE) || cardstatus.equals(Environment.MEDIA_UNMOUNTED)
-				|| cardstatus.equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
 }
