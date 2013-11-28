@@ -1,5 +1,8 @@
 #IndiaSatelliteWeather
-UNDER DEVELOPMENT! NOT YET LAUNCHED IN THE ANDROID PLAY STORE!
+If you want to try, please download from Google Play:
+
+[![Get it on Google Play](http://www.android.com/images/brand/get_it_on_play_logo_small.png)](https://play.google.com/store/apps/details?id=com.shahul3d.indiasatelliteweather)
+
 
 ##The Concept:
 "A picture is worth a thousand words". A complex weather data can be conveyed with a single image map. By observing the Cloud formations around your City, you can easy predict whether the day is going to be Hot or Rainy/Cloudy.
