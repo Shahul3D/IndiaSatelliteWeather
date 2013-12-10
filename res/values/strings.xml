@@ -2,5 +2,12 @@
 <resources>
 
     <string name="app_name">India Satellite Weather</string>
-
+	<string name="updated_as_on">As on</string>
+	<string name="updated_as_on">As on</string>
+	<string name="no_internet_connection">No Internet Connectivity!</string>
+	
+	<!-- Not yet used anywhere..will need while replacing the design with IntentService -->
+    <string name="map_download_error">Unable to retrive MAP!</string>
+    <string name="map_download_success">Successfully updated!</string>
+    <string name="map_no_update">No update available!</string>
 </resources>

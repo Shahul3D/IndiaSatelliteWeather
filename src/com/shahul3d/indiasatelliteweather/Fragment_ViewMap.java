@@ -157,7 +157,7 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 				downloadMapTask.get().execute(url);
 			}
 		} else {
-			Toast.makeText(getActivity(), "No Internet Connectivity!", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), getActivity().getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -184,7 +184,7 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 			// GregorianCalendar(TimeZone.getTimeZone("GMT+5:30"));
 			Calendar indianTime = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT+5:30"));
 			indianTime.setTimeInMillis(getLastModifiedTime());
-			formattedTime = "As on "+ String.format(Locale.US, "%tb %te, %tl:%tM %tp ",	indianTime, indianTime, indianTime, indianTime,indianTime);
+			formattedTime = getActivity().getString(R.string.updated_as_on)+ String.format(Locale.US, "%tb %te, %tl:%tM %tp ",	indianTime, indianTime, indianTime, indianTime,indianTime);
 			//For Debug. date with seconds
 			// formattedTime = "As on "+ String.format(Locale.US,"%tb %te, %tl:%tM:%tS %tp  ",indianTime, indianTime, indianTime,indianTime,indianTime,indianTime);
 			indianTime = null;
