@@ -1,4 +1,4 @@
-package com.shahul3d.indiasatelliteweather.utils;
+package com.shahul3d.indiasatelliteweather.bg;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,7 +14,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.shahul3d.indiasatelliteweather.Fragment_ViewMap;
+import com.shahul3d.indiasatelliteweather.ui.Fragment_ViewMap;
+import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
 import com.squareup.okhttp.OkHttpClient;
 
 public class DownloadFileFromURL extends AsyncTask<String, Integer, Integer> {

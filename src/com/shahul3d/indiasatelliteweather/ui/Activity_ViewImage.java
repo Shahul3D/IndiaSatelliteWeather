@@ -1,11 +1,13 @@
-package com.shahul3d.indiasatelliteweather;
+package com.shahul3d.indiasatelliteweather.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.Window;
 
 import com.crashlytics.android.Crashlytics;
-import com.shahul3d.indiasatelliteweather.Fragment_ViewMap.ActivityListenerInterface;
+import com.shahul3d.indiasatelliteweather.R;
+import com.shahul3d.indiasatelliteweather.others.TrackedFragmentActivity;
+import com.shahul3d.indiasatelliteweather.ui.Fragment_ViewMap.ActivityListenerInterface;
 import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
 
 public class Activity_ViewImage extends TrackedFragmentActivity implements ActivityListenerInterface{

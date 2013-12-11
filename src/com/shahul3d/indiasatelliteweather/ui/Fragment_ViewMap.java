@@ -1,4 +1,4 @@
-package com.shahul3d.indiasatelliteweather;
+package com.shahul3d.indiasatelliteweather.ui;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
@@ -29,8 +29,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shahul3d.indiasatelliteweather.R;
+import com.shahul3d.indiasatelliteweather.bg.DownloadFileFromURL;
 import com.shahul3d.indiasatelliteweather.utils.DecodeUtils;
-import com.shahul3d.indiasatelliteweather.utils.DownloadFileFromURL;
 
 public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	private ImageViewTouch mImage;
