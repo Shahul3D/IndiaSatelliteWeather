@@ -7,7 +7,6 @@ import android.view.Window;
 import com.crashlytics.android.Crashlytics;
 import com.shahul3d.indiasatelliteweather.Fragment_ViewMap.ActivityListenerInterface;
 import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
-import com.shahul3d.indiasatelliteweather.utils.TrackedFragmentActivity;
 
 public class Activity_ViewImage extends TrackedFragmentActivity implements ActivityListenerInterface{
 

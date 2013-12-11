@@ -1,4 +1,4 @@
-package com.shahul3d.indiasatelliteweather.utils;
+package com.shahul3d.indiasatelliteweather;
 
 import android.support.v4.app.FragmentActivity;
 

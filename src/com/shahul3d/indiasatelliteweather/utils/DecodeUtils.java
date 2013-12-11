@@ -1,4 +1,4 @@
-package com.shahul3d.indiasatelliteweather;
+package com.shahul3d.indiasatelliteweather.utils;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.graphics.Bitmap;

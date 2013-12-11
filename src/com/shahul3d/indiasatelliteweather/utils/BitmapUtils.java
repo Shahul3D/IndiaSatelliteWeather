@@ -1,4 +1,4 @@
-package com.shahul3d.indiasatelliteweather;
+package com.shahul3d.indiasatelliteweather.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;

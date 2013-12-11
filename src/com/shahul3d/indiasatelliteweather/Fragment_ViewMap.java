@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.shahul3d.indiasatelliteweather.utils.DecodeUtils;
 import com.shahul3d.indiasatelliteweather.utils.DownloadFileFromURL;
 
 public class Fragment_ViewMap extends android.support.v4.app.Fragment {
