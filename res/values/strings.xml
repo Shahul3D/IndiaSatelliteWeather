@@ -3,7 +3,7 @@
 
     <string name="app_name">India Satellite Weather</string>
 	<string name="updated_as_on">As on</string>
-	<string name="updated_as_on">As on</string>
+	<string name="loading">Loading..</string>
 	<string name="no_internet_connection">No Internet Connectivity!</string>
 	
 	<!-- Not yet used anywhere..will need while replacing the design with IntentService -->

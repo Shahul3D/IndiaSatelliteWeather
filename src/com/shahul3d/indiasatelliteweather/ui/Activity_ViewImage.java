@@ -26,7 +26,7 @@ public class Activity_ViewImage extends TrackedFragmentActivity implements Activ
 
 		// If the Fragment is non-null, then it is retained across a configuration change.
 		//since it is configured as RetainedInstance we no need handle if the instance is available.
-		CommonUtils.printLog("fragment state during onCreate()= " + mapFragment);
+//		CommonUtils.printLog("fragment state during onCreate()= " + mapFragment);
 		if (mapFragment == null) {
 			mapFragment = new Fragment_ViewMap();
 			fm.beginTransaction().add(R.id.frame_mapfragment, mapFragment, MAP_FRAGMENT_NAME).commit();
