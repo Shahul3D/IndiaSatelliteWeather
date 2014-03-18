@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.shahul3d.indiasatelliteweather"
     android:versionCode="2"
-    android:versionName="2.0 Beta" >
+    android:versionName="2.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
