@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.bg.MapDownloaderService;
 import com.shahul3d.indiasatelliteweather.others.AppConstants;
+import com.shahul3d.indiasatelliteweather.others.WeatherApplication;
 import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
 import com.shahul3d.indiasatelliteweather.utils.DecodeUtils;
 
@@ -39,6 +40,7 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	private Menu optionsMenu;
 	private SharedPreferences preference_General = null;
 	private ActivityListenerInterface mListener;
+	public WeatherApplication applicationObject;
 	//Setting the default MAP type
 	private static String currentMAP=AppConstants.MAP_INDIA_WEATHER_UV;
 
@@ -61,9 +63,10 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		preference_General = getActivity().getSharedPreferences("BackgroundPreference", Activity.MODE_PRIVATE);
+		applicationObject = (WeatherApplication) getActivity().getApplicationContext();
 		setHasOptionsMenu(true);
 		setRetainInstance(true);
-		downloadMap(currentMAP);
+//		downloadMap(currentMAP);
 	}
 
 	@Override
@@ -128,7 +131,7 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 		} else {
 			// Cached Map is not available. I know user is going to refresh now!
 			// wait. I'm here to help you. :)
-//			downloadMap(mapType);
+			downloadMap(mapType);
 			if (mImage != null && mapDateTime != null) {
 				mImage.clear();
 				mapDateTime.setText(getActivity().getString(R.string.loading));
@@ -157,21 +160,18 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 		}
 	}
 	
-	
 	public void updateRefreshSpinner()
 	{
-	    IntentFilter filter = new IntentFilter(AppConstants.PREFIX_STICKY_BROADCAST+ currentMAP);
-	    Intent stickyIntent = getActivity().registerReceiver(null, filter);
-	    
-	    if(stickyIntent != null)
+		CommonUtils.printLog("UpdateRefreshSpinner Called");
+	    if(applicationObject.runningServiceList.contains(currentMAP))
 	    {
-	    	//If any sticky broadcast exists, then start the spinner. current map download is going on.. 
-	    	boolean isSticky = stickyIntent.getBooleanExtra("running", false);
-	    	if(isSticky)
-	    		setRefreshActionButtonState(true);
+	    	setRefreshActionButtonState(true);
+	    }
+	    else
+	    {
+	    	setRefreshActionButtonState(false);
 	    }
 	}
-	
 
 	public void downloadMap(final String mapType) {
 		
@@ -204,6 +204,8 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	  LocalBroadcastManager.getInstance(getActivity()).registerReceiver(MAPDownloadBroadcastUpdateReceiver, 
 			  new IntentFilter(AppConstants.ACTION_DOWNLOAD_MAP_PROGRES_UPDATE));
 	  CommonUtils.printLog("Receiver Registered");
+	  updateDownloadProgress(0);
+	  updateRefreshSpinner();
 	}
 	
 	
@@ -217,24 +219,30 @@ public class Fragment_ViewMap extends android.support.v4.app.Fragment {
 	}
 	
 	private BroadcastReceiver MAPDownloadBroadcastResultReceiver = new BroadcastReceiver() {
-	  @Override
-	  public void onReceive(Context context, Intent intent) {
-		  //TODO: Need to  get MAP type from the intent once multiple maps are supported
-	    int result = intent.getIntExtra(AppConstants.INTENT_EXTRA_KEY_OUT,0);
-	    String reqMapType = intent.getStringExtra(AppConstants.INTENT_EXTRA_KEY_MAP_TYPE);
-	    setRefreshActionButtonState(false);
-	    updateMap(reqMapType);
-	    CommonUtils.printLog( "Got result: " + result+"  maptype:"+reqMapType);
-	  }
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO: Need to get MAP type from the intent once multiple maps are supported
+			final String mapType = intent.getStringExtra(AppConstants.INTENT_EXTRA_KEY_MAP_TYPE);
+			if (mapType.equals(currentMAP)) {
+				int result = intent.getIntExtra(AppConstants.INTENT_EXTRA_KEY_OUT, 0);
+				String reqMapType = intent.getStringExtra(AppConstants.INTENT_EXTRA_KEY_MAP_TYPE);
+				setRefreshActionButtonState(false);
+				updateMap(reqMapType);
+				CommonUtils.printLog("Got result: " + result + "  maptype:" + reqMapType);
+			}
+		}
 	};
 
 	private BroadcastReceiver MAPDownloadBroadcastUpdateReceiver = new BroadcastReceiver() {
-		  @Override
-		  public void onReceive(Context context, Intent intent) {
-			  //TODO: Need to  get MAP type from the intent once multiple maps are supported
-		    int progress = intent.getIntExtra(AppConstants.INTENT_EXTRA_KEY_UPDATE, 0);
-		    updateDownloadProgress(progress);
-		    CommonUtils.printLog( "Got Update: " + progress);
-		  }
-		};
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO: Need to get MAP type from the intent once multiple maps are supported
+			final String mapType = intent.getStringExtra(AppConstants.INTENT_EXTRA_KEY_MAP_TYPE);
+			if (mapType.equals(currentMAP)) {
+				int progress = intent.getIntExtra(AppConstants.INTENT_EXTRA_KEY_UPDATE, 0);
+				updateDownloadProgress(progress);
+				CommonUtils.printLog("Got Update: " + progress);
+			}
+		}
+	};
 }

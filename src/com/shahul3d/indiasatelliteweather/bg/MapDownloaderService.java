@@ -17,10 +17,12 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.shahul3d.indiasatelliteweather.others.AppConstants;
+import com.shahul3d.indiasatelliteweather.others.WeatherApplication;
 import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
 import com.squareup.okhttp.OkHttpClient;
 
 public class MapDownloaderService extends Service {
+	public WeatherApplication applicationObject;
 	final int STATUS_UPDATE_THRESHOLD = 10;
 	LocalBroadcastManager localBroadCastInstance;
 	private OkHttpClient okHttpClient;
@@ -34,6 +36,7 @@ public class MapDownloaderService extends Service {
 
 	@Override
 	public void onCreate() {
+		applicationObject = (WeatherApplication) getApplicationContext();
 		CommonUtils.printLog("MapDownloaderService Created");
 		localBroadCastInstance = LocalBroadcastManager.getInstance(this);
 		okHttpClient = new OkHttpClient();
@@ -81,6 +84,12 @@ public class MapDownloaderService extends Service {
 			//Getting the requested MAP type
 			final String requestedMapType = intent.getStringExtra(AppConstants.INTENT_EXTRA_KEY_IN);
 			
+			if(applicationObject.runningServiceList!= null && applicationObject.runningServiceList.contains(requestedMapType))
+			{
+				CommonUtils.printLog("already a thread is processing the same request: "+requestedMapType);
+				return;
+			}
+			
 			this.setName(INNER_TAG+requestedMapType);
 			CommonUtils.printLog("new MAPDownloadThread Started for: "+requestedMapType);
 			
@@ -90,9 +99,7 @@ public class MapDownloaderService extends Service {
 
 			try {
 				
-				//Publishing a Sticky Broadcast to indicate the current operation.
-				stickyIntent = new Intent(AppConstants.PREFIX_STICKY_BROADCAST+requestedMapType);
-				setStickyIntent(stickyIntent);
+				updateRunningStatus(true, requestedMapType);
 				
 				URL map_url = new URL(AppConstants.MAP_URL.get(requestedMapType));
 				// TODO: handle unknown map type and null cases.
@@ -106,12 +113,12 @@ public class MapDownloaderService extends Service {
 				long res_update_time = connection.getHeaderFieldDate("Last-Modified", 0);
 //				Log.d("shahul", "current modified time: " + res_update_time	+ "  VS previous: " + mapFragment.get().getLastModifiedTime());
 
-				if ((res_update_time == CommonUtils.getLastModifiedTime(null, getApplicationContext(), requestedMapType))) {
-					// We have the latest version. No need to downlaod again.
-					connection.disconnect();
-					returnResult(2,requestedMapType);
-					return;
-				}
+//				if ((res_update_time == CommonUtils.getLastModifiedTime(null, getApplicationContext(), requestedMapType))) {
+//					// We have the latest version. No need to downlaod again.
+//					connection.disconnect();
+//					returnResult(2,requestedMapType);
+//					return;
+//				}
 				
 				updateProgress(3, requestedMapType); // Updating the user about the download.
 				// Log.d("shahul", "Res code" + connection.getResponseCode());
@@ -136,7 +143,7 @@ public class MapDownloaderService extends Service {
 					total += count;
 					updateTrigger ++;
 					if (updateTrigger > STATUS_UPDATE_THRESHOLD) {
-						Thread.sleep(3000);
+//						Thread.sleep(3000);
 						if (lenghtOfFile > 0) {
 							updateTrigger = 0;
 							// update status, only if total length is known
@@ -150,7 +157,10 @@ public class MapDownloaderService extends Service {
 
 				Bitmap bmp = BitmapFactory.decodeByteArray(response, 0,	response.length);
 				// TODO: Costly operation. need to find some workaround.
-				bmp = Bitmap.createBitmap(bmp, 110, 230, 800, 800);
+				if(requestedMapType.contains(AppConstants.MAP_INDIA_WEATHER_UV))
+				{
+					bmp = Bitmap.createBitmap(bmp, 110, 230, 800, 800);
+				}
 				String sd_card_path = getApplicationContext().getExternalFilesDir(Context.STORAGE_SERVICE).getAbsolutePath();
 				File temp_file = new File( sd_card_path + File.separator	+ "temp.jpg");
 				outFileOutStream = new FileOutputStream(temp_file.getPath());
@@ -179,7 +189,7 @@ public class MapDownloaderService extends Service {
 			} finally {
 				try {
 					updateProgress(100, requestedMapType);
-					removeStickyIntent(stickyIntent);
+					updateRunningStatus(false, requestedMapType);
 					
 					if (inputStream_conn != null)
 						inputStream_conn.close();
@@ -196,25 +206,21 @@ public class MapDownloaderService extends Service {
 			}
 			   
 			   returnResult(1,requestedMapType);
-			   removeStickyIntent(stickyIntent);
+			   updateRunningStatus(false, requestedMapType);
 			   stickyIntent = null;
 
 			   updateProgress(100,requestedMapType);
-			
-			
 			CommonUtils.printLog("new MAPDownloadThread Ended");
 		}
 	}
 	
-	
-	private void setStickyIntent(Intent intent) {
-		intent.putExtra("running", true);
-		this.sendStickyBroadcast(intent);
-	}
-	
-	private void removeStickyIntent(Intent intent)
-	{
-		this.removeStickyBroadcast(intent);
+
+	private void updateRunningStatus(final boolean isRunning, final String mapType) {
+			if (isRunning) {
+				applicationObject.runningServiceList.add(mapType);
+			} else {
+				applicationObject.runningServiceList.remove(mapType);
+			}
 	}
 	
 	private void updateProgress(long progress, String requestedMapType) {

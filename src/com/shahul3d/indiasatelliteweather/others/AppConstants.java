@@ -21,6 +21,9 @@ public final class AppConstants {
 	//Weather Map Types.
 	public static final String PREFIX_STICKY_BROADCAST = "com.shahul3d.IndiaSatelliteWeather.";
 	public static final String MAP_INDIA_WEATHER_UV = "india_weather_uv";
+	public static final String MAP_INDIA_WEATHER_IR = "india_weather_ir";
+	public static final String MAP_INDIA_WEATHER_COLOR = "india_color";
+	public static final String MAP_INDIA_WIND_FLOW = "india_windflow";
 
 	//Weather MAP type - Link relationships.
 	public static final Map<String, String> MAP_URL;
@@ -28,5 +31,8 @@ public final class AppConstants {
     {
         MAP_URL = new HashMap<String, String>();
         MAP_URL.put(MAP_INDIA_WEATHER_UV, "http://www.imd.gov.in/section/satmet/img/sector-eir.jpg");
+        MAP_URL.put(MAP_INDIA_WEATHER_COLOR, "http://tropic.ssec.wisc.edu/real-time/indian/images/xxirm5bbm.jpg");
+        MAP_URL.put(MAP_INDIA_WEATHER_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
+        MAP_URL.put(MAP_INDIA_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
     }
 }
