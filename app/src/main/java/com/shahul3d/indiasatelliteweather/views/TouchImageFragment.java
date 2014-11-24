@@ -10,7 +10,6 @@ import com.shahul3d.indiasatelliteweather.widgets.FloatingActionButton;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
-import org.androidannotations.annotations.Trace;
 import org.androidannotations.annotations.ViewById;
 
 @EFragment(R.layout.touch_image_fragment)
