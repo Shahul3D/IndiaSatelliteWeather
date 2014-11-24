@@ -11,13 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
-import com.shahul3d.indiasatelliteweather.widgets.FloatingActionButton;
+import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -41,10 +42,14 @@ public class MainMapActivity extends ActionBarActivity {
     @ViewById(R.id.sliding_tabs)
     SlidingTabLayout slidingTabLayout;
 
+    @Bean
+    StorageUtils storageUtils;
+
     @AfterViews
     protected void init() {
         initToolbar();
         initDrawer();
+        Log.a("Storage path: %s", storageUtils.getExternalStoragePath());
     }
 
     private void initDrawer() {
