@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
-import com.shahul3d.indiasatelliteweather.widgets.FloatingActionButton;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -20,12 +19,8 @@ public class TouchImageFragment extends Fragment {
     @ViewById
     SubsamplingScaleImageView touchImage;
 
-    @ViewById(R.id.fabButton)
-    FloatingActionButton fab;
-
     @AfterViews
     void calledAfterViewInjection() {
-        fab.setDrawableIcon(getResources().getDrawable(R.drawable.plus));
         touchImage.setImageAsset(chooseImage(pageNumber));
     }
 

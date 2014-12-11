@@ -45,17 +45,4 @@
             android:drawSelectorOnTop="false"></ListView>
 
     </android.support.v4.widget.DrawerLayout>
-
-    <com.shahul3d.indiasatelliteweather.widgets.FloatingActionButton
-        android:id="@+id/fabButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp"
-        android:layout_marginBottom="25dp"
-        android:layout_marginRight="20dp"
-        android:textSize="24sp" />
 </LinearLayout>
