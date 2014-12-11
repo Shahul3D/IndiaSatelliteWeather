@@ -38,7 +38,7 @@ public class TouchImageFragment extends Fragment {
         } else if (pageNumber == 3) {
             defaultImage = "map_water_vapor.jpg";
         }
-        Log.a("Loading: %s",defaultImage);
+        Log.a("Loading: %s", defaultImage);
         return defaultImage;
     }
 
