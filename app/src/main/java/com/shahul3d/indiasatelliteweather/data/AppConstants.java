@@ -11,4 +11,5 @@ public class AppConstants {
     public static final String MAP_COLOR = "map_color";
     public static final String MAP_WIND_FLOW = "map_windflow";
 
+    public static final String DOWNLOAD_INTENT_NAME = "DOWNLOAD_MAP_TYPE";
 }

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.noveogroup.android.log.Log;
+import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadCompletedEvent;
-import com.shahul3d.indiasatelliteweather.events.DownloadRequestEvent;
 import com.shahul3d.indiasatelliteweather.events.TestEvent;
 
 import org.androidannotations.annotations.Background;
@@ -16,7 +16,6 @@ import de.greenrobot.event.EventBus;
 
 @EService
 public class DownloaderService extends Service {
-
     EventBus bus = EventBus.getDefault();
 
     @Override
@@ -39,9 +38,17 @@ public class DownloaderService extends Service {
         super.onDestroy();
     }
 
-    public void onEvent(DownloadRequestEvent downloadRequest) {
-        String mapType = downloadRequest.getMapTypeToDownload();
-        downloadMap(mapType);
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            String requestedMapType = intent.getStringExtra(AppConstants.DOWNLOAD_INTENT_NAME);
+
+            // Starting a new thread for download
+            downloadMap(requestedMapType);
+        }
+
+        // NOT_STICKY: No need to restart the service if it get killed by user or by system.
+        return START_NOT_STICKY;
     }
 
     @Background
@@ -55,6 +62,7 @@ public class DownloaderService extends Service {
         bus.post(new DownloadCompletedEvent(mapType));
     }
 
+    //TODO: Test event. to be removed.
     public void onEvent(TestEvent event) {
         Log.a("Service  got the message: " + event.getData());
     }
