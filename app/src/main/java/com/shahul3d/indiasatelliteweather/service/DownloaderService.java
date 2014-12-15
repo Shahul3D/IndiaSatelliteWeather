@@ -42,8 +42,6 @@ public class DownloaderService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String requestedMapType = intent.getStringExtra(AppConstants.DOWNLOAD_INTENT_NAME);
-
-            // Starting a new thread for download
             downloadMap(requestedMapType);
         }
 
@@ -53,6 +51,13 @@ public class DownloaderService extends Service {
 
     @Background
     private void downloadMap(String mapType) {
+        //TODO: to check the same map type is already downloading.
+
+//        try {
+//            URL map_url = new URL(AppConstants.MAP_URL.get(mapType));
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
         //download logic here...
         publishDownloadComplete(mapType);
     }
