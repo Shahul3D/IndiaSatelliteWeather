@@ -50,7 +50,7 @@ public class DownloaderService extends Service {
     }
 
     @Background
-    private void downloadMap(String mapType) {
+    public void downloadMap(String mapType) {
         //TODO: to check the same map type is already downloading.
 
 //        try {
@@ -63,7 +63,7 @@ public class DownloaderService extends Service {
     }
 
     //Notify the Views to refresh to get the updated map.
-    private void publishDownloadComplete(String mapType) {
+    public void publishDownloadComplete(String mapType) {
         bus.post(new DownloadCompletedEvent(mapType));
     }
 
