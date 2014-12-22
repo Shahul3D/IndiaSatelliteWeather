@@ -27,4 +27,8 @@ public class AppConstants {
         MAP_URL.put(MAP_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
     }
+
+    //Download configurations
+    public final int STATUS_UPDATE_THRESHOLD = 10;
+    public final long MAX_DOWNLOAD_PROGRESS = 90;
 }

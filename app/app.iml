@@ -90,7 +90,9 @@
     <orderEntry type="library" exported="" name="support-v4-21.0.2" level="project" />
     <orderEntry type="library" exported="" name="eventbus-2.4.0" level="project" />
     <orderEntry type="library" exported="" name="androidannotations-api-3.2" level="project" />
+    <orderEntry type="library" exported="" name="okio-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.2" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-2.1.0" level="project" />
     <orderEntry type="module" module-name="library" exported="" />
   </component>
 </module>
