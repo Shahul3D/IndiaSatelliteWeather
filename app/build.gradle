@@ -44,5 +44,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.2'
     compile 'com.noveogroup.android:android-logger:1.3.4'
     compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'com.squareup.okhttp:okhttp:2.1.0'
 //    compile group:'com.squareup.picasso', name:'picasso', version:'2.4.0'
 }

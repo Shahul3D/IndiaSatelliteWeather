@@ -51,8 +51,8 @@ public class MainMapActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Starting the service when the app starts
-        DownloaderService_.intent(getApplication()).start();
+//        Starting the service when the app starts
+//        DownloaderService_.intent(getApplication()).start();
     }
 
     @Override
@@ -67,7 +67,8 @@ public class MainMapActivity extends ActionBarActivity {
     protected void init() {
         initToolbar();
         initDrawer();
-        Log.a("Storage path: %s", storageUtils.getExternalStoragePath());
+        //TODO: To be removed.
+        Log.d("Storage path: %s", storageUtils.getExternalStoragePath());
     }
 
     private void initDrawer() {
@@ -127,7 +128,7 @@ public class MainMapActivity extends ActionBarActivity {
 //
 //        //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_refresh) {
-//            Log.a("refresh clicked..");
+//            Log.d("refresh clicked..");
 //            return true;
 //        }
 //
