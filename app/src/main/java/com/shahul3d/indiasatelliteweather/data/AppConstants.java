@@ -31,4 +31,20 @@ public class AppConstants {
     //Download configurations
     public final int STATUS_UPDATE_THRESHOLD = 10;
     public final long MAX_DOWNLOAD_PROGRESS = 90;
+
+    public String getMapType(int type) {
+        String mapType = MAP_UV;
+        switch (type) {
+            case 1:
+                mapType = MAP_COLOR;
+                break;
+            case 2:
+                mapType = MAP_IR;
+                break;
+            case 3:
+                mapType = MAP_WIND_FLOW;
+                break;
+        }
+        return mapType;
+    }
 }
