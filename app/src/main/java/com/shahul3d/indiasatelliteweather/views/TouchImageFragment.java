@@ -9,14 +9,19 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
+import com.shahul3d.indiasatelliteweather.events.DownloadCompletedEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
+import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.OkHttpClient;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
+import java.io.File;
 
 import de.greenrobot.event.EventBus;
 
@@ -27,6 +32,9 @@ public class TouchImageFragment extends Fragment {
 
     @FragmentArg
     int pageNumber;
+
+    @Bean
+    StorageUtils storageUtils;
 
     @ViewById
     SubsamplingScaleImageView touchImage;
@@ -54,20 +62,15 @@ public class TouchImageFragment extends Fragment {
 
     @AfterViews
     void calledAfterViewInjection() {
-        touchImage.setImageAsset(chooseImage(pageNumber));
+//        touchImage.setImageAsset(chooseImage(pageNumber));
+        renderImage();
     }
 
-    String chooseImage(int pageNumber) {
-        String defaultImage = "map_temprature.jpg";
-        if (pageNumber == 1) {
-            defaultImage = "map_infra_red.jpg";
-        } else if (pageNumber == 2) {
-            defaultImage = "map_color_composite.jpg";
-        } else if (pageNumber == 3) {
-            defaultImage = "map_water_vapor.jpg";
-        }
-        Log.d("Loading: %s", defaultImage);
-        return defaultImage;
+    @UiThread
+    void renderImage() {
+        //TODO: Check file exits before render.
+        touchImage.setImageFile(storageUtils.getExternalStoragePath() + File.separator + appConstants.getMapType(pageNumber) + ".jpg");
+        Log.d("Map refreshed");
     }
 
     @Override
@@ -91,6 +94,13 @@ public class TouchImageFragment extends Fragment {
         public void onDestroyView() {
             super.onDestroyView();
         }*/
+    public void onEvent(DownloadCompletedEvent downloadCompleted) {
+        int mapID = downloadCompleted.mapID;
+        if (pageNumber == mapID) {
+            renderImage();
+        }
+    }
+
     public void onEvent(Object e) {
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
@@ -20,6 +21,7 @@ import com.squareup.okhttp.Response;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EService;
+import org.androidannotations.annotations.UiThread;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -76,34 +78,20 @@ public class DownloaderService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            String requestedMapType = getMapType(intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0));
-            Log.d("Download requested for map type: " + requestedMapType);
-            downloadMap(requestedMapType);
+            int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
+            downloadMap(mapID);
         }
         // NOT_STICKY: No need to restart the service if it get killed by user or by system.
         return START_NOT_STICKY;
     }
 
-    public String getMapType(int type) {
-        String mapType = appConstants.MAP_UV;
-        switch (type) {
-            case 1:
-                mapType = appConstants.MAP_COLOR;
-                break;
-            case 2:
-                mapType = appConstants.MAP_IR;
-                break;
-            case 3:
-                mapType = appConstants.MAP_WIND_FLOW;
-                break;
-        }
-        return mapType;
-    }
-
     @Background
-    public void downloadMap(String mapType) {
+    public void downloadMap(int mapID) {
         //TODO: to check the same map type is already downloading.
         //TODO: Check internet
+        String mapType = appConstants.getMapType(mapID);
+        Log.d("Download requested for map type: " + mapType);
+
         final String URL = appConstants.MAP_URL.get(mapType);
 
         try {
@@ -119,6 +107,7 @@ public class DownloaderService extends Service {
             Log.d("\nN/W counts: " + httpClient.getCache().getNetworkCount() + "\nReq Counts: " + httpClient.getCache().getRequestCount() + "\nCache Hits: " + httpClient.getCache().getHitCount());
 
             if (response.code() == 200) {
+                long lastUpdatedTime = 0;
                 InputStream inputStream = null;
                 ByteArrayOutputStream outArrrayIPStream = null;
                 try {
@@ -140,8 +129,14 @@ public class DownloaderService extends Service {
                         //Update download status
                         if (statusUpdateTrigger > appConstants.STATUS_UPDATE_THRESHOLD) {
 //                            Thread.sleep(3000);
-                            statusUpdateTrigger = 0;
-                            Log.d("downloaded percent: " + downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize);
+                            long currentTime = System.currentTimeMillis();
+                            if ((currentTime - lastUpdatedTime) > 1000) {
+                                statusUpdateTrigger = 0;
+                                long downloadedPercent = downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
+                                Log.d("downloaded percent: " + downloadedPercent);
+                                updateDownloadStatus(mapType, downloadedPercent);
+                                lastUpdatedTime = currentTime;
+                            }
                         }
                     }
 
@@ -157,6 +152,7 @@ public class DownloaderService extends Service {
 
                     //Save downloaded image for offline use.
                     saveDownlaodedMap(mapType, bmp);
+                    updateDownloadStatus(mapType, 100);
                 } catch (IOException ignore) {
                     //TODO: Exception handling
                     //Error on fetching & organizing the binary data.
@@ -182,7 +178,7 @@ public class DownloaderService extends Service {
             return;
         }
 
-        publishDownloadComplete(mapType);
+        publishDownloadComplete(mapID);
     }
 
     private void saveDownlaodedMap(String mapType, Bitmap bmp) throws IOException {
@@ -200,9 +196,14 @@ public class DownloaderService extends Service {
         Log.d("Map  saved to: " + temp_file.getAbsolutePath() + ". Overwritten? = " + success);
     }
 
+    @UiThread
+    public void updateDownloadStatus(String mapType, long downloadedPercentage) {
+        Toast.makeText(getApplicationContext(), "Downloaded: " + mapType + "->" + downloadedPercentage, Toast.LENGTH_SHORT).show();
+    }
+
     //Notify the Views to refresh to get the updated map.
-    public void publishDownloadComplete(String mapType) {
-        bus.post(new DownloadCompletedEvent(mapType));
+    public void publishDownloadComplete(int mapID) {
+        bus.post(new DownloadCompletedEvent(mapID));
     }
 
     //TODO: Test event. to be removed.

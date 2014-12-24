@@ -1,13 +1,13 @@
 package com.shahul3d.indiasatelliteweather.events;
 
 public class DownloadCompletedEvent {
-    public String mapType;
+    public int mapID;
 
-    public DownloadCompletedEvent(String mapTypeToDownload) {
-        mapType = mapTypeToDownload;
+    public DownloadCompletedEvent(int mapIDToDownload) {
+        mapID = mapIDToDownload;
     }
 
-    public String getDownloadedMapType() {
-        return mapType;
+    public int getDownloadedMapType() {
+        return mapID;
     }
 }
