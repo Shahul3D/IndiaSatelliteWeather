@@ -46,17 +46,20 @@ public class TouchImageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        Log.d("OnCreate:"+pageNumber);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         bus.register(this);
+        Log.d("OnResume:"+pageNumber);
     }
 
     @Override
     public void onPause() {
         bus.unregister(this);
+        Log.d("OnPause:"+pageNumber);
         super.onPause();
     }
 
@@ -64,6 +67,7 @@ public class TouchImageFragment extends Fragment {
     void calledAfterViewInjection() {
 //        touchImage.setImageAsset(chooseImage(pageNumber));
         renderImage();
+        Log.d("ViewAfterInjection:"+pageNumber);
     }
 
     @UiThread
