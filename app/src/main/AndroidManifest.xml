@@ -20,6 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".controllers.AnimatedMapActivity_" />
         <service android:name=".service.DownloaderService_" />
     </application>
 
