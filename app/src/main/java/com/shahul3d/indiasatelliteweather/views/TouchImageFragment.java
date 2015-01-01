@@ -8,8 +8,10 @@ import android.view.MenuItem;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
+import com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadCompletedEvent;
+import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.OkHttpClient;
@@ -40,7 +42,7 @@ public class TouchImageFragment extends Fragment {
     SubsamplingScaleImageView touchImage;
 
     EventBus bus = EventBus.getDefault();
-    OkHttpClient httpClient;
+    MainMapActivity_ activityContext = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,9 +67,10 @@ public class TouchImageFragment extends Fragment {
 
     @AfterViews
     void calledAfterViewInjection() {
-//        touchImage.setImageAsset(chooseImage(pageNumber));
+        activityContext = (MainMapActivity_) getActivity();
         renderImage();
         Log.d("ViewAfterInjection:"+pageNumber);
+        activityContext.hideProgress();
     }
 
     @UiThread
@@ -93,11 +96,6 @@ public class TouchImageFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-        @Override
-        public void onDestroyView() {
-            super.onDestroyView();
-        }*/
     public void onEvent(DownloadCompletedEvent downloadCompleted) {
         int mapID = downloadCompleted.mapID;
         if (pageNumber == mapID) {
@@ -105,6 +103,15 @@ public class TouchImageFragment extends Fragment {
         }
     }
 
-    public void onEvent(Object e) {
+    public void onEvent(DownloadProgressUpdateEvent downloadProgress) {
+        if (activityContext == null) {
+            return;
+        }
+
+        int mapID = downloadProgress.getMapType();
+        if (pageNumber == mapID) {
+            int progress = downloadProgress.getProgress();
+            activityContext.updateProgress(progress);
+        }
     }
 }

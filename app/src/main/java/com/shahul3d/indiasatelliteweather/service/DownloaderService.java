@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadCompletedEvent;
+import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.TestEvent;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.Cache;
@@ -21,7 +21,6 @@ import com.squareup.okhttp.Response;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EService;
-import org.androidannotations.annotations.UiThread;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -107,7 +106,6 @@ public class DownloaderService extends Service {
             Log.d("\nN/W counts: " + httpClient.getCache().getNetworkCount() + "\nReq Counts: " + httpClient.getCache().getRequestCount() + "\nCache Hits: " + httpClient.getCache().getHitCount());
 
             if (response.code() == 200) {
-                long lastUpdatedTime = 0;
                 InputStream inputStream = null;
                 ByteArrayOutputStream outArrrayIPStream = null;
                 try {
@@ -129,14 +127,10 @@ public class DownloaderService extends Service {
                         //Update download status
                         if (statusUpdateTrigger > appConstants.STATUS_UPDATE_THRESHOLD) {
 //                            Thread.sleep(3000);
-                            long currentTime = System.currentTimeMillis();
-                            if ((currentTime - lastUpdatedTime) > 1000) {
                                 statusUpdateTrigger = 0;
-                                long downloadedPercent = downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
+                                Long downloadedPercent = downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
                                 Log.d("downloaded percent: " + downloadedPercent);
-                                updateDownloadStatus(mapType, downloadedPercent);
-                                lastUpdatedTime = currentTime;
-                            }
+                                updateDownloadStatus(mapID, downloadedPercent.intValue());
                         }
                     }
 
@@ -152,7 +146,7 @@ public class DownloaderService extends Service {
 
                     //Save downloaded image for offline use.
                     saveDownlaodedMap(mapType, bmp);
-                    updateDownloadStatus(mapType, 100);
+                    updateDownloadStatus(mapID, 100);
                 } catch (IOException ignore) {
                     //TODO: Exception handling
                     //Error on fetching & organizing the binary data.
@@ -196,9 +190,8 @@ public class DownloaderService extends Service {
         Log.d("Map  saved to: " + temp_file.getAbsolutePath() + ". Overwritten? = " + success);
     }
 
-    @UiThread
-    public void updateDownloadStatus(String mapType, long downloadedPercentage) {
-        Toast.makeText(getApplicationContext(), "Downloaded: " + mapType + "->" + downloadedPercentage, Toast.LENGTH_SHORT).show();
+    public void updateDownloadStatus(int mapID, int downloadedPercentage) {
+        bus.post(new DownloadProgressUpdateEvent(mapID,downloadedPercentage));
     }
 
     //Notify the Views to refresh to get the updated map.

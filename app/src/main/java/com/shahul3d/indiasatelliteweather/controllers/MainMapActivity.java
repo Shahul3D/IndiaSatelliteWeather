@@ -9,9 +9,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
@@ -22,6 +24,7 @@ import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_main_map)
@@ -37,6 +40,9 @@ public class MainMapActivity extends ActionBarActivity {
 
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
+
+    @ViewById
+    NumberProgressBar number_progress_bar;
 
     @ViewById(R.id.viewpager)
     ViewPager pager;
@@ -98,6 +104,30 @@ public class MainMapActivity extends ActionBarActivity {
                 return Color.WHITE;
             }
         });
+        number_progress_bar.setSuffix("% Downloading ");
+    }
+
+    @UiThread
+    public void updateProgress(int progress) {
+        if (number_progress_bar != null) {
+            if (progress >= 100) {
+                hideProgress();
+                return;
+            }
+
+            if (number_progress_bar.getVisibility() == View.GONE) {
+                number_progress_bar.setVisibility(View.VISIBLE);
+            }
+
+            number_progress_bar.setProgress(progress);
+        }
+    }
+
+    @UiThread
+    public void hideProgress() {
+        if (number_progress_bar != null) {
+            number_progress_bar.setVisibility(View.GONE);
+        }
     }
 
     @Override
