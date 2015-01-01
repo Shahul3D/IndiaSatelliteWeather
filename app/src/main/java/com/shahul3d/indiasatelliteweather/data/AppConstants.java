@@ -23,6 +23,7 @@ public class AppConstants {
     {
         MAP_URL = new HashMap<String, String>();
         MAP_URL.put(MAP_UV, "http://www.imd.gov.in/section/satmet/img/sector-eir.jpg");
+//        MAP_URL.put(MAP_UV, "http://www.imd.gov.in/section/satmet/img/india.jpg");
         MAP_URL.put(MAP_COLOR, "http://tropic.ssec.wisc.edu/real-time/indian/images/xxirm5bbm.jpg");
         MAP_URL.put(MAP_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
