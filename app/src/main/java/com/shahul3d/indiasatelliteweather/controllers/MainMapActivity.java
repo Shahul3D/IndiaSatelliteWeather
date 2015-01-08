@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
+import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
@@ -53,6 +55,7 @@ public class MainMapActivity extends ActionBarActivity {
 
     @Bean
     StorageUtils storageUtils;
+    private MenuItem refreshItem;
 
 
     @Override
@@ -124,6 +127,7 @@ public class MainMapActivity extends ActionBarActivity {
             }
 
             if (number_progress_bar.getVisibility() == View.GONE) {
+                startRefreshAnimation();
                 number_progress_bar.setVisibility(View.VISIBLE);
             }
 
@@ -134,6 +138,7 @@ public class MainMapActivity extends ActionBarActivity {
     @UiThread
     public void hideProgress() {
         if (number_progress_bar != null) {
+            finishRefreshAnimation();
             number_progress_bar.setVisibility(View.GONE);
         }
     }
@@ -152,9 +157,17 @@ public class MainMapActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main_map, menu);
+        refreshItem = menu.findItem(R.id.action_refresh);
         return true;
+    }
+
+    public void startRefreshAnimation() {
+        AnimationUtil.startRefreshAnimation(this, refreshItem);
+    }
+
+    public void finishRefreshAnimation() {
+        AnimationUtil.stopRefreshAnimation(this, refreshItem);
     }
 
 //    @Override
