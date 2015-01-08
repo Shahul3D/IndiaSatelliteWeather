@@ -12,7 +12,7 @@ import com.shahul3d.indiasatelliteweather.views.TouchImageFragment_;
 
 public class TouchImagePageAdapter extends FragmentStatePagerAdapter {
 
-    final int PAGE_COUNT = 4;
+    final int PAGE_COUNT = 5;
     private String titles[];
 
     public TouchImagePageAdapter(FragmentManager fm, String[] titles2) {

@@ -12,6 +12,7 @@ public class AppConstants {
     public static final String MAP_UV = "map_uv";
     public static final String MAP_IR = "map_ir";
     public static final String MAP_COLOR = "map_color";
+    public static final String MAP_HEAT = "map_heat";
     public static final String MAP_WIND_FLOW = "map_windflow";
 
     //Intent name for downloader service.
@@ -23,9 +24,9 @@ public class AppConstants {
     {
         MAP_URL = new HashMap<String, String>();
         MAP_URL.put(MAP_UV, "http://www.imd.gov.in/section/satmet/img/sector-eir.jpg");
-//        MAP_URL.put(MAP_UV, "http://www.imd.gov.in/section/satmet/img/india.jpg");
         MAP_URL.put(MAP_COLOR, "http://tropic.ssec.wisc.edu/real-time/indian/images/xxirm5bbm.jpg");
         MAP_URL.put(MAP_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
+        MAP_URL.put(MAP_HEAT, "http://www.imd.gov.in/section/satmet/img/3Dasiasec_ir1_temp.jpg");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
     }
 
@@ -43,6 +44,9 @@ public class AppConstants {
                 mapType = MAP_IR;
                 break;
             case 3:
+                mapType = MAP_HEAT;
+                break;
+            case 4:
                 mapType = MAP_WIND_FLOW;
                 break;
         }

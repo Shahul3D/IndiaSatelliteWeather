@@ -32,7 +32,7 @@ import org.androidannotations.annotations.ViewById;
 
 @EActivity(R.layout.activity_main_map)
 public class MainMapActivity extends ActionBarActivity {
-    private String titles[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Wind Direction"};
+    private String titles[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
