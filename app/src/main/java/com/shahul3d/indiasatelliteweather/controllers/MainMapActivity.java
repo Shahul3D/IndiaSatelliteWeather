@@ -8,8 +8,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,7 +19,6 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
-import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
@@ -64,7 +65,7 @@ public class MainMapActivity extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         //Stopping the service when the app exists.
-        DownloaderService_.intent(getApplication()).stop();
+//        DownloaderService_.intent(getApplication()).stop();
         super.onDestroy();
     }
 
@@ -81,11 +82,18 @@ public class MainMapActivity extends ActionBarActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Ultra Violet", "Color Composite", "Infra Red", "Wind Direction"
+                "Weather Maps", "Weather Animation", "Settings", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
         mDrawerList.setAdapter(adapter);
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Selected :" + position);
+                mDrawerLayout.closeDrawer(Gravity.START);
+            }
+        });
     }
 
     private void initToolbar() {
