@@ -10,7 +10,6 @@ import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
-import com.shahul3d.indiasatelliteweather.events.TestEvent;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Call;
@@ -216,7 +215,6 @@ public class DownloaderService extends Service {
     }
 
     //TODO: Test event. to be removed.
-    public void onEvent(TestEvent event) {
-        Log.d("Service  got the message: " + event.getData());
+    public void onEvent(int dummyEvent) {
     }
 }

@@ -26,8 +26,8 @@ import java.io.File;
 
 import de.greenrobot.event.EventBus;
 
-@EFragment(R.layout.touch_image_fragment)
-public class TouchImageFragment extends Fragment {
+@EFragment(R.layout.map_view_fragment)
+public class MapViewFragment extends Fragment {
     @Bean
     AppConstants appConstants;
 

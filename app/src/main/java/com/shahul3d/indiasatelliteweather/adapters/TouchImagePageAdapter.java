@@ -6,8 +6,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
 import com.noveogroup.android.log.Log;
-import com.shahul3d.indiasatelliteweather.views.TouchImageFragment;
-import com.shahul3d.indiasatelliteweather.views.TouchImageFragment_;
+//TODO: Remove redundant import.
+import com.shahul3d.indiasatelliteweather.views.MapViewFragment;
+import com.shahul3d.indiasatelliteweather.views.MapViewFragment_;
 
 
 public class TouchImagePageAdapter extends FragmentStatePagerAdapter {
@@ -22,7 +23,7 @@ public class TouchImagePageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        TouchImageFragment fragment = TouchImageFragment_.builder()
+        MapViewFragment fragment = MapViewFragment_.builder()
                 .pageNumber(position)
                 .build();
         return fragment;
