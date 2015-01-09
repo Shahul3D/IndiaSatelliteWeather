@@ -10,11 +10,10 @@ import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
-import com.shahul3d.indiasatelliteweather.events.DownloadCompletedEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
+import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
-import com.squareup.okhttp.OkHttpClient;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;
@@ -48,20 +47,20 @@ public class TouchImageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Log.d("OnCreate:"+pageNumber);
+        Log.d("OnCreate:" + pageNumber);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         bus.register(this);
-        Log.d("OnResume:"+pageNumber);
+        Log.d("OnResume:" + pageNumber);
     }
 
     @Override
     public void onPause() {
         bus.unregister(this);
-        Log.d("OnPause:"+pageNumber);
+        Log.d("OnPause:" + pageNumber);
         super.onPause();
     }
 
@@ -69,7 +68,7 @@ public class TouchImageFragment extends Fragment {
     void calledAfterViewInjection() {
         activityContext = (MainMapActivity_) getActivity();
         renderImage();
-        Log.d("ViewAfterInjection:"+pageNumber);
+        Log.d("ViewAfterInjection:" + pageNumber);
         activityContext.hideProgress();
     }
 
@@ -97,11 +96,21 @@ public class TouchImageFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onEvent(DownloadCompletedEvent downloadCompleted) {
-        int mapID = downloadCompleted.mapID;
-        if (pageNumber == mapID) {
-            renderImage();
+    public void onEvent(DownloadStatusEvent downloadStatus) {
+        int mapID = downloadStatus.mapID;
+        if (pageNumber != mapID) {
+            return;
         }
+
+        activityContext.stopRefreshAnimation();
+
+        if (!downloadStatus.status) {
+            //TODO: Handle download failure scenerio.
+            Log.d("Received download failed event for:" + mapID);
+            return;
+        }
+
+        renderImage();
     }
 
     public void onEvent(DownloadProgressUpdateEvent downloadProgress) {

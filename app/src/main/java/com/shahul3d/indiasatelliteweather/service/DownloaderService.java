@@ -8,8 +8,8 @@ import android.os.IBinder;
 
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
-import com.shahul3d.indiasatelliteweather.events.DownloadCompletedEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
+import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.events.TestEvent;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.Cache;
@@ -40,6 +40,10 @@ public class DownloaderService extends Service {
     AppConstants appConstants;
 
     OkHttpClient httpClient;
+
+    //No need to initialize the values, since the boolean values will be false by default.
+    Boolean activeDownloadsList[] = new Boolean[5]; //TODO: get the size from Appconstant MAP_URL.
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -76,12 +80,21 @@ public class DownloaderService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent != null) {
-            int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
-            downloadMap(mapID);
+        int startOption = START_NOT_STICKY;
+        if (intent == null) {
+            return startOption;
         }
+
+        int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
+        if (activeDownloadsList[mapID]) {
+            Log.d("Duplicate download request for the same map type");
+            return startOption;
+        }
+
+        activeDownloadsList[mapID] = true;
+        downloadMap(mapID);
         // NOT_STICKY: No need to restart the service if it get killed by user or by system.
-        return START_NOT_STICKY;
+        return startOption;
     }
 
     @Background
@@ -127,10 +140,10 @@ public class DownloaderService extends Service {
                         //Update download status
                         if (statusUpdateTrigger > appConstants.STATUS_UPDATE_THRESHOLD) {
 //                            Thread.sleep(3000);
-                                statusUpdateTrigger = 0;
-                                Long downloadedPercent = downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
-                                Log.d("downloaded percent: " + downloadedPercent);
-                                updateDownloadStatus(mapID, downloadedPercent.intValue());
+                            statusUpdateTrigger = 0;
+                            Long downloadedPercent = downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
+                            Log.d("downloaded percent: " + downloadedPercent);
+                            updateDownloadStatus(mapID, downloadedPercent.intValue());
                         }
                     }
 
@@ -149,6 +162,7 @@ public class DownloaderService extends Service {
                     updateDownloadStatus(mapID, 100);
                 } catch (IOException ignore) {
                     //TODO: Exception handling
+                    broadcastDownloadStatus(mapID, false);
                     //Error on fetching & organizing the binary data.
                     ignore.printStackTrace();
                     return;
@@ -167,12 +181,13 @@ public class DownloaderService extends Service {
             }
         } catch (IOException e) {
             //TODO: Exception handling
+            broadcastDownloadStatus(mapID, false);
             //Error in download call
             e.printStackTrace();
             return;
         }
 
-        publishDownloadComplete(mapID);
+        broadcastDownloadStatus(mapID, true);
     }
 
     private void saveDownlaodedMap(String mapType, Bitmap bmp) throws IOException {
@@ -191,12 +206,13 @@ public class DownloaderService extends Service {
     }
 
     public void updateDownloadStatus(int mapID, int downloadedPercentage) {
-        bus.post(new DownloadProgressUpdateEvent(mapID,downloadedPercentage));
+        bus.post(new DownloadProgressUpdateEvent(mapID, downloadedPercentage));
     }
 
     //Notify the Views to refresh to get the updated map.
-    public void publishDownloadComplete(int mapID) {
-        bus.post(new DownloadCompletedEvent(mapID));
+    public void broadcastDownloadStatus(int mapID, boolean status) {
+        activeDownloadsList[mapID] = false;
+        bus.post(new DownloadStatusEvent(mapID, status));
     }
 
     //TODO: Test event. to be removed.

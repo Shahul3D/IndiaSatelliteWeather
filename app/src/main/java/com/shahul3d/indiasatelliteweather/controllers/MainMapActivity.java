@@ -139,7 +139,7 @@ public class MainMapActivity extends ActionBarActivity {
     @UiThread
     public void hideProgress() {
         if (number_progress_bar != null) {
-            finishRefreshAnimation();
+            stopRefreshAnimation();
             number_progress_bar.setVisibility(View.GONE);
         }
     }
@@ -164,15 +164,17 @@ public class MainMapActivity extends ActionBarActivity {
     }
 
     public void startRefreshAnimation() {
-        if(!isLoading){
+        if (!isLoading) {
             AnimationUtil.startRefreshAnimation(this, refreshItem);
             isLoading = Boolean.TRUE;
         }
     }
 
-    public void finishRefreshAnimation() {
-        AnimationUtil.stopRefreshAnimation(this, refreshItem);
-        isLoading = Boolean.FALSE;
+    public void stopRefreshAnimation() {
+        if (isLoading) {
+            AnimationUtil.stopRefreshAnimation(this, refreshItem);
+            isLoading = Boolean.FALSE;
+        }
     }
 
 //    @Override
