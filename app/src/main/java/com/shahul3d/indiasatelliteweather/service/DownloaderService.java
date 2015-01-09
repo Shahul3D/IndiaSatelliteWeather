@@ -41,8 +41,8 @@ public class DownloaderService extends Service {
 
     OkHttpClient httpClient;
 
-    //No need to initialize the values, since the boolean values will be false by default.
-    Boolean activeDownloadsList[] = new Boolean[5]; //TODO: get the size from Appconstant MAP_URL.
+    //TODO: get the size from Appconstant MAP_URL.
+    Boolean activeDownloadsList[] = new Boolean[5];
 
 
     @Override
@@ -86,7 +86,7 @@ public class DownloaderService extends Service {
         }
 
         int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
-        if (activeDownloadsList[mapID]) {
+        if (activeDownloadsList[mapID] != null &&  activeDownloadsList[mapID]) {
             Log.d("Duplicate download request for the same map type");
             return startOption;
         }
@@ -182,7 +182,7 @@ public class DownloaderService extends Service {
         } catch (IOException e) {
             //TODO: Exception handling
             broadcastDownloadStatus(mapID, false);
-            //Error in download call
+            Log.d("Error in download call");
             e.printStackTrace();
             return;
         }

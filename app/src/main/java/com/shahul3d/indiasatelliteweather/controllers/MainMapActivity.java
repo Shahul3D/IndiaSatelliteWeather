@@ -163,6 +163,7 @@ public class MainMapActivity extends ActionBarActivity {
         return true;
     }
 
+    @UiThread
     public void startRefreshAnimation() {
         if (!isLoading) {
             AnimationUtil.startRefreshAnimation(this, refreshItem);
@@ -170,6 +171,7 @@ public class MainMapActivity extends ActionBarActivity {
         }
     }
 
+    @UiThread
     public void stopRefreshAnimation() {
         if (isLoading) {
             AnimationUtil.stopRefreshAnimation(this, refreshItem);
