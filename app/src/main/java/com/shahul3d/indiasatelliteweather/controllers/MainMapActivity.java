@@ -56,6 +56,7 @@ public class MainMapActivity extends ActionBarActivity {
     @Bean
     StorageUtils storageUtils;
     private MenuItem refreshItem;
+    private boolean isLoading = Boolean.FALSE;
 
 
     @Override
@@ -163,11 +164,15 @@ public class MainMapActivity extends ActionBarActivity {
     }
 
     public void startRefreshAnimation() {
-        AnimationUtil.startRefreshAnimation(this, refreshItem);
+        if(!isLoading){
+            AnimationUtil.startRefreshAnimation(this, refreshItem);
+            isLoading = Boolean.TRUE;
+        }
     }
 
     public void finishRefreshAnimation() {
         AnimationUtil.stopRefreshAnimation(this, refreshItem);
+        isLoading = Boolean.FALSE;
     }
 
 //    @Override

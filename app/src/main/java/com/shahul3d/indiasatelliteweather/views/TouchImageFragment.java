@@ -86,6 +86,7 @@ public class TouchImageFragment extends Fragment {
         if (id == R.id.action_refresh) {
             //TODO: to be refactored.
             Log.d("Refresh clicked:-> with page number:" + pageNumber);
+            activityContext.startRefreshAnimation();
             Intent downloaderIntent = new Intent(getActivity().getApplicationContext(), DownloaderService_.class);
             downloaderIntent.putExtra(appConstants.DOWNLOAD_INTENT_NAME, pageNumber);
             getActivity().getApplicationContext().startService(downloaderIntent);
