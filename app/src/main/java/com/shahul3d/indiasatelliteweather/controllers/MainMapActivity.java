@@ -110,13 +110,30 @@ public class MainMapActivity extends ActionBarActivity {
         pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), titles));
         slidingTabLayout.setViewPager(pager);
         slidingTabLayout.setDistributeEvenly(true);
+        number_progress_bar.setSuffix("% Downloading ");
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
                 return Color.WHITE;
             }
         });
-        number_progress_bar.setSuffix("% Downloading ");
+        slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int arg0) {
+                Log.d("onPageSelected:" + arg0);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @UiThread
