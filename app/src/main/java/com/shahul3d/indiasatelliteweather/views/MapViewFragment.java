@@ -3,6 +3,8 @@ package com.shahul3d.indiasatelliteweather.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
@@ -13,6 +15,7 @@ import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
+import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -42,6 +45,8 @@ public class MapViewFragment extends Fragment {
 
     EventBus bus = EventBus.getDefault();
     MainMapActivity_ activityContext = null;
+    MenuItem refreshItem;
+    boolean isLoading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,12 +85,20 @@ public class MapViewFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.i("create menu called on fragmetn");
+        inflater.inflate(R.menu.menu_main_map, menu);
+        refreshItem = menu.findItem(R.id.action_refresh);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             //TODO: to be refactored.
             Log.d("Refresh clicked:-> with page number:" + pageNumber);
-            activityContext.startRefreshAnimation();
+            startRefreshAnimation();
             Intent downloaderIntent = new Intent(getActivity().getApplicationContext(), DownloaderService_.class);
             downloaderIntent.putExtra(appConstants.DOWNLOAD_INTENT_NAME, pageNumber);
             getActivity().getApplicationContext().startService(downloaderIntent);
@@ -96,13 +109,29 @@ public class MapViewFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @UiThread
+    public void startRefreshAnimation() {
+        if (!isLoading) {
+            AnimationUtil.startRefreshAnimation(getActivity().getApplicationContext(), refreshItem);
+            isLoading = Boolean.TRUE;
+        }
+    }
+
+    @UiThread
+    public void stopRefreshAnimation() {
+        if (isLoading) {
+            AnimationUtil.stopRefreshAnimation(getActivity().getApplicationContext(), refreshItem);
+            isLoading = Boolean.FALSE;
+        }
+    }
+
     public void onEvent(DownloadStatusEvent downloadStatus) {
         int mapID = downloadStatus.mapID;
         if (pageNumber != mapID) {
             return;
         }
 
-        activityContext.stopRefreshAnimation();
+        stopRefreshAnimation();
 
         if (!downloadStatus.status) {
             //TODO: Handle download failure scenerio.
