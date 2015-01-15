@@ -22,6 +22,8 @@ import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
+import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
+import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
@@ -32,6 +34,10 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main_map)
 public class MainMapActivity extends ActionBarActivity {
@@ -61,24 +67,30 @@ public class MainMapActivity extends ActionBarActivity {
     @Bean
     AppConstants appConstants;
 
+    EventBus bus = EventBus.getDefault();
     private MenuItem refreshItem;
     private boolean isLoading = Boolean.FALSE;
     Integer currentPage = 0;
+    ConcurrentHashMap<Integer, Integer> downloadingMapsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Starting the service when the app starts
-//        DownloaderService_.intent(getApplication()).start();
+        downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bus.register(this);
     }
 
     @Override
-    protected void onDestroy() {
-        //Stopping the service when the app exists.
-//        DownloaderService_.intent(getApplication()).stop();
-        super.onDestroy();
+    public void onPause() {
+        bus.unregister(this);
+        super.onPause();
     }
-
 
     @AfterViews
     protected void init() {
@@ -133,8 +145,9 @@ public class MainMapActivity extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int arg0) {
-                currentPage = arg0;
                 Log.d("onPageSelected:" + arg0);
+                syncDownloadProgress(arg0);
+                currentPage = arg0;
             }
 
             @Override
@@ -166,10 +179,8 @@ public class MainMapActivity extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.a("onOptionsSelected called");
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            //TODO: to be refactored.
             Log.i("Refresh clicked:-> with page number:" + currentPage);
             startRefreshAnimation();
             Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
@@ -218,6 +229,39 @@ public class MainMapActivity extends ActionBarActivity {
         if (isLoading) {
             AnimationUtil.stopRefreshAnimation(this, refreshItem);
             isLoading = Boolean.FALSE;
+        }
+    }
+
+    public void syncDownloadProgress(int currentPage) {
+        if (!downloadingMapsList.containsKey(currentPage)) {
+            hideProgress();
+            return;
+        }
+        updateProgress(downloadingMapsList.get(currentPage));
+    }
+
+    public void updateActiveDownloadsList(int downloadingMapID, int lastKnownProgress) {
+        if (lastKnownProgress == -1 && downloadingMapsList.containsKey(downloadingMapID)) {
+            downloadingMapsList.remove(downloadingMapID);
+            return;
+        }
+        downloadingMapsList.put(downloadingMapID, lastKnownProgress);
+
+    }
+
+    public void onEvent(DownloadProgressUpdateEvent downloadProgress) {
+        if (currentPage == downloadProgress.getMapType()) {
+            updateProgress(downloadProgress.getProgress());
+        }
+        updateActiveDownloadsList(downloadProgress.getMapType(), downloadProgress.getProgress());
+    }
+
+    public void onEvent(DownloadStatusEvent downloadStatus) {
+        int completedMapID = downloadStatus.mapID;
+        updateActiveDownloadsList(completedMapID, -1);
+
+        if (currentPage == completedMapID) {
+            hideProgress();
         }
     }
 }

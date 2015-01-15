@@ -85,7 +85,7 @@ public class DownloaderService extends Service {
         }
 
         int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
-        if (activeDownloadsList[mapID] != null &&  activeDownloadsList[mapID]) {
+        if (activeDownloadsList[mapID] != null && activeDownloadsList[mapID]) {
             Log.d("Duplicate download request for the same map type");
             return startOption;
         }
@@ -98,10 +98,10 @@ public class DownloaderService extends Service {
 
     @Background
     public void downloadMap(int mapID) {
-        //TODO: to check the same map type is already downloading.
         //TODO: Check internet
         String mapType = appConstants.getMapType(mapID);
         Log.d("Download requested for map type: " + mapType);
+        updateDownloadStatus(mapID, 0);
 
         final String URL = appConstants.MAP_URL.get(mapType);
 

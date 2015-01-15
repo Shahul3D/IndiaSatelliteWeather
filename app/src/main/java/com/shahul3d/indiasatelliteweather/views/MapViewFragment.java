@@ -8,7 +8,6 @@ import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
-import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 
@@ -89,17 +88,5 @@ public class MapViewFragment extends Fragment {
         }
 
         renderImage();
-    }
-
-    public void onEvent(DownloadProgressUpdateEvent downloadProgress) {
-        if (activityContext == null) {
-            return;
-        }
-
-        int mapID = downloadProgress.getMapType();
-        if (pageNumber == mapID) {
-            int progress = downloadProgress.getProgress();
-            activityContext.updateProgress(progress);
-        }
     }
 }
