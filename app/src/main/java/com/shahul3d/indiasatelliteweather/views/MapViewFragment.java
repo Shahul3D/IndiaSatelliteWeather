@@ -84,6 +84,9 @@ public class MapViewFragment extends Fragment {
     @UiThread
     void renderImage() {
         //TODO: Check file exits before render.
+        touchImage.setMaxScale(5f);
+        touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
+        touchImage.setScaleAndCenter(2f, touchImage.getCenter());
         touchImage.setImageFile(storageUtils.getExternalStoragePath() + File.separator + appConstants.getMapType(pageNumber) + ".jpg");
         Log.d("Map refreshed");
     }
