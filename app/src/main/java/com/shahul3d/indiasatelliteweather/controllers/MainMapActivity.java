@@ -63,7 +63,7 @@ public class MainMapActivity extends ActionBarActivity {
 
     private MenuItem refreshItem;
     private boolean isLoading = Boolean.FALSE;
-    Integer currentPage = -1;
+    Integer currentPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
