@@ -1,5 +1,6 @@
 package com.shahul3d.indiasatelliteweather.controllers;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,9 @@ import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
+import com.shahul3d.indiasatelliteweather.data.AppConstants;
+import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
+import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
@@ -53,9 +58,12 @@ public class MainMapActivity extends ActionBarActivity {
 
     @Bean
     StorageUtils storageUtils;
+    @Bean
+    AppConstants appConstants;
+
     private MenuItem refreshItem;
     private boolean isLoading = Boolean.FALSE;
-
+    Integer currentPage = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,7 @@ public class MainMapActivity extends ActionBarActivity {
         initDrawer();
         //TODO: To be removed.
         Log.d("Storage path: %s", storageUtils.getExternalStoragePath());
+        hideProgress();
     }
 
     private void initDrawer() {
@@ -124,6 +133,7 @@ public class MainMapActivity extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int arg0) {
+                currentPage = arg0;
                 Log.d("onPageSelected:" + arg0);
             }
 
@@ -132,29 +142,6 @@ public class MainMapActivity extends ActionBarActivity {
 
             }
         });
-    }
-
-    @UiThread
-    public void updateProgress(int progress) {
-        if (number_progress_bar != null) {
-            if (progress >= 100) {
-                hideProgress();
-                return;
-            }
-
-            if (number_progress_bar.getVisibility() == View.GONE) {
-                number_progress_bar.setVisibility(View.VISIBLE);
-            }
-
-            number_progress_bar.setProgress(progress);
-        }
-    }
-
-    @UiThread
-    public void hideProgress() {
-        if (number_progress_bar != null) {
-            number_progress_bar.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -167,5 +154,70 @@ public class MainMapActivity extends ActionBarActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Log.d("onCreateOptionsMenu called");
+        getMenuInflater().inflate(R.menu.menu_main_map, menu);
+        refreshItem = menu.findItem(R.id.action_refresh);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.a("onOptionsSelected called");
+        int id = item.getItemId();
+        if (id == R.id.action_refresh) {
+            //TODO: to be refactored.
+            Log.i("Refresh clicked:-> with page number:" + currentPage);
+            startRefreshAnimation();
+            Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
+            downloaderIntent.putExtra(appConstants.DOWNLOAD_INTENT_NAME, currentPage);
+            getApplicationContext().startService(downloaderIntent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @UiThread
+    public void updateProgress(int progress) {
+        if (number_progress_bar != null) {
+            if (progress >= 100) {
+                hideProgress();
+                return;
+            }
+
+            if (number_progress_bar.getVisibility() == View.GONE) {
+                startRefreshAnimation();
+                number_progress_bar.setVisibility(View.VISIBLE);
+            }
+
+            number_progress_bar.setProgress(progress);
+        }
+    }
+
+    @UiThread
+    public void hideProgress() {
+        if (number_progress_bar != null) {
+            stopRefreshAnimation();
+            number_progress_bar.setVisibility(View.GONE);
+        }
+    }
+
+    @UiThread
+    public void startRefreshAnimation() {
+        if (!isLoading) {
+            AnimationUtil.startRefreshAnimation(this, refreshItem);
+            isLoading = Boolean.TRUE;
+        }
+    }
+
+    @UiThread
+    public void stopRefreshAnimation() {
+        if (isLoading) {
+            AnimationUtil.stopRefreshAnimation(this, refreshItem);
+            isLoading = Boolean.FALSE;
+        }
     }
 }
