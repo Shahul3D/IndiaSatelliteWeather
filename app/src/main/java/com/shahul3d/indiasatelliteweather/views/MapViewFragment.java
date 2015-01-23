@@ -16,8 +16,13 @@
 package com.shahul3d.indiasatelliteweather.views;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.davemorrissey.labs.subscaleview.ImageViewState;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
@@ -51,8 +56,26 @@ public class MapViewFragment extends Fragment {
     @ViewById
     SubsamplingScaleImageView touchImage;
 
+    ImageViewState mapViewState = null;
     EventBus bus = EventBus.getDefault();
     MainMapActivity_ activityContext = null;
+    private static final String BUNDLE_STATE = "mapViewState";
+
+    @Override
+    public void onPause() {
+        bus.unregister(this);
+        Log.i("OnPause:" + pageNumber);
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        ImageViewState state = touchImage.getState();
+        if (state != null) {
+            outState.putSerializable(BUNDLE_STATE, touchImage.getState());
+        }
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,17 +84,11 @@ public class MapViewFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        bus.register(this);
-        Log.d("OnResume:" + pageNumber);
-    }
-
-    @Override
-    public void onPause() {
-        bus.unregister(this);
-        Log.d("OnPause:" + pageNumber);
-        super.onPause();
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (savedInstanceState != null && savedInstanceState.containsKey(BUNDLE_STATE)) {
+            mapViewState = (ImageViewState) savedInstanceState.getSerializable(BUNDLE_STATE);
+        }
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @AfterViews
@@ -81,13 +98,25 @@ public class MapViewFragment extends Fragment {
         Log.d("ViewAfterInjection:" + pageNumber);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        bus.register(this);
+        Log.d("OnResume:" + pageNumber);
+    }
+
     @UiThread
     void renderImage() {
         //TODO: Check file exits before render.
-        touchImage.setMaxScale(5f);
-        touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
-        touchImage.setScaleAndCenter(2f, touchImage.getCenter());
-        touchImage.setImageFile(storageUtils.getExternalStoragePath() + File.separator + appConstants.getMapType(pageNumber) + ".jpg");
+        String imageFile = storageUtils.getExternalStoragePath() + File.separator + appConstants.getMapType(pageNumber) + ".jpg";
+        if (mapViewState != null) {
+            touchImage.setImageFile(imageFile, mapViewState);
+        } else {
+            touchImage.setMaxScale(5f);
+            touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
+            touchImage.setScaleAndCenter(2f, touchImage.getCenter());
+            touchImage.setImageFile(imageFile);
+        }
         Log.d("Map refreshed");
     }
 
