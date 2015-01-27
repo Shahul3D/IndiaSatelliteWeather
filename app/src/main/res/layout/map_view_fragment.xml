@@ -24,6 +24,17 @@
         android:layout_height="fill_parent"
         android:background="@color/material_blue_grey_800">
 
+        <LinearLayout
+            android:id="@+id/noImageBanner"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center_vertical|center_horizontal|center"
+                android:text="@string/no_data_message"/>
+        </LinearLayout>
+
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
             android:id="@+id/touchImage"
             android:layout_width="match_parent"
