@@ -20,4 +20,11 @@ public class StorageUtils {
         String location = dir[dir.length - 1].toString();
         return location ;
     }
+    public boolean fileExists(Context context, String filename) {
+        File file = context.getFileStreamPath(filename);
+        if(file == null || !file.exists()) {
+            return false;
+        }
+        return true;
+    }
 }
