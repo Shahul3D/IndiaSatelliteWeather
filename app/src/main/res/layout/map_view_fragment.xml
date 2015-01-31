@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*******************************************************************************
   ~  * Copyright (c) 2015.  Shahul Hameed.
   ~  *
@@ -25,14 +24,22 @@
         android:background="@color/material_blue_grey_800">
 
         <LinearLayout
-            android:id="@+id/noImageBanner"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+            <!--
+                        <ProgressBar
+                            android:id="@+id/loadingIndicator" style="?android:attr/progressBarStyle"
+                            android:indeterminate="true"
+                            android:layout_width="100dp" android:layout_height="100dp"
+                            android:gravity="center_vertical|center_horizontal|center"/>
+            -->
             <TextView
+                android:id="@+id/noImageBanner"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical|center_horizontal|center"
-                android:text="@string/no_data_message"/>
+                android:text="@string/no_data_message"
+                android:visibility="gone" />
         </LinearLayout>
 
         <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView

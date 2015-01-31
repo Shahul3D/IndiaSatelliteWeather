@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.davemorrissey.labs.subscaleview.ImageViewState;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
@@ -55,6 +56,9 @@ public class MapViewFragment extends Fragment {
 
     @ViewById
     SubsamplingScaleImageView touchImage;
+
+    @ViewById
+    TextView noImageBanner;
 
     ImageViewState mapViewState = null;
     EventBus bus = EventBus.getDefault();
@@ -109,6 +113,13 @@ public class MapViewFragment extends Fragment {
     void renderImage() {
         //TODO: Check file exits before render.
         String imageFile = storageUtils.getExternalStoragePath() + File.separator + appConstants.getMapType(pageNumber) + ".jpg";
+
+        if (!storageUtils.fileExists(imageFile)){
+            Log.e("File not exists: " + pageNumber);
+            noImageBanner.setVisibility(View.VISIBLE);
+            return;
+        }
+
         if (mapViewState != null) {
             touchImage.setImageFile(imageFile, mapViewState);
         } else {
