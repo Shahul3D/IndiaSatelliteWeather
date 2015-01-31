@@ -15,6 +15,8 @@
 
 package com.shahul3d.indiasatelliteweather.views;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -30,6 +32,7 @@ import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
+import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 
 import org.androidannotations.annotations.AfterViews;
@@ -47,6 +50,8 @@ import de.greenrobot.event.EventBus;
 public class MapViewFragment extends Fragment {
     @Bean
     AppConstants appConstants;
+    @Bean
+    PreferenceUtil preferenceUtil;
 
     @FragmentArg
     int pageNumber;
@@ -63,6 +68,7 @@ public class MapViewFragment extends Fragment {
     ImageViewState mapViewState = null;
     EventBus bus = EventBus.getDefault();
     MainMapActivity_ activityContext = null;
+    private SharedPreferences preference_General;
     private static final String BUNDLE_STATE = "mapViewState";
 
     @Override
@@ -84,6 +90,7 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        preference_General = getActivity().getSharedPreferences("BackgroundPreference", Activity.MODE_PRIVATE);
         Log.d("OnCreate:" + pageNumber);
     }
 
@@ -112,9 +119,10 @@ public class MapViewFragment extends Fragment {
     @UiThread
     void renderImage() {
         //TODO: Check file exits before render.
-        String imageFile = storageUtils.getExternalStoragePath() + File.separator + appConstants.getMapType(pageNumber) + ".jpg";
+        final String mapType = appConstants.getMapType(pageNumber);
+        String imageFile = storageUtils.getExternalStoragePath() + File.separator + mapType + ".jpg";
 
-        if (!storageUtils.fileExists(imageFile)){
+        if (!storageUtils.fileExists(imageFile)) {
             Log.e("File not exists: " + pageNumber);
             noImageBanner.setVisibility(View.VISIBLE);
             return;
@@ -129,6 +137,13 @@ public class MapViewFragment extends Fragment {
             touchImage.setImageFile(imageFile);
         }
         Log.d("Map refreshed");
+        updateLastModifiedTime(mapType);
+    }
+
+    private void updateLastModifiedTime(String mapType) {
+        String lastUpdatedDateTime = preferenceUtil.getLastModifiedTime(preference_General, mapType);
+        Log.a("Retrieved updated time: " + lastUpdatedDateTime);
+
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {

@@ -15,8 +15,10 @@
 
 package com.shahul3d.indiasatelliteweather.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
@@ -25,6 +27,7 @@ import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
+import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Call;
@@ -52,11 +55,14 @@ public class DownloaderService extends Service {
     StorageUtils storageUtils;
     @Bean
     AppConstants appConstants;
+    @Bean
+    PreferenceUtil preferenceUtil;
 
     OkHttpClient httpClient;
 
     //TODO: get the size from Appconstant MAP_URL.
     Boolean activeDownloadsList[] = new Boolean[5];
+    private SharedPreferences preference_General = null;
 
 
     @Override
@@ -70,6 +76,7 @@ public class DownloaderService extends Service {
         Log.d("Service On Create");
         bus.register(this);
         initializeHTTPClient();
+        preference_General = this.getSharedPreferences("BackgroundPreference", Activity.MODE_PRIVATE);
     }
 
     @Override
@@ -115,6 +122,7 @@ public class DownloaderService extends Service {
     public void downloadMap(int mapID) {
         //TODO: Check internet
         String mapType = appConstants.getMapType(mapID);
+        String lastModifiedHeader = "";
         Log.d("Download requested for map type: " + mapType);
         updateDownloadStatus(mapID, 0);
 
@@ -126,7 +134,7 @@ public class DownloaderService extends Service {
 
             //TODO: These caching headers should be stored on preferences.
             String eTagHeader = response.header("ETag", "");
-            String lastModifiedHeader = response.header("Last-Modified", "");
+            lastModifiedHeader = response.header("Last-Modified", "");
 
             Log.d("eTagHeader: " + eTagHeader);
             Log.d("last modified: " + lastModifiedHeader);
@@ -201,6 +209,7 @@ public class DownloaderService extends Service {
             return;
         }
 
+        preferenceUtil.updateLastModifiedTime(preference_General, mapType, lastModifiedHeader);
         broadcastDownloadStatus(mapID, true);
     }
 
