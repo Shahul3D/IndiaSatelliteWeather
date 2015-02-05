@@ -180,7 +180,7 @@ public class DownloaderService extends Service {
                     }
 
                     //Save downloaded image for offline use.
-                    saveDownlaodedMap(mapType, bmp);
+                    saveDownloadedMap(mapType, bmp);
                     updateDownloadStatus(mapID, 100);
                 } catch (IOException ignore) {
                     //TODO: Exception handling
@@ -213,7 +213,7 @@ public class DownloaderService extends Service {
         broadcastDownloadStatus(mapID, true);
     }
 
-    private void saveDownlaodedMap(String mapType, Bitmap bmp) throws IOException {
+    private void saveDownloadedMap(String mapType, Bitmap bmp) throws IOException {
         String storagePath = storageUtils.getExternalStoragePath();
 
         File temp_file = new File(storagePath + File.separator + mapType + "_temp.jpg");
