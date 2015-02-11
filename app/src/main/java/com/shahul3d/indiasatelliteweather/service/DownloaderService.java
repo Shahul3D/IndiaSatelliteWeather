@@ -17,19 +17,22 @@ package com.shahul3d.indiasatelliteweather.service;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
-import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
 import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.Cache;
@@ -60,8 +63,6 @@ public class DownloaderService extends Service {
     AppConstants appConstants;
     @Bean
     PreferenceUtil preferenceUtil;
-    @Bean
-    CommonUtils commonUtils;
 
     OkHttpClient httpClient;
 
@@ -98,7 +99,7 @@ public class DownloaderService extends Service {
             Cache responseCache = new Cache(getApplicationContext().getCacheDir(), cacheSize);
             httpClient.setCache(responseCache);
         } catch (Exception e) {
-            commonUtils.trackException("Can't set HTTP cache", e);
+            trackException("Can't set HTTP cache", e);
         }
         httpClient.setReadTimeout(90, TimeUnit.SECONDS);
         httpClient.setConnectTimeout(30, TimeUnit.SECONDS);
@@ -111,7 +112,7 @@ public class DownloaderService extends Service {
             return startOption;
         }
 
-        if (!commonUtils.isNetworkAvailable()) {
+        if (!isNetworkAvailable()) {
             Toast.makeText(this, this.getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
             return startOption;
         }
@@ -193,7 +194,7 @@ public class DownloaderService extends Service {
                     saveDownloadedMap(mapType, bmp);
                     updateDownloadStatus(mapID, 100);
                 } catch (IOException ignore) {
-                    commonUtils.trackException("MAP download & parser error", ignore);
+                    trackException("MAP download & parser error", ignore);
                     broadcastDownloadStatus(mapID, false);
                     //Error on fetching & organizing the binary data.
                     return;
@@ -211,7 +212,7 @@ public class DownloaderService extends Service {
                 return;
             }
         } catch (IOException e) {
-            commonUtils.trackException("MAP download connection error", e);
+            trackException("MAP download connection error", e);
             broadcastDownloadStatus(mapID, false);
             return;
         }
@@ -243,6 +244,19 @@ public class DownloaderService extends Service {
     public void broadcastDownloadStatus(int mapID, boolean status) {
         activeDownloadsList[mapID] = false;
         bus.post(new DownloadStatusEvent(mapID, status));
+    }
+
+    public boolean isNetworkAvailable() {
+        //http://stackoverflow.com/questions/4238921/android-detect-whether-there-is-an-internet-connection-available
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public static void trackException(String log, Exception e) {
+        Log.e("Unable to set http cache");
+        Crashlytics.log(log);
+        Crashlytics.logException(e);
     }
 
     //TODO: Test event. to be removed.
