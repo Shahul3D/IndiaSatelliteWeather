@@ -15,17 +15,32 @@
 
 package com.shahul3d.indiasatelliteweather.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import com.crashlytics.android.Crashlytics;
 import com.noveogroup.android.log.Log;
 
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.RootContext;
 
 @EBean
 public class CommonUtils {
-    public static void trackException(String log, Exception e)
-    {
+    @RootContext
+    Context context;
+
+    public static void trackException(String log, Exception e) {
         Log.e("Unable to set http cache");
         Crashlytics.log(log);
         Crashlytics.logException(e);
     }
+
+    public boolean isNetworkAvailable() {
+        //http://stackoverflow.com/questions/4238921/android-detect-whether-there-is-an-internet-connection-available
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
 }
+
