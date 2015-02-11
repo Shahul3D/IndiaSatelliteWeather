@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".controllers.AnimatedMapActivity_" />
         <service android:name=".service.DownloaderService_" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="90bc6f870150459d4681c40e61c608701b9d747d"/>
     </application>
 
 </manifest>

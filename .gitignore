@@ -4,3 +4,5 @@ local.properties
 .idea/
 *.iml
 .DS_Store
+app/crashlytics.properties
+app/src/main/res/values/com_crashlytics_export_strings.xml
