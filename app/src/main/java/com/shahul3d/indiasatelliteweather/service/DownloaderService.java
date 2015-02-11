@@ -27,6 +27,7 @@ import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
+import com.shahul3d.indiasatelliteweather.utils.CommonUtils;
 import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.squareup.okhttp.Cache;
@@ -57,6 +58,8 @@ public class DownloaderService extends Service {
     AppConstants appConstants;
     @Bean
     PreferenceUtil preferenceUtil;
+    @Bean
+    CommonUtils commonUtils;
 
     OkHttpClient httpClient;
 
@@ -93,7 +96,7 @@ public class DownloaderService extends Service {
             Cache responseCache = new Cache(getApplicationContext().getCacheDir(), cacheSize);
             httpClient.setCache(responseCache);
         } catch (Exception e) {
-            Log.e("Unable to set http cache");
+            commonUtils.trackException("Can't set HTTP cache", e);
         }
         httpClient.setReadTimeout(90, TimeUnit.SECONDS);
         httpClient.setConnectTimeout(30, TimeUnit.SECONDS);
@@ -183,10 +186,9 @@ public class DownloaderService extends Service {
                     saveDownloadedMap(mapType, bmp);
                     updateDownloadStatus(mapID, 100);
                 } catch (IOException ignore) {
-                    //TODO: Exception handling
+                    commonUtils.trackException("MAP download & parser error", ignore);
                     broadcastDownloadStatus(mapID, false);
                     //Error on fetching & organizing the binary data.
-                    ignore.printStackTrace();
                     return;
                 } finally {
                     if (inputStream != null) {
@@ -202,10 +204,8 @@ public class DownloaderService extends Service {
                 return;
             }
         } catch (IOException e) {
-            //TODO: Exception handling
+            commonUtils.trackException("MAP download connection error", ignore);
             broadcastDownloadStatus(mapID, false);
-            Log.d("Error in download call");
-            e.printStackTrace();
             return;
         }
 
