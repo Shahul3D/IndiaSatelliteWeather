@@ -22,8 +22,10 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import com.noveogroup.android.log.Log;
+import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
@@ -106,6 +108,11 @@ public class DownloaderService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         int startOption = START_NOT_STICKY;
         if (intent == null) {
+            return startOption;
+        }
+
+        if (!commonUtils.isNetworkAvailable()) {
+            Toast.makeText(this, this.getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
             return startOption;
         }
 
@@ -204,7 +211,7 @@ public class DownloaderService extends Service {
                 return;
             }
         } catch (IOException e) {
-            commonUtils.trackException("MAP download connection error", ignore);
+            commonUtils.trackException("MAP download connection error", e);
             broadcastDownloadStatus(mapID, false);
             return;
         }

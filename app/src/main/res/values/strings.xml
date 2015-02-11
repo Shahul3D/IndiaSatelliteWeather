@@ -8,4 +8,5 @@
     <string name="no_data_message">No offline MAP found. \n Please refresh to fetch the latest MAP</string>
     <!--Menu-->
     <string name="action_refresh">Refresh</string>
+    <string name="no_internet_connection">Unable to connect to Internet!</string>
 </resources>
