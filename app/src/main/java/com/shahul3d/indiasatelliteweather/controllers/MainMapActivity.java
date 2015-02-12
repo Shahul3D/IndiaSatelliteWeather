@@ -33,6 +33,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
@@ -92,6 +94,9 @@ public class MainMapActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
+
+        Tracker t = ((WeatherApplication) getApplication()).getTracker();
+        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
 

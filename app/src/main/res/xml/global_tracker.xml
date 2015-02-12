@@ -13,22 +13,18 @@
   ~  * limitations under the License.
   ~  *******************************************************************************/
   -->
+<resources>
+    <integer name="ga_sessionTimeout">100</integer>
 
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes">
-
-    <!-- Replace placeholder ID with your tracking ID -->
-    <string name="ga_trackingId">UA-46030637-1</string>
-
-    <!-- Enable automatic activity tracking -->
+    <!-- Enable automatic Activity measurement -->
     <bool name="ga_autoActivityTracking">true</bool>
 
     <!-- Enable automatic exception tracking -->
     <bool name="ga_reportUncaughtExceptions">true</bool>
 
-    <!-- Treat events as test events and don't send to google -->
-    <bool name="ga_dryRun">false</bool>
-
-    <!-- The screen names that will appear in your reporting -->
-    <string name="com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_">MainMapActivity</string>
-
+    <!-- The screen names that will appear in reports -->
+    <screenName name="com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_">
+        MainMapActivity
+    </screenName>
+    <string name="ga_trackingId">UA-46030637-1</string>
 </resources>
