@@ -112,12 +112,13 @@ public class DownloaderService extends Service {
             return startOption;
         }
 
+        int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
         if (!isNetworkAvailable()) {
-            Toast.makeText(this, this.getString(R.string.no_internet_connection), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, this.getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
+            broadcastDownloadStatus(mapID, false);
             return startOption;
         }
 
-        int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
         if (activeDownloadsList[mapID] != null && activeDownloadsList[mapID]) {
             Log.d("Duplicate download request for the same map type");
             return startOption;
@@ -247,11 +248,14 @@ public class DownloaderService extends Service {
     }
 
     public boolean isNetworkAvailable() {
-        //http://stackoverflow.com/questions/4238921/android-detect-whether-there-is-an-internet-connection-available
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+        if (connectivityManager != null) {
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+        }
+        return false;
     }
+
 
     public static void trackException(String log, Exception e) {
         Log.e("Unable to set http cache");
