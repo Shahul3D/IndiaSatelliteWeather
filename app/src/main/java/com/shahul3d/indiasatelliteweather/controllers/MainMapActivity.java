@@ -109,6 +109,10 @@ public class MainMapActivity extends ActionBarActivity {
     @Override
     public void onPause() {
         bus.unregister(this);
+        //App going background. stopping all download notifications.
+        stopRefreshAnimation();
+        hideProgress();
+
         super.onPause();
     }
 
