@@ -95,8 +95,8 @@ public class MainMapActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
 
-        Tracker t = ((WeatherApplication) getApplication()).getTracker();
-        t.send(new HitBuilders.AppViewBuilder().build());
+//        Tracker t = ((WeatherApplication) getApplication()).getTracker();
+//        t.send(new HitBuilders.AppViewBuilder().build());
     }
 
 
