@@ -15,7 +15,14 @@
 
 package com.shahul3d.indiasatelliteweather.utils;
 
+import com.crashlytics.android.Crashlytics;
+import com.noveogroup.android.log.Log;
+
 import org.androidannotations.annotations.EBean;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @EBean
 public class FormatUtils {
@@ -51,5 +58,21 @@ public class FormatUtils {
         } else {
             return diff / DAY_MILLIS + " days ago";
         }
+    }
+
+    public static long timeStringToMillis(String timeString) {
+        long timeInMilliseconds = 0l;
+//    String givenDateString = "Mon, 02 Mar 2015 19:27:55 GMT";
+        final String pattern = "EEE, dd MMM yyyy HH:mm:ss z";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        try {
+            Date mDate = sdf.parse(timeString);
+            timeInMilliseconds = mDate.getTime();
+        } catch (ParseException e) {
+            Log.e("Unable to parse last downloaded date");
+            Crashlytics.logException(e);
+        }
+
+        return timeInMilliseconds;
     }
 }

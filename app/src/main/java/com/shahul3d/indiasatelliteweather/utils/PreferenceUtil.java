@@ -18,6 +18,7 @@ package com.shahul3d.indiasatelliteweather.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EBean;
 import org.androidannotations.annotations.RootContext;
 
@@ -26,19 +27,20 @@ public class PreferenceUtil {
 
     @RootContext
     Context context;
+    @Bean
+    FormatUtils formatUtils;
     public final String KEY_POST_FIX = "_update_time";
 
     public void updateLastModifiedTime(SharedPreferences preference_General, String mapType, final String lastModifiedDateTime) {
         SharedPreferences.Editor editor = preference_General.edit();
-
-        editor.putString(mapType + KEY_POST_FIX, lastModifiedDateTime);
+        editor.putLong(mapType + KEY_POST_FIX, formatUtils.timeStringToMillis(lastModifiedDateTime));
         editor.commit();
     }
 
-    public String getLastModifiedTime(SharedPreferences preference_General, String mapType) {
-        String lastModifiedDateTime = "";
+    public long getLastModifiedTime(SharedPreferences preference_General, String mapType) {
+        long lastModifiedDateTime = 0l;
         if (preference_General != null) {
-            lastModifiedDateTime = preference_General.getString(mapType + KEY_POST_FIX, "");
+            lastModifiedDateTime = preference_General.getLong(mapType + KEY_POST_FIX, 0l);
         }
         return lastModifiedDateTime;
     }

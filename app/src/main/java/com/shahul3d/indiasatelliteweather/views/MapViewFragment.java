@@ -32,6 +32,7 @@ import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.controllers.MainMapActivity_;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
+import com.shahul3d.indiasatelliteweather.utils.FormatUtils;
 import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 
@@ -58,12 +59,15 @@ public class MapViewFragment extends Fragment {
 
     @Bean
     StorageUtils storageUtils;
+    @Bean
+    FormatUtils formatUtils;
 
     @ViewById
     SubsamplingScaleImageView touchImage;
-
     @ViewById
     TextView noImageBanner;
+    @ViewById
+    TextView map_updated_time;
 
     ImageViewState mapViewState = null;
     EventBus bus = EventBus.getDefault();
@@ -125,9 +129,11 @@ public class MapViewFragment extends Fragment {
         if (!storageUtils.fileExists(imageFile)) {
             Log.e("File not exists: " + pageNumber);
             noImageBanner.setVisibility(View.VISIBLE);
+            map_updated_time.setVisibility(View.GONE);
             return;
         }
 
+        map_updated_time.setVisibility(View.VISIBLE);
         if (mapViewState != null) {
             touchImage.setImageFile(imageFile, mapViewState);
         } else {
@@ -141,9 +147,8 @@ public class MapViewFragment extends Fragment {
     }
 
     private void updateLastModifiedTime(String mapType) {
-        String lastUpdatedDateTime = preferenceUtil.getLastModifiedTime(preference_General, mapType);
-        Log.a("Retrieved updated time: " + lastUpdatedDateTime);
-
+        long lastUpdatedDateTime = preferenceUtil.getLastModifiedTime(preference_General, mapType);
+        map_updated_time.setText(formatUtils.getTimeAgo(lastUpdatedDateTime));
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {
