@@ -137,18 +137,19 @@ public class MapViewFragment extends Fragment {
         if (mapViewState != null) {
             touchImage.setImageFile(imageFile, mapViewState);
         } else {
-            touchImage.setMaxScale(5f);
-            touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
             touchImage.setScaleAndCenter(2f, touchImage.getCenter());
             touchImage.setImageFile(imageFile);
         }
+        touchImage.setMaxScale(7f);
+        touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
+
         Log.d("Map refreshed");
         updateLastModifiedTime(mapType);
     }
 
     private void updateLastModifiedTime(String mapType) {
         long lastUpdatedDateTime = preferenceUtil.getLastModifiedTime(preference_General, mapType);
-        map_updated_time.setText(formatUtils.getTimeAgo(lastUpdatedDateTime));
+        map_updated_time.setText("Updated: "+formatUtils.getTimeAgo(lastUpdatedDateTime));
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {
