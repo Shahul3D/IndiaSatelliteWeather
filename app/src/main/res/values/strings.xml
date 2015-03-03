@@ -9,4 +9,26 @@
     <!--Menu-->
     <string name="action_refresh">Refresh</string>
     <string name="no_internet_connection">Unable to connect to Internet!</string>
+
+    <!-- about this app -->
+    <string name="about_heading">About Developer</string>
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">
+        <![CDATA[
+        <b>India Satellite Weather</b>
+         <br/>
+         Designed & Developed by <b>Shahul</b> (<a href="mailto:shahul3d@gmail.com">Shahul3D@gmail.com</a>).
+          <br/>
+          <br/>
+          I\'m a polyglot programmer from Trichy, India. Primarily focusing on Java, Javascript (NodeJS) & Android technologies.
+          <br/>(<a href="https://www.linkedin.com/in/shahul3d">more about me</a>)
+          <br/>
+          <br/>
+          This is a open source software. You can find its source on my <a href="https://github.com/Shahul3D/IndiaSatelliteWeather"> github</a> repo.
+          <br/>
+          <br/>
+          <b>Special Thanks to these Libraries:</b>
+        ]]>
+    </string>
 </resources>

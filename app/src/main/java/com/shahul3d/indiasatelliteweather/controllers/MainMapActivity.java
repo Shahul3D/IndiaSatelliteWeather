@@ -15,6 +15,7 @@
 
 package com.shahul3d.indiasatelliteweather.controllers;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -33,8 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
+import com.mikepenz.aboutlibraries.Libs;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
@@ -126,10 +126,11 @@ public class MainMapActivity extends ActionBarActivity {
     }
 
     private void initDrawer() {
+        final Context context = this;
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Weather Maps", "Weather Animation", "Settings", "About"
+                "Weather Maps", "Weather Animation", "Changelogs", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
@@ -139,6 +140,14 @@ public class MainMapActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("Selected :" + position);
                 mDrawerLayout.closeDrawer(Gravity.START);
+
+                if (position == 3) {
+                    new Libs.Builder()
+                            .withFields(R.string.class.getFields())
+                            .withActivityTitle(getString(R.string.about_heading))
+                            .withLibraries("androidAnnotations")
+                            .start(context);
+                }
             }
         });
     }
