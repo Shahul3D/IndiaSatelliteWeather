@@ -34,14 +34,14 @@ apt {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.1.0"
+    buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.shahul3d.indiasatelliteweather"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 3
-        versionName "3.0 beta"
+        versionName "3.0"
     }
     buildTypes {
         release {
@@ -67,5 +67,4 @@ dependencies {
     compile('com.mikepenz.aboutlibraries:library:4.5.7@aar') {
         transitive = true
     }
-//    compile group:'com.squareup.picasso', name:'picasso', version:'2.4.0'
 }
