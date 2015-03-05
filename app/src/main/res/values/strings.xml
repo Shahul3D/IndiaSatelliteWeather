@@ -10,6 +10,9 @@
     <string name="action_refresh">Refresh</string>
     <string name="no_internet_connection">Unable to connect to Internet!</string>
 
+    <!-- For Analytics -->
+    <string name="screen_Home">HomeScreen</string>
+
     <!-- about this app -->
     <string name="about_heading">About Developer</string>
     <string name="aboutLibraries_description_showIcon">true</string>

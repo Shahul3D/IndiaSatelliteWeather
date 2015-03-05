@@ -96,8 +96,8 @@ public class MainMapActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
 
-//        Tracker t = ((WeatherApplication) getApplication()).getTracker();
-//        t.send(new HitBuilders.AppViewBuilder().build());
+// Analytics Tracking
+        ((WeatherApplication) getApplicationContext()).sendAnalyticsScreen(getString(R.string.screen_Home));
     }
 
 
@@ -148,8 +148,7 @@ public class MainMapActivity extends ActionBarActivity {
                             .withActivityTitle(getString(R.string.about_heading))
                             .withLibraries("androidAnnotations")
                             .start(context);
-                }
-                else if(position == 1){
+                } else if (position == 1) {
                     Toast.makeText(context, "Coming Soon..!", Toast.LENGTH_SHORT).show();
                 }
             }
