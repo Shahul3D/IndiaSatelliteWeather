@@ -90,14 +90,16 @@ public class MainMapActivity extends ActionBarActivity {
     private boolean isLoading = Boolean.FALSE;
     Integer currentPage = 0;
     ConcurrentHashMap<Integer, Integer> downloadingMapsList;
+    WeatherApplication applicationContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
 
+        applicationContext = (WeatherApplication) getApplicationContext();
 // Analytics Tracking
-        ((WeatherApplication) getApplicationContext()).sendAnalyticsScreen(getString(R.string.screen_Home));
+        applicationContext.sendAnalyticsScreen(getString(R.string.screen_Home));
     }
 
 
@@ -180,10 +182,12 @@ public class MainMapActivity extends ActionBarActivity {
             }
 
             @Override
-            public void onPageSelected(int arg0) {
-                Log.d("onPageSelected:" + arg0);
-                syncDownloadProgress(arg0);
-                currentPage = arg0;
+            public void onPageSelected(int mapID) {
+                Log.d("onPageSelected:" + mapID);
+                syncDownloadProgress(mapID);
+                currentPage = mapID;
+
+                applicationContext.sendAnalyticsScreen(appConstants.getMapType(mapID));
             }
 
             @Override
