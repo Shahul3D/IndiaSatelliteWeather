@@ -148,9 +148,9 @@ public class DownloaderService extends Service {
             String eTagHeader = response.header("ETag", "");
             lastModifiedHeader = response.header("Last-Modified", "");
 
-            Log.d("eTagHeader: " + eTagHeader);
+//            Log.d("eTagHeader: " + eTagHeader);
             Log.d("last modified: " + lastModifiedHeader);
-            Log.d("\nN/W counts: " + httpClient.getCache().getNetworkCount() + "\nReq Counts: " + httpClient.getCache().getRequestCount() + "\nCache Hits: " + httpClient.getCache().getHitCount());
+//            Log.d("\nN/W counts: " + httpClient.getCache().getNetworkCount() + "\nReq Counts: " + httpClient.getCache().getRequestCount() + "\nCache Hits: " + httpClient.getCache().getHitCount());
 
             if (response.code() == 200) {
                 InputStream inputStream = null;
@@ -208,7 +208,7 @@ public class DownloaderService extends Service {
                     }
                 }
             } else {
-                //TODO: Exception handling
+                trackException("res code other than 200: "+response.code(), null);
                 Log.d("res code other than 200 " + response.code());
                 return;
             }
@@ -258,9 +258,10 @@ public class DownloaderService extends Service {
 
 
     public static void trackException(String log, Exception e) {
-        Log.e("Unable to set http cache");
         Crashlytics.log(log);
-        Crashlytics.logException(e);
+        if(e != null){
+            Crashlytics.logException(e);
+        }
     }
 
     //TODO: Test event. to be removed.

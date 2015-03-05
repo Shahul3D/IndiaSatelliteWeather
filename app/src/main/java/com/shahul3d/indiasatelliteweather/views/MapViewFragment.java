@@ -78,7 +78,7 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onPause() {
         bus.unregister(this);
-        Log.i("OnPause:" + pageNumber);
+        Log.d("OnPause:" + pageNumber);
         super.onPause();
     }
 
@@ -95,7 +95,6 @@ public class MapViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         preference_General = getActivity().getSharedPreferences("BackgroundPreference", Activity.MODE_PRIVATE);
-        Log.d("OnCreate:" + pageNumber);
     }
 
     @Override
@@ -110,7 +109,6 @@ public class MapViewFragment extends Fragment {
     void calledAfterViewInjection() {
         activityContext = (MainMapActivity_) getActivity();
         renderImage();
-        Log.d("ViewAfterInjection:" + pageNumber);
     }
 
     @Override

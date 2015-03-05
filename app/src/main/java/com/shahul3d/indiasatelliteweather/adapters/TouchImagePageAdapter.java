@@ -56,7 +56,6 @@ public class TouchImagePageAdapter extends FragmentStatePagerAdapter {
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         super.destroyItem(container, position, object);
-        Log.d("View Pager Destory Item called: "+position);
     }
 
 }

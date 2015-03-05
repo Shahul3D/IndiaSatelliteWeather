@@ -99,7 +99,7 @@ public class MainMapActivity extends ActionBarActivity {
 
         applicationContext = (WeatherApplication) getApplicationContext();
 // Analytics Tracking
-        applicationContext.sendAnalyticsScreen(getString(R.string.screen_Home));
+        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
     }
 
 
@@ -141,7 +141,6 @@ public class MainMapActivity extends ActionBarActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("Selected :" + position);
                 mDrawerLayout.closeDrawer(Gravity.START);
 
                 if (position == 2) {
@@ -150,6 +149,7 @@ public class MainMapActivity extends ActionBarActivity {
                             .withActivityTitle(getString(R.string.about_heading))
                             .withLibraries("androidAnnotations")
                             .start(context);
+                    applicationContext.sendAnalyticsScreen(getString(R.string.about_page));
                 } else if (position == 1) {
                     Toast.makeText(context, "Coming Soon..!", Toast.LENGTH_SHORT).show();
                 }
@@ -211,7 +211,6 @@ public class MainMapActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("onCreateOptionsMenu called");
         getMenuInflater().inflate(R.menu.menu_main_map, menu);
         refreshItem = menu.findItem(R.id.action_refresh);
         return true;
@@ -221,7 +220,7 @@ public class MainMapActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            Log.i("Refresh clicked:-> with page number:" + currentPage);
+            Log.d("Refresh clicked:-> with page number:" + currentPage);
             startRefreshAnimation();
             Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
             downloaderIntent.putExtra(appConstants.DOWNLOAD_INTENT_NAME, currentPage);
