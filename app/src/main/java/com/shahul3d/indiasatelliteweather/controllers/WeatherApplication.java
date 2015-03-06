@@ -17,6 +17,7 @@ package com.shahul3d.indiasatelliteweather.controllers;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
@@ -39,6 +40,7 @@ public class WeatherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Crashlytics.start(this);
         // Initialization for Google Analytics Instance.
         initializeGa();
     }
