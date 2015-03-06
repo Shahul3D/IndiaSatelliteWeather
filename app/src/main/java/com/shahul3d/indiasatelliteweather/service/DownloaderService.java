@@ -187,10 +187,7 @@ public class DownloaderService extends Service {
                     options.inMutable = true;
                     Bitmap bmp = BitmapFactory.decodeByteArray(responseImage, 0, responseImage.length, options);
 
-                    if (mapType.equals(appConstants.MAP_UV)) {
-                        //Trim the unwanted area from the Ultra Violet Map.
-                        bmp = Bitmap.createBitmap(bmp, 110, 230, 800, 800);
-                    }
+                    bmp = trimMAP(mapType, bmp);
 
                     //Save downloaded image for offline use.
                     saveDownloadedMap(mapType, bmp);
@@ -221,6 +218,23 @@ public class DownloaderService extends Service {
 
         preferenceUtil.updateLastModifiedTime(preference_General, mapType, lastModifiedHeader);
         broadcastDownloadStatus(mapID, true);
+    }
+
+    private Bitmap trimMAP(String mapType, Bitmap bmp) {
+
+        //Try to remove unwanted parts from MAP. return the original MAP in case of any errors.
+        try {
+            //Trim the unwanted area from the Ultra Violet Map.
+            if (mapType.equals(appConstants.MAP_UV)) {
+                bmp = Bitmap.createBitmap(bmp, 110, 230, 800, 800);
+            }else if(mapType.equals(appConstants.MAP_HEAT)) {
+                bmp = Bitmap.createBitmap(bmp, 0, 180, 1250, 1400);
+            }
+        } catch (Exception e) {
+            trackException("trim MAP Error", e);
+        }
+
+        return bmp;
     }
 
     private void saveDownloadedMap(String mapType, Bitmap bmp) throws IOException {
