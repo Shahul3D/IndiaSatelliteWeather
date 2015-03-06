@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -124,7 +125,7 @@ public class MainMapActivity extends ActionBarActivity {
         initToolbar();
         initDrawer();
         //TODO: To be removed.
-        Log.d("Storage path: %s", storageUtils.getExternalStoragePath());
+//        Log.d("Storage path: %s", Environment.getExternalStorageDirectory());
         hideProgress();
     }
 

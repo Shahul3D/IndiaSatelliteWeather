@@ -24,6 +24,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -223,9 +224,7 @@ public class DownloaderService extends Service {
     }
 
     private void saveDownloadedMap(String mapType, Bitmap bmp) throws IOException {
-        String storagePath = storageUtils.getExternalStoragePath();
-
-        File temp_file = new File(storagePath + File.separator + mapType + "_temp.jpg");
+        File temp_file = new File(Environment.getExternalStorageDirectory() + File.separator + mapType + "_temp.jpg");
         FileOutputStream fileOutStream = new FileOutputStream(temp_file.getPath());
 
         // Compression Quality set to 100. ie. NO COMPRESSION.
@@ -233,7 +232,7 @@ public class DownloaderService extends Service {
         fileOutStream.flush();
         fileOutStream.close();
 
-        boolean success = temp_file.renameTo(new File(storagePath, mapType + ".jpg"));
+        boolean success = temp_file.renameTo(new File(Environment.getExternalStorageDirectory(), mapType + ".jpg"));
         Log.d("Map  saved to: " + temp_file.getAbsolutePath() + ". Overwritten? = " + success);
     }
 
