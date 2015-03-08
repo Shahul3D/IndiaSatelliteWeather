@@ -11,5 +11,5 @@ This application fetches the weather data directly from the Official Indian Gove
 
 It very well equipped with data caching capabilities and will never download any duplicate data from the server. The downloaded weather maps will stored locally and can accessed in offline.
 
-## Screenshot of the current development status:
+## Screenshot of current development build:
 ![Current Progress Screenshot](https://raw.github.com/Shahul3D/IndiaSatelliteWeather/master/Screenshot.png)
