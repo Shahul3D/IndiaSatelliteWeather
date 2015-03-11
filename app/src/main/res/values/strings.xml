@@ -13,6 +13,7 @@
     <!-- For Analytics -->
     <string name="home_page">HomeScreen</string>
     <string name="about_page">AboutPage</string>
+    <string name="rating_page">AppRatingPage</string>
 
     <!-- about this app -->
     <string name="about_heading">About Developer</string>

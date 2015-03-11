@@ -148,7 +148,11 @@ public class MapViewFragment extends Fragment {
 
     private void updateLastModifiedTime(String mapType) {
         long lastUpdatedDateTime = preferenceUtil.getLastModifiedTime(preference_General, mapType);
-        map_updated_time.setText("Updated: "+formatUtils.getTimeAgo(lastUpdatedDateTime));
+        String timeAgo = "sometime ago";
+        if (lastUpdatedDateTime > 0) {
+            timeAgo = formatUtils.getTimeAgo(lastUpdatedDateTime);
+        }
+        map_updated_time.setText("Updated: " + timeAgo);
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {

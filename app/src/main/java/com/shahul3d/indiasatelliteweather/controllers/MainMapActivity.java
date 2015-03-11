@@ -99,6 +99,7 @@ public class MainMapActivity extends ActionBarActivity {
         downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
 
         applicationContext = (WeatherApplication) getApplicationContext();
+//        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
         AppRater.app_launched(this);
     }
 
@@ -150,6 +151,7 @@ public class MainMapActivity extends ActionBarActivity {
                     case 2:
                         AppRater.setDontRemindButtonVisible(true);
                         AppRater.showRateDialog(context);
+                        applicationContext.sendAnalyticsScreen(getString(R.string.rating_page));
                         break;
                     case 3:
                         new Libs.Builder()
