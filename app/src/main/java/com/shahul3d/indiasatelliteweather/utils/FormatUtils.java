@@ -23,6 +23,7 @@ import org.androidannotations.annotations.EBean;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @EBean
 public class FormatUtils {
@@ -64,7 +65,7 @@ public class FormatUtils {
         long timeInMilliseconds = 0l;
 //    String givenDateString = "Mon, 02 Mar 2015 19:27:55 GMT";
         final String pattern = "EEE, dd MMM yyyy HH:mm:ss z";
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.ENGLISH);
         try {
             Date mDate = sdf.parse(timeString);
             timeInMilliseconds = mDate.getTime();

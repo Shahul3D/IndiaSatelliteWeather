@@ -2,7 +2,7 @@ build/
 local.properties
 .gradle/
 .idea/
-*.iml
+**/*.iml
 .DS_Store
 app/crashlytics.properties
 **/com_crashlytics_export_strings.xml

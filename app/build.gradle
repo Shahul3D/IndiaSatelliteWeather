@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.14.7'
     }
 }
 apply plugin: 'com.android.application'
@@ -38,7 +38,7 @@ android {
 
     defaultConfig {
         applicationId "com.shahul3d.indiasatelliteweather"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 21
         versionCode 5
         versionName "3.0.2"
