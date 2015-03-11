@@ -64,6 +64,7 @@ dependencies {
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.squareup.okhttp:okhttp:2.1.0'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
+    compile 'com.github.codechimp-org.apprater:library:1.0.28'
     compile('com.mikepenz.aboutlibraries:library:4.5.7@aar') {
         transitive = true
     }

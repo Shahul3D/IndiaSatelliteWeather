@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -53,6 +52,7 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.codechimp.apprater.AppRater;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -99,8 +99,7 @@ public class MainMapActivity extends ActionBarActivity {
         downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
 
         applicationContext = (WeatherApplication) getApplicationContext();
-// Analytics Tracking
-        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
+        AppRater.app_launched(this);
     }
 
 
@@ -134,7 +133,7 @@ public class MainMapActivity extends ActionBarActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Weather Maps", "Weather Animation", "About"
+                "Weather Maps", "Weather Animation", "Do you like this Work ?", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
@@ -144,15 +143,22 @@ public class MainMapActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mDrawerLayout.closeDrawer(Gravity.START);
 
-                if (position == 2) {
-                    new Libs.Builder()
-                            .withFields(R.string.class.getFields())
-                            .withActivityTitle(getString(R.string.about_heading))
-                            .withLibraries("androidAnnotations")
-                            .start(context);
-                    applicationContext.sendAnalyticsScreen(getString(R.string.about_page));
-                } else if (position == 1) {
-                    Toast.makeText(context, "Coming Soon..!", Toast.LENGTH_SHORT).show();
+                switch (position) {
+                    case 1:
+                        Toast.makeText(context, "Coming Soon..!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        AppRater.setDontRemindButtonVisible(true);
+                        AppRater.showRateDialog(context);
+                        break;
+                    case 3:
+                        new Libs.Builder()
+                                .withFields(R.string.class.getFields())
+                                .withActivityTitle(getString(R.string.about_heading))
+                                .withLibraries("androidAnnotations")
+                                .start(context);
+                        applicationContext.sendAnalyticsScreen(getString(R.string.about_page));
+                        break;
                 }
             }
         });
