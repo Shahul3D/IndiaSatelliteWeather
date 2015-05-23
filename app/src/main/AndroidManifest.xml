@@ -24,7 +24,7 @@
         <service android:name=".service.DownloaderService_" />
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="43621532a288d183a4787b37981436bc7f4765dd" />
+            android:value="90bc6f870150459d4681c40e61c608701b9d747d" />
     </application>
 
 </manifest>
