@@ -16,10 +16,12 @@
 package com.shahul3d.indiasatelliteweather.events;
 
 public class DownloadStatusEvent {
+    public int mapType;
     public int mapID;
     public boolean status;
 
-    public DownloadStatusEvent(int mapID, boolean status) {
+    public DownloadStatusEvent(int mapType, int mapID, boolean status) {
+        this.mapType = mapType;
         this.mapID = mapID;
         this.status = status;
     }

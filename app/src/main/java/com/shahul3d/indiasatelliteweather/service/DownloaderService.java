@@ -114,7 +114,7 @@ public class DownloaderService extends Service {
         int mapType = intent.getIntExtra(AppConstants.DOWNLOAD_MAP_TYPE, 0);
         if (!isNetworkAvailable()) {
             Toast.makeText(this, this.getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
-            broadcastDownloadStatus(mapID, false);
+            broadcastDownloadStatus(mapType, mapID, false);
             return startOption;
         }
 
@@ -135,7 +135,7 @@ public class DownloaderService extends Service {
         String mapFileName = AppConstants.getMapType(mapID, mapType);
         String lastModifiedHeader = "";
         Log.d("Download requested for map type: " + mapFileName);
-        updateDownloadStatus(mapID, 0);
+        updateDownloadStatus(mapType, mapID, 0);
 
         final String URL = AppConstants.MAP_URL.get(mapFileName);
 
@@ -144,7 +144,7 @@ public class DownloaderService extends Service {
             Response response = call.execute();
 
             //TODO: These caching headers should be stored on preferences.
-            String eTagHeader = response.header("ETag", "");
+//            String eTagHeader = response.header("ETag", "");
             lastModifiedHeader = response.header("Last-Modified", "");
 
 //            Log.d("eTagHeader: " + eTagHeader);
@@ -176,7 +176,7 @@ public class DownloaderService extends Service {
                             statusUpdateTrigger = 0;
                             Long downloadedPercent = downloaded * AppConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
                             Log.d("downloaded percent: " + downloadedPercent);
-                            updateDownloadStatus(mapID, downloadedPercent.intValue());
+                            updateDownloadStatus(mapType, mapID, downloadedPercent.intValue());
                         }
                     }
 
@@ -189,10 +189,10 @@ public class DownloaderService extends Service {
 
                     //Save downloaded image for offline use.
                     saveDownloadedMap(mapFileName, bmp);
-                    updateDownloadStatus(mapID, 100);
+                    updateDownloadStatus(mapType, mapID, 100);
                 } catch (IOException ignore) {
                     trackException("MAP download & parser error", ignore);
-                    broadcastDownloadStatus(mapID, false);
+                    broadcastDownloadStatus(mapType, mapID, false);
                     //Error on fetching & organizing the binary data.
                     return;
                 } finally {
@@ -204,18 +204,18 @@ public class DownloaderService extends Service {
                     }
                 }
             } else {
-                trackException("res code other than 200: "+response.code(), null);
+                trackException("res code other than 200: " + response.code(), null);
                 Log.d("res code other than 200 " + response.code());
                 return;
             }
         } catch (IOException e) {
             trackException("MAP download connection error", e);
-            broadcastDownloadStatus(mapID, false);
+            broadcastDownloadStatus(mapType, mapID, false);
             return;
         }
 
         preferenceUtil.updateLastModifiedTime(preference_General, mapFileName, lastModifiedHeader);
-        broadcastDownloadStatus(mapID, true);
+        broadcastDownloadStatus(mapType, mapID, true);
     }
 
     private Bitmap removeMapBorders(String mapType, Bitmap bmp) {
@@ -234,7 +234,7 @@ public class DownloaderService extends Service {
             try {
                 Crashlytics.setInt("mapWidth", bmp.getWidth());
                 Crashlytics.setInt("mapHeight", bmp.getHeight());
-            } catch(Exception e1) {
+            } catch (Exception e1) {
                 Crashlytics.logException(e1);
             }
             Crashlytics.logException(e);
@@ -255,14 +255,14 @@ public class DownloaderService extends Service {
         Log.d("Map  saved to: " + temp_file.getAbsolutePath() + ". Overwritten? = " + success);
     }
 
-    public void updateDownloadStatus(int mapID, int downloadedPercentage) {
-        bus.post(new DownloadProgressUpdateEvent(mapID, downloadedPercentage));
+    public void updateDownloadStatus(int mapType, int mapID, int downloadedPercentage) {
+        bus.post(new DownloadProgressUpdateEvent(mapType, mapID, downloadedPercentage));
     }
 
     //Notify the Views to refresh to get the updated map.
-    public void broadcastDownloadStatus(int mapID, boolean status) {
+    public void broadcastDownloadStatus(int mapType, int mapID, boolean status) {
         activeDownloadsList[mapID] = false;
-        bus.post(new DownloadStatusEvent(mapID, status));
+        bus.post(new DownloadStatusEvent(mapType, mapID, status));
     }
 
     public boolean isNetworkAvailable() {
@@ -277,7 +277,7 @@ public class DownloaderService extends Service {
 
     public static void trackException(String log, Exception e) {
         Crashlytics.log(log);
-        if(e != null){
+        if (e != null) {
             Crashlytics.logException(e);
         }
     }

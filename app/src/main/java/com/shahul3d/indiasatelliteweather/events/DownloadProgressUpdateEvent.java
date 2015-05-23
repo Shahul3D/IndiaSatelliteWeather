@@ -16,19 +16,25 @@
 package com.shahul3d.indiasatelliteweather.events;
 
 public class DownloadProgressUpdateEvent {
+    public int mapType;
     public int mapID;
     public int progress;
 
-    public DownloadProgressUpdateEvent(int mapID, int downloadProgress) {
+    public DownloadProgressUpdateEvent(int mapType, int mapID, int downloadProgress) {
+        this.mapType = mapType;
         this.mapID = mapID;
         progress = downloadProgress;
     }
 
-    public int getMapType() {
+    public int getMapID() {
         return mapID;
     }
 
-    public int getProgress(){
+    public int getMapType() {
+        return mapType;
+    }
+
+    public int getProgress() {
         return progress;
     }
 }

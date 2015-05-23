@@ -91,13 +91,13 @@ public class MainMapActivity extends AppCompatActivity {
     private boolean isLoading = Boolean.FALSE;
     Integer currentPage = 0;
     AppConstants.MapType currentMapType;
-    ConcurrentHashMap<Integer, Integer> downloadingMapsList;
+    ConcurrentHashMap<String, Integer> downloadingMapsList;
     WeatherApplication applicationContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        downloadingMapsList = new ConcurrentHashMap<Integer, Integer>();
+        downloadingMapsList = new ConcurrentHashMap<String, Integer>();
 
         applicationContext = (WeatherApplication) getApplicationContext();
 //        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
@@ -316,34 +316,41 @@ public class MainMapActivity extends AppCompatActivity {
     }
 
     public void syncDownloadProgress(int currentPage) {
-        if (!downloadingMapsList.containsKey(currentPage)) {
+        final String key = constructActiveDownloadMAPKey(currentMapType.value, currentPage);
+        if (!downloadingMapsList.containsKey(key)) {
             hideProgress();
             return;
         }
-        updateProgress(downloadingMapsList.get(currentPage));
+        updateProgress(downloadingMapsList.get(key));
     }
 
-    public void updateActiveDownloadsList(int downloadingMapID, int lastKnownProgress) {
-        if (lastKnownProgress == -1 && downloadingMapsList.containsKey(downloadingMapID)) {
-            downloadingMapsList.remove(downloadingMapID);
+    public void updateActiveDownloadsList(int mapType, int downloadingMapID, int lastKnownProgress) {
+        final String key = constructActiveDownloadMAPKey(mapType, downloadingMapID);
+        if (lastKnownProgress == -1 && downloadingMapsList.containsKey(key)) {
+            downloadingMapsList.remove(key);
             return;
         }
-        downloadingMapsList.put(downloadingMapID, lastKnownProgress);
+        downloadingMapsList.put(key, lastKnownProgress);
+    }
 
+    private String constructActiveDownloadMAPKey(int mapType, int downloadingMapID) {
+        return mapType + ":" + downloadingMapID;
     }
 
     public void onEvent(DownloadProgressUpdateEvent downloadProgress) {
-        if (currentPage == downloadProgress.getMapType()) {
+        if (currentMapType.value == downloadProgress.getMapType() && currentPage == downloadProgress.getMapID()) {
             updateProgress(downloadProgress.getProgress());
         }
-        updateActiveDownloadsList(downloadProgress.getMapType(), downloadProgress.getProgress());
+        //TODO: map type should be included on activeDownloadsList
+        updateActiveDownloadsList(downloadProgress.getMapType(), downloadProgress.getMapID(), downloadProgress.getProgress());
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {
         int completedMapID = downloadStatus.mapID;
-        updateActiveDownloadsList(completedMapID, -1);
+        //TODO: map type should be included on activeDownloadsList
+        updateActiveDownloadsList(downloadStatus.mapType, completedMapID, -1);
 
-        if (currentPage == completedMapID) {
+        if (currentMapType.value == downloadStatus.mapType && currentPage == completedMapID) {
             hideProgress();
         }
     }
