@@ -61,14 +61,11 @@ public class DownloaderService extends Service {
     @Bean
     StorageUtils storageUtils;
     @Bean
-    AppConstants appConstants;
-    @Bean
     PreferenceUtil preferenceUtil;
 
     OkHttpClient httpClient;
 
-    //TODO: get the size from Appconstant MAP_URL.
-    Boolean activeDownloadsList[] = new Boolean[5];
+    Boolean activeDownloadsList[] = new Boolean[AppConstants.MAP_URL.size()];
     private SharedPreferences preference_General = null;
 
 
@@ -113,7 +110,8 @@ public class DownloaderService extends Service {
             return startOption;
         }
 
-        int mapID = intent.getIntExtra(appConstants.DOWNLOAD_INTENT_NAME, 0);
+        int mapID = intent.getIntExtra(AppConstants.DOWNLOAD_INTENT_NAME, 0);
+        int mapType = intent.getIntExtra(AppConstants.DOWNLOAD_MAP_TYPE, 0);
         if (!isNetworkAvailable()) {
             Toast.makeText(this, this.getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show();
             broadcastDownloadStatus(mapID, false);
@@ -126,20 +124,20 @@ public class DownloaderService extends Service {
         }
 
         activeDownloadsList[mapID] = true;
-        downloadMap(mapID);
+        downloadMap(mapID, mapType);
         // NOT_STICKY: No need to restart the service if it get killed by user or by system.
         return startOption;
     }
 
     @Background
-    public void downloadMap(int mapID) {
+    public void downloadMap(int mapID, int mapType) {
         //TODO: Check internet
-        String mapType = appConstants.getMapType(mapID);
+        String mapFileName = AppConstants.getMapType(mapID, mapType);
         String lastModifiedHeader = "";
-        Log.d("Download requested for map type: " + mapType);
+        Log.d("Download requested for map type: " + mapFileName);
         updateDownloadStatus(mapID, 0);
 
-        final String URL = appConstants.MAP_URL.get(mapType);
+        final String URL = AppConstants.MAP_URL.get(mapFileName);
 
         try {
             Call call = httpClient.newCall(new Request.Builder().url(URL).get().build());
@@ -173,10 +171,10 @@ public class DownloaderService extends Service {
 //                        Log.d(String.format("%d / %d", downloaded, responseSize));
 
                         //Update download status
-                        if (statusUpdateTrigger > appConstants.STATUS_UPDATE_THRESHOLD) {
+                        if (statusUpdateTrigger > AppConstants.STATUS_UPDATE_THRESHOLD) {
 //                            Thread.sleep(3000);
                             statusUpdateTrigger = 0;
-                            Long downloadedPercent = downloaded * appConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
+                            Long downloadedPercent = downloaded * AppConstants.MAX_DOWNLOAD_PROGRESS / responseSize;
                             Log.d("downloaded percent: " + downloadedPercent);
                             updateDownloadStatus(mapID, downloadedPercent.intValue());
                         }
@@ -187,10 +185,10 @@ public class DownloaderService extends Service {
                     options.inMutable = true;
                     Bitmap bmp = BitmapFactory.decodeByteArray(responseImage, 0, responseImage.length, options);
 
-                    bmp = removeMapBorders(mapType, bmp);
+                    bmp = removeMapBorders(mapFileName, bmp);
 
                     //Save downloaded image for offline use.
-                    saveDownloadedMap(mapType, bmp);
+                    saveDownloadedMap(mapFileName, bmp);
                     updateDownloadStatus(mapID, 100);
                 } catch (IOException ignore) {
                     trackException("MAP download & parser error", ignore);
@@ -216,7 +214,7 @@ public class DownloaderService extends Service {
             return;
         }
 
-        preferenceUtil.updateLastModifiedTime(preference_General, mapType, lastModifiedHeader);
+        preferenceUtil.updateLastModifiedTime(preference_General, mapFileName, lastModifiedHeader);
         broadcastDownloadStatus(mapID, true);
     }
 
@@ -225,9 +223,9 @@ public class DownloaderService extends Service {
         //Try to remove unwanted parts from MAP. return the original MAP in case of any errors.
         try {
             //Trim the unwanted area from the Ultra Violet Map.
-            if (mapType.equals(appConstants.MAP_UV)) {
+            if (mapType.equals(AppConstants.MAP_UV)) {
                 return Bitmap.createBitmap(bmp, 110, 230, 800, 800);
-            } else if (mapType.equals(appConstants.MAP_HEAT)) {
+            } else if (mapType.equals(AppConstants.MAP_HEAT)) {
                 return Bitmap.createBitmap(bmp, 0, 180, 1250, 1400);
             }
         } catch (Exception e) {
@@ -236,7 +234,9 @@ public class DownloaderService extends Service {
             try {
                 Crashlytics.setInt("mapWidth", bmp.getWidth());
                 Crashlytics.setInt("mapHeight", bmp.getHeight());
-            } catch(Exception e1) {}
+            } catch(Exception e1) {
+                Crashlytics.logException(e1);
+            }
             Crashlytics.logException(e);
         }
         return bmp;

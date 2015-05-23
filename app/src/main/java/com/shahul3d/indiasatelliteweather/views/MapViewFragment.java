@@ -51,12 +51,13 @@ import de.greenrobot.event.EventBus;
 @EFragment(R.layout.map_view_fragment)
 public class MapViewFragment extends Fragment {
     @Bean
-    AppConstants appConstants;
-    @Bean
     PreferenceUtil preferenceUtil;
 
     @FragmentArg
     int pageNumber;
+
+    @FragmentArg
+    AppConstants.MapType mapType;
 
     @Bean
     StorageUtils storageUtils;
@@ -122,8 +123,8 @@ public class MapViewFragment extends Fragment {
     @UiThread
     void renderImage() {
         //TODO: Check file exits before render.
-        final String mapType = appConstants.getMapType(pageNumber);
-        String imageFile = Environment.getExternalStorageDirectory() + File.separator + mapType + ".jpg";
+        final String mapFileName = AppConstants.getMapType(pageNumber, mapType.value);
+        String imageFile = Environment.getExternalStorageDirectory() + File.separator + mapFileName + ".jpg";
 
         if (!storageUtils.fileExists(imageFile)) {
             Log.e("File not exists: " + pageNumber);
@@ -143,7 +144,7 @@ public class MapViewFragment extends Fragment {
         touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
 
         Log.d("Map refreshed");
-        updateLastModifiedTime(mapType);
+        updateLastModifiedTime(mapFileName);
     }
 
     private void updateLastModifiedTime(String mapType) {

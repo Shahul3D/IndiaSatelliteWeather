@@ -20,26 +20,30 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.ViewGroup;
 
-import com.noveogroup.android.log.Log;
-//TODO: Remove redundant import.
+import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.views.MapViewFragment;
 import com.shahul3d.indiasatelliteweather.views.MapViewFragment_;
+//TODO: Remove redundant import.
 
 
 public class TouchImagePageAdapter extends FragmentStatePagerAdapter {
 
-    final int PAGE_COUNT = 5;
+    int totalPageCount;
     private String titles[];
+    AppConstants.MapType mapType;
 
-    public TouchImagePageAdapter(FragmentManager fm, String[] titles2) {
+    public TouchImagePageAdapter(FragmentManager fm, String[] titles, AppConstants.MapType mapType) {
         super(fm);
-        titles = titles2;
+        this.titles = titles;
+        totalPageCount = titles.length;
+        this.mapType = mapType;
     }
 
     @Override
     public Fragment getItem(int position) {
         MapViewFragment fragment = MapViewFragment_.builder()
                 .pageNumber(position)
+                .mapType(mapType)
                 .build();
         return fragment;
     }
@@ -50,7 +54,7 @@ public class TouchImagePageAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return PAGE_COUNT;
+        return totalPageCount;
     }
 
     @Override

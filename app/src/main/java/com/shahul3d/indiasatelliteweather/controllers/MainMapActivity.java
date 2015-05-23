@@ -32,8 +32,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -61,7 +61,8 @@ import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main_map)
 public class MainMapActivity extends AppCompatActivity {
-    private String titles[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
+    private String map_tabs[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
+    private String forecast_tabs[] = new String[]{"24 Hours", "48 Hours", "72 Hours", "96 Hours", "120 Hours", "144 Hours", "168 Hours"};
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -84,13 +85,12 @@ public class MainMapActivity extends AppCompatActivity {
 
     @Bean
     StorageUtils storageUtils;
-    @Bean
-    AppConstants appConstants;
 
     EventBus bus = EventBus.getDefault();
     private MenuItem refreshItem;
     private boolean isLoading = Boolean.FALSE;
     Integer currentPage = 0;
+    AppConstants.MapType currentMapType;
     ConcurrentHashMap<Integer, Integer> downloadingMapsList;
     WeatherApplication applicationContext;
 
@@ -124,6 +124,7 @@ public class MainMapActivity extends AppCompatActivity {
     @AfterViews
     protected void init() {
         initToolbar();
+        initPager(AppConstants.MapType.LIVE);
         initDrawer();
         //TODO: To be removed.
 //        Log.d("Storage path: %s", Environment.getExternalStorageDirectory());
@@ -135,7 +136,7 @@ public class MainMapActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Weather Maps", "Weather Animation", "Do you like this Work ?", "About"
+                "Live Weather", "Forecast Rainfall", "Do you like this Work ?", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_navbar, values);
         mDrawerList.setAdapter(adapter);
@@ -145,8 +146,11 @@ public class MainMapActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawer(Gravity.START);
 
                 switch (position) {
+                    case 0:
+                        initPager(AppConstants.MapType.LIVE);
+                        break;
                     case 1:
-                        Toast.makeText(context, "Coming Soon..!", Toast.LENGTH_SHORT).show();
+                        initPager(AppConstants.MapType.FORECAST);
                         break;
                     case 2:
                         AppRater.setDontRemindButtonVisible(true);
@@ -173,8 +177,12 @@ public class MainMapActivity extends AppCompatActivity {
             toolbar.setNavigationIcon(R.drawable.ic_ab_drawer);
             toolbar.inflateMenu(R.menu.menu_main_map);
         }
+    }
 
-        pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), titles));
+    private void initPager(final AppConstants.MapType mapType) {
+        updateToolbarTitle(mapType);
+        currentMapType = mapType;
+        pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), getTabTitles(mapType), mapType));
         slidingTabLayout.setViewPager(pager);
         slidingTabLayout.setDistributeEvenly(true);
         number_progress_bar.setSuffix("% Downloading ");
@@ -197,7 +205,7 @@ public class MainMapActivity extends AppCompatActivity {
                 syncDownloadProgress(mapID);
                 currentPage = mapID;
 
-                applicationContext.sendAnalyticsScreen(appConstants.getMapType(mapID));
+                applicationContext.sendAnalyticsScreen(AppConstants.getMapType(mapID, mapType.value));
             }
 
             @Override
@@ -205,6 +213,31 @@ public class MainMapActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String[] getTabTitles(AppConstants.MapType mapType) {
+        String[] tabs;
+        if (mapType == AppConstants.MapType.LIVE) {
+            tabs = map_tabs;
+        } else {
+            tabs = forecast_tabs;
+        }
+        return tabs;
+    }
+
+    private void updateToolbarTitle(AppConstants.MapType mapType) {
+        String title;
+        if (mapType == AppConstants.MapType.LIVE) {
+            title = "LIVE Weather";
+        } else {
+            title = "Forecast Rainfall";
+        }
+        try {
+            getSupportActionBar().setTitle(title);
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -233,7 +266,8 @@ public class MainMapActivity extends AppCompatActivity {
             Log.d("Refresh clicked:-> with page number:" + currentPage);
             startRefreshAnimation();
             Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
-            downloaderIntent.putExtra(appConstants.DOWNLOAD_INTENT_NAME, currentPage);
+            downloaderIntent.putExtra(AppConstants.DOWNLOAD_INTENT_NAME, currentPage);
+            downloaderIntent.putExtra(AppConstants.DOWNLOAD_MAP_TYPE, currentMapType.value);
             getApplicationContext().startService(downloaderIntent);
         }
 
