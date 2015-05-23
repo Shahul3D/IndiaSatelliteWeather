@@ -22,6 +22,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import io.fabric.sdk.android.Fabric;
 
 public class WeatherApplication extends Application {
     // Prevent hits from being sent to reports, i.e. during testing.
@@ -40,7 +41,7 @@ public class WeatherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Crashlytics.start(this);
+        Fabric.with(this, new Crashlytics());
         // Initialization for Google Analytics Instance.
         initializeGa();
     }
@@ -104,7 +105,5 @@ public class WeatherApplication extends Application {
 
         // Send TimingBuilder Map
         tracker.send(event.build());
-
-        return;
     }
 }
