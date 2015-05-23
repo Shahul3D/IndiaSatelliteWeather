@@ -22,8 +22,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.noveogroup.android.log.Log;
 import com.shahul3d.indiasatelliteweather.R;
 import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
@@ -59,7 +60,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main_map)
-public class MainMapActivity extends ActionBarActivity {
+public class MainMapActivity extends AppCompatActivity {
     private String titles[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -136,8 +137,7 @@ public class MainMapActivity extends ActionBarActivity {
         String[] values = new String[]{
                 "Weather Maps", "Weather Animation", "Do you like this Work ?", "About"
         };
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_navbar, values);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -154,9 +154,10 @@ public class MainMapActivity extends ActionBarActivity {
                         applicationContext.sendAnalyticsScreen(getString(R.string.rating_page));
                         break;
                     case 3:
-                        new Libs.Builder()
+                        new LibsBuilder()
                                 .withFields(R.string.class.getFields())
                                 .withActivityTitle(getString(R.string.about_heading))
+                                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                                 .withLibraries("androidAnnotations")
                                 .start(context);
                         applicationContext.sendAnalyticsScreen(getString(R.string.about_page));
