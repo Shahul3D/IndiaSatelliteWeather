@@ -341,13 +341,11 @@ public class MainMapActivity extends AppCompatActivity {
         if (currentMapType.value == downloadProgress.getMapType() && currentPage == downloadProgress.getMapID()) {
             updateProgress(downloadProgress.getProgress());
         }
-        //TODO: map type should be included on activeDownloadsList
         updateActiveDownloadsList(downloadProgress.getMapType(), downloadProgress.getMapID(), downloadProgress.getProgress());
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {
         int completedMapID = downloadStatus.mapID;
-        //TODO: map type should be included on activeDownloadsList
         updateActiveDownloadsList(downloadStatus.mapType, completedMapID, -1);
 
         if (currentMapType.value == downloadStatus.mapType && currentPage == completedMapID) {
