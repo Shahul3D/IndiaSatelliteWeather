@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<changelog>
+    <release
+        version="3.1"
+        versioncode="7">
+        <change>Added new MAP category "Forecast Rainfall" for rainfall prediction</change>
+        <change>Added 7 new MAPS to "Forecast Rainfall" type.</change>
+        <change>Updated all of the dependent libraries to to its latest version.</change>
+    </release>
+    <release
+        version="3.0.3"
+        versioncode="6">
+        <change>Re-designed the app with material design.</change>
+        <change>Added new "Heat MAP" to know the live temperature</change>
+    </release>
+</changelog>

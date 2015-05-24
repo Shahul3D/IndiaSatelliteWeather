@@ -57,6 +57,7 @@ import org.codechimp.apprater.AppRater;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.cketti.library.changelog.ChangeLog;
 import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main_map)
@@ -93,6 +94,7 @@ public class MainMapActivity extends AppCompatActivity {
     AppConstants.MapType currentMapType;
     ConcurrentHashMap<String, Integer> downloadingMapsList;
     WeatherApplication applicationContext;
+    ChangeLog changeLogLib;
 
     final String BUNDLE_MAP_TYPE = "MAP_TYPE";
     final String BUNDLE_MAP_ID = "MAP_ID";
@@ -111,6 +113,11 @@ public class MainMapActivity extends AppCompatActivity {
         applicationContext = (WeatherApplication) getApplicationContext();
 //        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
         AppRater.app_launched(this);
+
+        changeLogLib = new ChangeLog(this);
+        if (changeLogLib.isFirstRun()) {
+            changeLogLib.getLogDialog().show();
+        }
     }
 
 
@@ -154,7 +161,7 @@ public class MainMapActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Live Weather", "Forecast Rainfall", "Do you like this Work ?", "About"
+                "Live Weather", "Forecast Rainfall", "What's New", "Do you like this Work ?", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_navbar, values);
         mDrawerList.setAdapter(adapter);
@@ -171,11 +178,14 @@ public class MainMapActivity extends AppCompatActivity {
                         showForcastMAPs();
                         break;
                     case 2:
+                        changeLogLib.getLogDialog().show();
+                        break;
+                    case 3:
                         AppRater.setDontRemindButtonVisible(true);
                         AppRater.showRateDialog(context);
                         applicationContext.sendAnalyticsScreen(getString(R.string.rating_page));
                         break;
-                    case 3:
+                    case 4:
                         new LibsBuilder()
                                 .withFields(R.string.class.getFields())
                                 .withActivityTitle(getString(R.string.about_heading))

@@ -66,6 +66,7 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'com.github.codechimp-org.apprater:library:1.0.28'
+    compile 'de.cketti.library.changelog:ckchangelog:1.2.2'
     compile('com.mikepenz.aboutlibraries:library:5.0.0@aar') {
         transitive = true
     }
