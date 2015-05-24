@@ -191,7 +191,12 @@ public class DownloaderService extends Service {
                     saveDownloadedMap(mapFileName, bmp);
                     updateDownloadStatus(mapType, mapID, 100);
                 } catch (IOException ignore) {
-                    trackException("MAP download & parser error", ignore);
+                    trackException("MAP download IO exception", ignore);
+                    broadcastDownloadStatus(mapType, mapID, false);
+                    //Error on fetching & organizing the binary data.
+                    return;
+                } catch (Exception e) {
+                    trackException("MAP download & parser error", e);
                     broadcastDownloadStatus(mapType, mapID, false);
                     //Error on fetching & organizing the binary data.
                     return;
@@ -242,7 +247,7 @@ public class DownloaderService extends Service {
         return bmp;
     }
 
-    private void saveDownloadedMap(String mapType, Bitmap bmp) throws IOException {
+    private void saveDownloadedMap(String mapType, Bitmap bmp) throws Exception {
         File temp_file = new File(Environment.getExternalStorageDirectory() + File.separator + mapType + "_temp.jpg");
         FileOutputStream fileOutStream = new FileOutputStream(temp_file.getPath());
 
