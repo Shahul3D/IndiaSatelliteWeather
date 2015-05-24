@@ -45,11 +45,9 @@ import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
-import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
@@ -84,9 +82,6 @@ public class MainMapActivity extends AppCompatActivity {
     @ViewById(R.id.sliding_tabs)
     SlidingTabLayout slidingTabLayout;
 
-    @Bean
-    StorageUtils storageUtils;
-
     EventBus bus = EventBus.getDefault();
     private MenuItem refreshItem;
     private boolean isLoading = Boolean.FALSE;
@@ -116,7 +111,8 @@ public class MainMapActivity extends AppCompatActivity {
 
         changeLogLib = new ChangeLog(this);
         if (changeLogLib.isFirstRun()) {
-            changeLogLib.getLogDialog().show();
+//            changeLogLib.getLogDialog().show();
+            changeLogLib.getFullLogDialog().show();
         }
     }
 
@@ -220,6 +216,7 @@ public class MainMapActivity extends AppCompatActivity {
     private void reInitializeTabs() {
         //Hiding the progress from the previous map type.
         hideProgress();
+        currentPage = 0;
         updateToolbarTitle(currentMapType);
         pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), getTabTitles(currentMapType), currentMapType));
         slidingTabLayout.setViewPager(pager);

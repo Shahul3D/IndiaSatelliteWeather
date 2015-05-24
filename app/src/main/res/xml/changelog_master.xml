@@ -2,10 +2,17 @@
 <changelog>
     <release
         version="3.1 (24 May 15)"
-        versioncode="7">
+        versioncode="8">
         <change>Added new MAP category "Forecast Rainfall" for rainfall prediction.</change>
         <change>Added 7 new MAPS to "Forecast Rainfall" type.</change>
-        <change>Updated all of the dependent libraries to to its latest version.</change>
+        <change>
+            Optimized storage access. Now images wont be listed on gallery and all the stored
+            files will get removed along with the app.
+        </change>
+        <change>
+            Updated all of the dependent libraries to its latest version. can expect some boost
+            in performance
+        </change>
     </release>
     <release
         version="3.0.3 (11 Mar 15)"
@@ -16,6 +23,9 @@
     <release
         version="1.0 to 3.0.2"
         versioncode="5">
-        <change>Lots and lots of additions and improvements done over more than one year of active development.</change>
+        <change>
+            Lots and lots of additions and improvements done over more than one year of active
+            development.
+        </change>
     </release>
 </changelog>

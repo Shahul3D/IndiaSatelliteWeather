@@ -16,6 +16,7 @@
 package com.shahul3d.indiasatelliteweather.controllers;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -29,6 +30,7 @@ public class WeatherApplication extends Application {
     private static final boolean GA_IS_DRY_RUN = false;
     private static final String GLOBAL_PROPERTY_ID = "UA-46030637-1";
     Tracker gaTracker = null;
+    private static Context mContext;
 
 
 //    synchronized Tracker getTracker() {
@@ -41,9 +43,14 @@ public class WeatherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = getApplicationContext();
         Fabric.with(this, new Crashlytics());
         // Initialization for Google Analytics Instance.
         initializeGa();
+    }
+
+    public static Context getContext() {
+        return mContext;
     }
 
     /*

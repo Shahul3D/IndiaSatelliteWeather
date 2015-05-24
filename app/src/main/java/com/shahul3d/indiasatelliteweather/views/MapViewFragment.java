@@ -18,7 +18,6 @@ package com.shahul3d.indiasatelliteweather.views;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -59,8 +58,6 @@ public class MapViewFragment extends Fragment {
     @FragmentArg
     AppConstants.MapType mapType;
 
-    @Bean
-    StorageUtils storageUtils;
     @Bean
     FormatUtils formatUtils;
 
@@ -124,9 +121,9 @@ public class MapViewFragment extends Fragment {
     void renderImage() {
         //TODO: Check file exits before render.
         final String mapFileName = AppConstants.getMapType(pageNumber, mapType.value);
-        String imageFile = Environment.getExternalStorageDirectory() + File.separator + mapFileName + ".jpg";
+        String imageFile = StorageUtils.getAppSpecificFolder() + File.separator + mapFileName + ".jpg";
 
-        if (!storageUtils.fileExists(imageFile)) {
+        if (!StorageUtils.fileExists(imageFile)) {
             Log.e("File not exists: " + pageNumber);
             noImageBanner.setVisibility(View.VISIBLE);
             map_updated_time.setVisibility(View.GONE);
@@ -141,7 +138,7 @@ public class MapViewFragment extends Fragment {
             touchImage.setImageFile(imageFile);
         }
         touchImage.setMaxScale(7f);
-        touchImage.setMinimumScaleType(touchImage.SCALE_TYPE_CENTER_CROP);
+        touchImage.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
 
         Log.d("Map refreshed");
         updateLastModifiedTime(mapFileName);

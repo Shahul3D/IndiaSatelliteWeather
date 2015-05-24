@@ -24,7 +24,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Environment;
 import android.os.IBinder;
 import android.widget.Toast;
 
@@ -58,8 +57,6 @@ import de.greenrobot.event.EventBus;
 @EService
 public class DownloaderService extends Service {
     EventBus bus = EventBus.getDefault();
-    @Bean
-    StorageUtils storageUtils;
     @Bean
     PreferenceUtil preferenceUtil;
 
@@ -190,6 +187,9 @@ public class DownloaderService extends Service {
                     //Save downloaded image for offline use.
                     saveDownloadedMap(mapFileName, bmp);
                     updateDownloadStatus(mapType, mapID, 100);
+
+                    //check for .nomeida file and create it if it is not available.
+                    StorageUtils.createNoMediaFile();
                 } catch (IOException ignore) {
                     trackException("MAP download IO exception", ignore);
                     broadcastDownloadStatus(mapType, mapID, false);
@@ -248,7 +248,7 @@ public class DownloaderService extends Service {
     }
 
     private void saveDownloadedMap(String mapType, Bitmap bmp) throws Exception {
-        File temp_file = new File(Environment.getExternalStorageDirectory() + File.separator + mapType + "_temp.jpg");
+        File temp_file = new File(StorageUtils.getAppSpecificFolder() + File.separator + mapType + "_temp.jpg");
         FileOutputStream fileOutStream = new FileOutputStream(temp_file.getPath());
 
         // Compression Quality set to 100. ie. NO COMPRESSION.
@@ -256,7 +256,7 @@ public class DownloaderService extends Service {
         fileOutStream.flush();
         fileOutStream.close();
 
-        boolean success = temp_file.renameTo(new File(Environment.getExternalStorageDirectory(), mapType + ".jpg"));
+        boolean success = temp_file.renameTo(new File(StorageUtils.getAppSpecificFolder(), mapType + ".jpg"));
         Log.d("Map  saved to: " + temp_file.getAbsolutePath() + ". Overwritten? = " + success);
     }
 
