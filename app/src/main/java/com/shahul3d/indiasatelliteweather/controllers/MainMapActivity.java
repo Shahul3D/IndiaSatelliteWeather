@@ -94,11 +94,20 @@ public class MainMapActivity extends AppCompatActivity {
     ConcurrentHashMap<String, Integer> downloadingMapsList;
     WeatherApplication applicationContext;
 
+    final String BUNDLE_MAP_TYPE = "MAP_TYPE";
+    final String BUNDLE_MAP_ID = "MAP_ID";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Making Live map as default.
+        currentMapType = AppConstants.MapType.LIVE;
+        if (savedInstanceState != null) {
+            // Restore values from saved state
+            currentPage = savedInstanceState.getInt(BUNDLE_MAP_ID, 0);
+            currentMapType = AppConstants.MapType.values()[savedInstanceState.getInt(BUNDLE_MAP_TYPE, 0)];
+        }
         downloadingMapsList = new ConcurrentHashMap<String, Integer>();
-
         applicationContext = (WeatherApplication) getApplicationContext();
 //        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
         AppRater.app_launched(this);
@@ -109,6 +118,15 @@ public class MainMapActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         bus.register(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        //Saving map type & current while recreating the activity.
+        savedInstanceState.putInt(BUNDLE_MAP_TYPE, currentMapType.value);
+        savedInstanceState.putInt(BUNDLE_MAP_ID, currentPage);
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
@@ -124,7 +142,7 @@ public class MainMapActivity extends AppCompatActivity {
     @AfterViews
     protected void init() {
         initToolbar();
-        initPager(AppConstants.MapType.LIVE);
+        reInitializeTabs();
         initDrawer();
         //TODO: To be removed.
 //        Log.d("Storage path: %s", Environment.getExternalStorageDirectory());
@@ -147,10 +165,10 @@ public class MainMapActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0:
-                        initPager(AppConstants.MapType.LIVE);
+                        showLiveMAPs();
                         break;
                     case 1:
-                        initPager(AppConstants.MapType.FORECAST);
+                        showForcastMAPs();
                         break;
                     case 2:
                         AppRater.setDontRemindButtonVisible(true);
@@ -171,6 +189,16 @@ public class MainMapActivity extends AppCompatActivity {
         });
     }
 
+    private void showForcastMAPs() {
+        currentMapType = AppConstants.MapType.FORECAST;
+        reInitializeTabs();
+    }
+
+    private void showLiveMAPs() {
+        currentMapType = AppConstants.MapType.LIVE;
+        reInitializeTabs();
+    }
+
     private void initToolbar() {
         if (toolbar != null) {
             setSupportActionBar(toolbar);
@@ -179,10 +207,11 @@ public class MainMapActivity extends AppCompatActivity {
         }
     }
 
-    private void initPager(final AppConstants.MapType mapType) {
-        updateToolbarTitle(mapType);
-        currentMapType = mapType;
-        pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), getTabTitles(mapType), mapType));
+    private void reInitializeTabs() {
+        //Hiding the progress from the previous map type.
+        hideProgress();
+        updateToolbarTitle(currentMapType);
+        pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), getTabTitles(currentMapType), currentMapType));
         slidingTabLayout.setViewPager(pager);
         slidingTabLayout.setDistributeEvenly(true);
         number_progress_bar.setSuffix("% Downloading ");
@@ -205,7 +234,7 @@ public class MainMapActivity extends AppCompatActivity {
                 syncDownloadProgress(mapID);
                 currentPage = mapID;
 
-                applicationContext.sendAnalyticsScreen(AppConstants.getMapType(mapID, mapType.value));
+                applicationContext.sendAnalyticsScreen(AppConstants.getMapType(mapID, currentMapType.value));
             }
 
             @Override
