@@ -237,8 +237,10 @@ public class DownloaderService extends Service {
             Crashlytics.log("trim MAP Error");
             Crashlytics.setString("MapType", mapType);
             try {
-                Crashlytics.setInt("mapWidth", bmp.getWidth());
-                Crashlytics.setInt("mapHeight", bmp.getHeight());
+                if (bmp != null) {
+                    Crashlytics.setInt("mapWidth", bmp.getWidth());
+                    Crashlytics.setInt("mapHeight", bmp.getHeight());
+                }
             } catch (Exception e1) {
                 Crashlytics.logException(e1);
             }
