@@ -33,7 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.crashlytics.android.Crashlytics;
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
@@ -45,6 +44,7 @@ import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
+import com.shahul3d.indiasatelliteweather.utils.CrashUtils;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
 import org.androidannotations.annotations.AfterViews;
@@ -271,8 +271,7 @@ public class MainMapActivity extends AppCompatActivity {
         try {
             getSupportActionBar().setTitle(title);
         } catch (Exception e) {
-            Crashlytics.logException(e);
-            e.printStackTrace();
+            CrashUtils.trackException("", e);
         }
     }
 

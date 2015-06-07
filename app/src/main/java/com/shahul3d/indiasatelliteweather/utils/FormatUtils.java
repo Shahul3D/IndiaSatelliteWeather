@@ -15,9 +15,6 @@
 
 package com.shahul3d.indiasatelliteweather.utils;
 
-import com.crashlytics.android.Crashlytics;
-import com.noveogroup.android.log.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,8 +64,7 @@ public class FormatUtils {
             Date mDate = sdf.parse(timeString);
             timeInMilliseconds = mDate.getTime();
         } catch (ParseException e) {
-            Log.e("Unable to parse last downloaded date");
-            Crashlytics.logException(e);
+            CrashUtils.trackException("Unable to parse last downloaded date",e);
         }
 
         return timeInMilliseconds;

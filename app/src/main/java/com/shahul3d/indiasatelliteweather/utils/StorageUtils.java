@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 
-import com.crashlytics.android.Crashlytics;
 import com.shahul3d.indiasatelliteweather.controllers.WeatherApplication;
 
 import java.io.File;
@@ -58,8 +57,7 @@ public class StorageUtils {
             }
 //            }
         } catch (Exception e) {
-            Crashlytics.log("Error while creating noMedia file");
-            Crashlytics.logException(e);
+            CrashUtils.trackException("Error while creating noMedia file", e);
         }
 
     }
