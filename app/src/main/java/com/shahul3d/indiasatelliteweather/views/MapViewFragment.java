@@ -37,7 +37,6 @@ import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.utils.StorageUtils;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.FragmentArg;
 import org.androidannotations.annotations.UiThread;
@@ -49,17 +48,10 @@ import de.greenrobot.event.EventBus;
 
 @EFragment(R.layout.map_view_fragment)
 public class MapViewFragment extends Fragment {
-    @Bean
-    PreferenceUtil preferenceUtil;
-
     @FragmentArg
     int pageNumber;
-
     @FragmentArg
     AppConstants.MapType mapType;
-
-    @Bean
-    FormatUtils formatUtils;
 
     @ViewById
     SubsamplingScaleImageView touchImage;
@@ -145,10 +137,10 @@ public class MapViewFragment extends Fragment {
     }
 
     private void updateLastModifiedTime(String mapType) {
-        long lastUpdatedDateTime = preferenceUtil.getLastModifiedTime(preference_General, mapType);
+        long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(preference_General, mapType);
         String timeAgo = "sometime ago";
         if (lastUpdatedDateTime > 0) {
-            timeAgo = formatUtils.getTimeAgo(lastUpdatedDateTime);
+            timeAgo = FormatUtils.getTimeAgo(lastUpdatedDateTime);
         }
         map_updated_time.setText("Updated: " + timeAgo);
     }

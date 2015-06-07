@@ -18,14 +18,11 @@ package com.shahul3d.indiasatelliteweather.utils;
 import com.crashlytics.android.Crashlytics;
 import com.noveogroup.android.log.Log;
 
-import org.androidannotations.annotations.EBean;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@EBean
 public class FormatUtils {
     public static String getTimeAgo(long time) {
         final int SECOND_MILLIS = 1000;

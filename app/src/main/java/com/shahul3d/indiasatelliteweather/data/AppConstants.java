@@ -48,6 +48,11 @@ public class AppConstants {
     public static final String DOWNLOAD_INTENT_NAME = "DOWNLOAD_MAP_ID";
     public static final String DOWNLOAD_MAP_TYPE = "DOWNLOAD_MAP_TYPE";
 
+    public static final long HTTP_DEFAULT_READ_TIMEOUT_MILLIS = 180000; //3 mins
+    public static final long HTTP_DEFAULT_WRITE_TIMEOUT_MILLIS = 120000; //2 mins
+    public static final long HTTP_DEFAULT_CONNECT_TIMEOUT_MILLIS = 60000;//1 min
+
+
     //URL of supported maps.
     public static final Map<String, String> MAP_URL;
 
@@ -70,6 +75,7 @@ public class AppConstants {
 
     //Download configurations
     public static final int STATUS_UPDATE_THRESHOLD = 10;
+    //Remaining 10% is for Trimming the image & storing it on disk.
     public static final long MAX_DOWNLOAD_PROGRESS = 90;
 
     public static String getMapType(int mapID, int mapType) {
@@ -118,5 +124,9 @@ public class AppConstants {
             }
         }
         return mapFileName;
+    }
+
+    public static String getMapURL(String mapFileName) {
+        return MAP_URL.get(mapFileName);
     }
 }
