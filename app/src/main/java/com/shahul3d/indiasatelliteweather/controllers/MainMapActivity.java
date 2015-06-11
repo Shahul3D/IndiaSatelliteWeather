@@ -42,6 +42,7 @@ import com.shahul3d.indiasatelliteweather.adapters.TouchImagePageAdapter;
 import com.shahul3d.indiasatelliteweather.data.AppConstants;
 import com.shahul3d.indiasatelliteweather.events.DownloadProgressUpdateEvent;
 import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
+import com.shahul3d.indiasatelliteweather.preferences.GeneralPreference;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
 import com.shahul3d.indiasatelliteweather.utils.CrashUtils;
@@ -158,7 +159,7 @@ public class MainMapActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Live Weather", "Forecast Rainfall", "What's New", "Do you like this Work ?", "About"
+                "Live Weather", "Forecast Rainfall", "Settings", "What's New", "Do you like this Work ?", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_navbar, values);
         mDrawerList.setAdapter(adapter);
@@ -175,14 +176,18 @@ public class MainMapActivity extends AppCompatActivity {
                         showForcastMAPs();
                         break;
                     case 2:
-                        changeLogLib.getLogDialog().show();
+                        Intent intent = new Intent(context, GeneralPreference.class);
+                        startActivity(intent);
                         break;
                     case 3:
+                        changeLogLib.getLogDialog().show();
+                        break;
+                    case 4:
                         AppRater.setDontRemindButtonVisible(true);
                         AppRater.showRateDialog(context);
                         applicationContext.sendAnalyticsScreen(getString(R.string.rating_page));
                         break;
-                    case 4:
+                    case 5:
                         new LibsBuilder()
                                 .withFields(R.string.class.getFields())
                                 .withActivityTitle(getString(R.string.about_heading))
@@ -296,7 +301,7 @@ public class MainMapActivity extends AppCompatActivity {
                 break;
         }
 
-        if(!status){
+        if (!status) {
             return;
         }
 

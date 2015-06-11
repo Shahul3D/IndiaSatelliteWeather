@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".controllers.AnimatedMapActivity_" />
+        <activity android:name=".preferences.GeneralPreference" />
         <service android:name=".service.DownloaderService_" />
         <meta-data
             android:name="io.fabric.ApiKey"
