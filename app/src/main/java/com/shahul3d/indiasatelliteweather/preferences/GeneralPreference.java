@@ -41,6 +41,11 @@ public class GeneralPreference extends PreferenceActivity {
         loadHeadersFromResource(R.xml.pref_headers, target);
     }
 
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return fragmentName.equals(MyPreferenceFragment.class.getName());
+    }
+
     private void prepareLayout() {
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         View content = root.getChildAt(0);

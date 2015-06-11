@@ -45,6 +45,7 @@ import com.shahul3d.indiasatelliteweather.events.DownloadStatusEvent;
 import com.shahul3d.indiasatelliteweather.service.DownloaderService_;
 import com.shahul3d.indiasatelliteweather.utils.AnimationUtil;
 import com.shahul3d.indiasatelliteweather.utils.CrashUtils;
+import com.shahul3d.indiasatelliteweather.utils.PreferenceUtil;
 import com.shahul3d.indiasatelliteweather.widgets.SlidingTabLayout;
 
 import org.androidannotations.annotations.AfterViews;
@@ -228,6 +229,9 @@ public class MainMapActivity extends AppCompatActivity {
                 return Color.WHITE;
             }
         });
+
+        //Check for update while launching the MAP view
+        handleAutoRefreshMaps();
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -242,6 +246,8 @@ public class MainMapActivity extends AppCompatActivity {
                 currentPage = mapID;
 
                 applicationContext.sendAnalyticsScreen(AppConstants.getMapType(mapID, currentMapType.value));
+                //Check for update while switching MAPs
+                handleAutoRefreshMaps();
             }
 
             @Override
@@ -249,6 +255,52 @@ public class MainMapActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void handleAutoRefreshMaps() {
+        final int autoRefreshIntervalSetting = PreferenceUtil.getAutoRefreshInterval();
+        if (autoRefreshIntervalSetting == -1) {
+            return;
+        }
+
+        final long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(AppConstants.getMapType(currentPage, currentMapType.value));
+        if (lastUpdatedDateTime < 1) {
+            return;
+        }
+
+        final int SECOND_MILLIS = 1000;
+        final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+        final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+        final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+        final long now = System.currentTimeMillis();
+        long diff = now - lastUpdatedDateTime;
+        boolean status = false;
+
+        switch (autoRefreshIntervalSetting) {
+            case 1://day
+                status = diff > DAY_MILLIS;
+                break;
+            case 2://6 hours
+                status = diff > (6 * HOUR_MILLIS);
+                break;
+            case 3://1 hour
+                status = diff > (HOUR_MILLIS);
+                break;
+            case 4://30 mins
+                status = diff > (30 * MINUTE_MILLIS);
+                break;
+            case 5://15 mins
+                status = diff > (1 * MINUTE_MILLIS);
+                status = true; //Always refresh
+                break;
+        }
+
+        if(!status){
+            return;
+        }
+
+        initiateDownload();
     }
 
     private String[] getTabTitles(AppConstants.MapType mapType) {
@@ -299,14 +351,18 @@ public class MainMapActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
             Log.d("Refresh clicked:-> with page number:" + currentPage);
-            startRefreshAnimation();
-            Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
-            downloaderIntent.putExtra(AppConstants.DOWNLOAD_INTENT_NAME, currentPage);
-            downloaderIntent.putExtra(AppConstants.DOWNLOAD_MAP_TYPE, currentMapType.value);
-            getApplicationContext().startService(downloaderIntent);
+            initiateDownload();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initiateDownload() {
+        startRefreshAnimation();
+        Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
+        downloaderIntent.putExtra(AppConstants.DOWNLOAD_INTENT_NAME, currentPage);
+        downloaderIntent.putExtra(AppConstants.DOWNLOAD_MAP_TYPE, currentMapType.value);
+        getApplicationContext().startService(downloaderIntent);
     }
 
     @UiThread

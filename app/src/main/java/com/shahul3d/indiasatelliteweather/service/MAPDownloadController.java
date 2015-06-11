@@ -84,7 +84,7 @@ public class MAPDownloadController {
         //Download & Everything successful.
         mapDownloadBroadcastHelper.broadcastDownloadProgress(mapType, mapID, 100);
 
-        PreferenceUtil.updateLastModifiedTime(preference_General, mapFileName, lastModifiedHeader);
+        PreferenceUtil.updateLastModifiedTime(mapFileName, lastModifiedHeader);
         markDownloadComplete(mapType, mapID, true);
 
         //check for .nomeida file and create it if it is not available.

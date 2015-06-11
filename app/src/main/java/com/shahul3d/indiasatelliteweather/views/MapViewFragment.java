@@ -15,8 +15,6 @@
 
 package com.shahul3d.indiasatelliteweather.views;
 
-import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -63,7 +61,6 @@ public class MapViewFragment extends Fragment {
     ImageViewState mapViewState = null;
     EventBus bus = EventBus.getDefault();
     MainMapActivity_ activityContext = null;
-    private SharedPreferences preference_General;
     private static final String BUNDLE_STATE = "mapViewState";
 
     @Override
@@ -85,7 +82,6 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preference_General = getActivity().getSharedPreferences("BackgroundPreference", Activity.MODE_PRIVATE);
     }
 
     @Override
@@ -137,7 +133,7 @@ public class MapViewFragment extends Fragment {
     }
 
     private void updateLastModifiedTime(String mapType) {
-        long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(preference_General, mapType);
+        long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(mapType);
         String timeAgo = "sometime ago";
         if (lastUpdatedDateTime > 0) {
             timeAgo = FormatUtils.getTimeAgo(lastUpdatedDateTime);
