@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /*
+  ~  * ******************************************************************************
+  ~  *  * Copyright (c) 2015.  Shahul Hameed.
+  ~  *  *
+  ~  *  * Licensed under GNU GENERAL PUBLIC LICENSE;
+  ~  *  * you may not use this file except in compliance with the License.
+  ~  *  *
+  ~  *  * Unless required by applicable law or agreed to in writing, software
+  ~  *  * distributed under the License is distributed on an "AS IS" BASIS,
+  ~  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  *  * See the License for the specific language governing permissions and
+  ~  *  * limitations under the License.
+  ~  *  ******************************************************************************
+  ~  */
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="autoUpdateMaps"
+        android:summary="If selected will allow the application to update the maps automatically when open."
+        android:title="Auto Update maps" />
+    <ListPreference
+        android:defaultValue="1"
+        android:dependency="autoUpdateMaps"
+        android:entries="@array/AutoUpdateKeys"
+        android:entryValues="@array/AutoUpdateValues"
+        android:key="autoUpdateInterval"
+        android:summary="Select how frequently the MAPS need to be updated"
+        android:title="Auto update Interval" />
+</PreferenceScreen>
