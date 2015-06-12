@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <changelog>
     <release
+        version="3.2 (13 June 15)"
+        versioncode="9">
+        <change>Provided option to auto refresh MAPS based on configurable intervals.</change>
+        <change>Added new Settings page (for auto refresh configuration) </change>
+    </release>
+    <release
         version="3.1 (24 May 15)"
         versioncode="8">
         <change>Added new MAP category "Forecast Rainfall" for rainfall prediction.</change>
