@@ -263,7 +263,7 @@ public class MainMapActivity extends AppCompatActivity {
     }
 
     private void handleAutoRefreshMaps() {
-        final int autoRefreshIntervalSetting = PreferenceUtil.getAutoRefreshInterval();
+        int autoRefreshIntervalSetting = PreferenceUtil.getAutoRefreshInterval();
         if (autoRefreshIntervalSetting == -1) {
             return;
         }
@@ -282,6 +282,12 @@ public class MainMapActivity extends AppCompatActivity {
         long diff = now - lastUpdatedDateTime;
         boolean status = false;
 
+        if (currentMapType == AppConstants.MapType.FORECAST) {
+            //Forecast maps will be updated only once a day.
+            //So setting its default update interval as 1 day.
+            autoRefreshIntervalSetting = 1;
+        }
+
         switch (autoRefreshIntervalSetting) {
             case 1://day
                 status = diff > DAY_MILLIS;
@@ -296,8 +302,8 @@ public class MainMapActivity extends AppCompatActivity {
                 status = diff > (30 * MINUTE_MILLIS);
                 break;
             case 5://15 mins
-                status = diff > (1 * MINUTE_MILLIS);
-                status = true; //Always refresh
+                status = diff > (15 * MINUTE_MILLIS);
+//                status = true; //Always refresh
                 break;
         }
 
