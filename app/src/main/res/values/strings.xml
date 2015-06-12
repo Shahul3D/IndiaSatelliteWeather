@@ -36,4 +36,6 @@
           <b>Special Thanks to these Libraries:</b>
         ]]>
     </string>
+    <string name="title_live_map">LIVE Weather</string>
+    <string name="title_forecast_map">Forecast Rainfall</string>
 </resources>

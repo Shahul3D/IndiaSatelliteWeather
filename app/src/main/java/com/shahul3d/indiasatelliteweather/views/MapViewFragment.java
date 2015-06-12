@@ -107,7 +107,6 @@ public class MapViewFragment extends Fragment {
 
     @UiThread
     void renderImage() {
-        //TODO: Check file exits before render.
         final String mapFileName = AppConstants.getMapType(pageNumber, mapType.value);
         String imageFile = StorageUtils.getAppSpecificFolder() + File.separator + mapFileName + ".jpg";
 

@@ -65,19 +65,14 @@ public class MainMapActivity extends AppCompatActivity {
 
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-
     @ViewById(R.id.navdrawer)
     ListView mDrawerList;
-
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
-
     @ViewById
     NumberProgressBar number_progress_bar;
-
     @ViewById(R.id.viewpager)
     ViewPager pager;
-
     @ViewById(R.id.sliding_tabs)
     SlidingTabLayout slidingTabLayout;
 
@@ -87,8 +82,7 @@ public class MainMapActivity extends AppCompatActivity {
     private boolean isLoading = Boolean.FALSE;
     Integer currentPage = 0;
     AppConstants.MapType currentMapType;
-    ConcurrentHashMap<String, Integer> downloadingMapsList;
-    WeatherApplication applicationContext;
+    ConcurrentHashMap<String, Integer> activeDownloadsList;
     ChangeLog changeLogLib;
 
     final String BUNDLE_MAP_TYPE = "MAP_TYPE";
@@ -97,15 +91,17 @@ public class MainMapActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Making Live map as default.
         currentMapType = AppConstants.MapType.LIVE;
+
         if (savedInstanceState != null) {
             // Restore values from saved state
             currentPage = savedInstanceState.getInt(BUNDLE_MAP_ID, 0);
             currentMapType = AppConstants.MapType.values()[savedInstanceState.getInt(BUNDLE_MAP_TYPE, 0)];
         }
-        downloadingMapsList = new ConcurrentHashMap<String, Integer>();
-        applicationContext = (WeatherApplication) getApplicationContext();
+
+        activeDownloadsList = new ConcurrentHashMap<String, Integer>();
 //        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.home_page));
         AppRater.app_launched(this);
 
@@ -147,8 +143,6 @@ public class MainMapActivity extends AppCompatActivity {
         initToolbar();
         reInitializeTabs();
         initDrawer();
-        //TODO: To be removed.
-//        Log.d("Storage path: %s", Environment.getExternalStorageDirectory());
         hideProgress();
     }
 
@@ -181,18 +175,10 @@ public class MainMapActivity extends AppCompatActivity {
                         changeLogLib.getLogDialog().show();
                         break;
                     case 4:
-                        AppRater.setDontRemindButtonVisible(true);
-                        AppRater.showRateDialog(context);
-                        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.rating_page));
+                        showRateAppDialog(context);
                         break;
                     case 5:
-                        new LibsBuilder()
-                                .withFields(R.string.class.getFields())
-                                .withActivityTitle(getString(R.string.about_heading))
-                                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
-                                .withLibraries("androidAnnotations")
-                                .start(context);
-                        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.about_page));
+                        showAboutDeveloperPage(context);
                         break;
                 }
             }
@@ -220,6 +206,7 @@ public class MainMapActivity extends AppCompatActivity {
     private void reInitializeTabs() {
         //Hiding the progress from the previous map type.
         hideProgress();
+
         currentPage = 0;
         updateToolbarTitle(currentMapType);
         pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), getTabTitles(currentMapType), currentMapType));
@@ -234,7 +221,8 @@ public class MainMapActivity extends AppCompatActivity {
         });
 
         //Check for update while launching the MAP view
-        handleAutoRefreshMaps();
+        autoRefreshMAP();
+
         slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -249,8 +237,9 @@ public class MainMapActivity extends AppCompatActivity {
                 currentPage = mapID;
 
                 WeatherApplication.analyticsHandler.trackScreen(AppConstants.getMapType(mapID, currentMapType.value));
+
                 //Check for update while switching MAPs
-                handleAutoRefreshMaps();
+                autoRefreshMAP();
             }
 
             @Override
@@ -260,9 +249,9 @@ public class MainMapActivity extends AppCompatActivity {
         });
     }
 
-    private void handleAutoRefreshMaps() {
-        int autoRefreshIntervalSetting = PreferenceUtil.getAutoRefreshInterval();
-        if (autoRefreshIntervalSetting == -1) {
+    private void autoRefreshMAP() {
+        int autoRefreshInterval = PreferenceUtil.getAutoRefreshInterval();
+        if (autoRefreshInterval == -1) {
             return;
         }
 
@@ -283,10 +272,10 @@ public class MainMapActivity extends AppCompatActivity {
         if (currentMapType == AppConstants.MapType.FORECAST) {
             //Forecast maps will be updated only once a day.
             //So setting its default update interval as 1 day.
-            autoRefreshIntervalSetting = 1;
+            autoRefreshInterval = 1;
         }
 
-        switch (autoRefreshIntervalSetting) {
+        switch (autoRefreshInterval) {
             case 1:// 1 day
                 status = diff > DAY_MILLIS;
                 break;
@@ -323,14 +312,14 @@ public class MainMapActivity extends AppCompatActivity {
     private void updateToolbarTitle(AppConstants.MapType mapType) {
         String title;
         if (mapType == AppConstants.MapType.LIVE) {
-            title = "LIVE Weather";
+            title = getString(R.string.title_live_map);
         } else {
-            title = "Forecast Rainfall";
+            title = getString(R.string.title_forecast_map);
         }
         try {
             getSupportActionBar().setTitle(title);
         } catch (Exception e) {
-            CrashUtils.trackException("", e);
+            CrashUtils.trackException("Error on setting toolbar title", e);
         }
     }
 
@@ -357,7 +346,7 @@ public class MainMapActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            Log.d("Refresh clicked:-> with page number:" + currentPage);
+            Log.d("Refresh called for page number:" + currentPage);
             initiateDownload();
         }
 
@@ -415,24 +404,40 @@ public class MainMapActivity extends AppCompatActivity {
 
     public void syncDownloadProgress(int currentPage) {
         final String key = constructActiveDownloadMAPKey(currentMapType.value, currentPage);
-        if (!downloadingMapsList.containsKey(key)) {
+        if (!activeDownloadsList.containsKey(key)) {
             hideProgress();
             return;
         }
-        updateProgress(downloadingMapsList.get(key));
+        updateProgress(activeDownloadsList.get(key));
     }
 
     public void updateActiveDownloadsList(int mapType, int downloadingMapID, int lastKnownProgress) {
         final String key = constructActiveDownloadMAPKey(mapType, downloadingMapID);
-        if (lastKnownProgress == -1 && downloadingMapsList.containsKey(key)) {
-            downloadingMapsList.remove(key);
+        if (lastKnownProgress == -1 && activeDownloadsList.containsKey(key)) {
+            activeDownloadsList.remove(key);
             return;
         }
-        downloadingMapsList.put(key, lastKnownProgress);
+        activeDownloadsList.put(key, lastKnownProgress);
     }
 
     private String constructActiveDownloadMAPKey(int mapType, int downloadingMapID) {
         return mapType + ":" + downloadingMapID;
+    }
+
+    private void showAboutDeveloperPage(Context context) {
+        new LibsBuilder()
+                .withFields(R.string.class.getFields())
+                .withActivityTitle(getString(R.string.about_heading))
+                .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                .withLibraries("androidAnnotations")
+                .start(context);
+        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.about_page));
+    }
+
+    private void showRateAppDialog(Context context) {
+        AppRater.setDontRemindButtonVisible(true);
+        AppRater.showRateDialog(context);
+        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.rating_page));
     }
 
     public void onEvent(DownloadProgressUpdateEvent downloadProgress) {
