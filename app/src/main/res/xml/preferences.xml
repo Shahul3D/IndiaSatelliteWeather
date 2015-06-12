@@ -19,14 +19,15 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="autoUpdateMaps"
-        android:summary="If selected will allow the application to update the maps automatically when open."
-        android:title="Auto Update maps" />
+        android:summary="Maps will refresh automatically when open."
+        android:title="Auto update Maps" />
     <ListPreference
-        android:defaultValue="1"
+        android:defaultValue="3"
         android:dependency="autoUpdateMaps"
         android:entries="@array/AutoUpdateKeys"
         android:entryValues="@array/AutoUpdateValues"
         android:key="autoUpdateInterval"
-        android:summary="Select how frequently the MAPS need to be updated"
+        android:summary="How frequently LIVE Maps should be updated? (Forecast Maps will updated on daily basis)"
         android:title="Auto update Interval" />
+
 </PreferenceScreen>

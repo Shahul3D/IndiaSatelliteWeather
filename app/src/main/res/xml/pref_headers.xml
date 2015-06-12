@@ -19,10 +19,10 @@
 
     <header
         android:fragment="com.shahul3d.indiasatelliteweather.preferences.GeneralPreference$MyPreferenceFragment"
-        android:title="Auto Update MAPS">
+        android:title="Auto Refresh Settings">
 
         <extra
             android:name="category"
-            android:value="Auto Update MAPS" />
+            android:value="AutoRefresh" />
     </header>
 </preference-headers>
