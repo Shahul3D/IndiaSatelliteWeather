@@ -20,12 +20,12 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,8 +62,6 @@ import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main_map)
 public class MainMapActivity extends AppCompatActivity {
-    private String map_tabs[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
-    private String forecast_tabs[] = new String[]{"24 Hours", "48 Hours", "72 Hours", "96 Hours", "120 Hours", "144 Hours", "168 Hours"};
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -166,7 +164,7 @@ public class MainMapActivity extends AppCompatActivity {
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mDrawerLayout.closeDrawer(Gravity.START);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
 
                 switch (position) {
                     case 0:
@@ -289,7 +287,7 @@ public class MainMapActivity extends AppCompatActivity {
         }
 
         switch (autoRefreshIntervalSetting) {
-            case 1://day
+            case 1:// 1 day
                 status = diff > DAY_MILLIS;
                 break;
             case 2://6 hours
@@ -315,13 +313,11 @@ public class MainMapActivity extends AppCompatActivity {
     }
 
     private String[] getTabTitles(AppConstants.MapType mapType) {
-        String[] tabs;
         if (mapType == AppConstants.MapType.LIVE) {
-            tabs = map_tabs;
+            return AppConstants.LIVE_MAP_TAB_LABELS;
         } else {
-            tabs = forecast_tabs;
+            return AppConstants.FORECAST_TAB_LABELS;
         }
-        return tabs;
     }
 
     private void updateToolbarTitle(AppConstants.MapType mapType) {
