@@ -20,104 +20,30 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Logger;
-import com.google.android.gms.analytics.Tracker;
 import com.shahul3d.indiasatelliteweather.R;
+import com.shahul3d.indiasatelliteweather.utils.AnalyticsUtil;
 
 import io.fabric.sdk.android.Fabric;
 
 public class WeatherApplication extends Application {
-    // Prevent hits from being sent to reports, i.e. during testing.
-    private static final boolean GA_IS_DRY_RUN = false;
-    private static final String GLOBAL_PROPERTY_ID = "UA-46030637-1";
-    Tracker gaTracker = null;
     private static Context mContext;
-
-
-//    synchronized Tracker getTracker() {
-//        GoogleAnalytics.getInstance(this).setDryRun(true);
-//        GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-//        Tracker t = analytics.newTracker(R.xml.global_tracker);
-//        return t;
-//    }
+    public static AnalyticsUtil analyticsHandler;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
         Fabric.with(this, new Crashlytics());
+        analyticsHandler = new AnalyticsUtil(this);
 
         //Initializing default values for preferences at first app launch.
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         // Initialization for Google Analytics Instance.
-        initializeGa();
+        analyticsHandler.initializeGATracker();
     }
 
     public static Context getContext() {
         return mContext;
-    }
-
-    /*
-     * Method to handle basic Google Analytics initialization.
-     * All Google Analytics work occurs off the main thread.
-     */
-    private void initializeGa() {
-
-        // Set dryRun flag.
-        GoogleAnalytics.getInstance(this).setDryRun(GA_IS_DRY_RUN);
-
-        // Set the log level to verbose if dryRun.
-        // DEFAULT is set to DRY RUN (only logging will happen)
-        GoogleAnalytics.getInstance(this).getLogger()
-                .setLogLevel(GA_IS_DRY_RUN ? Logger.LogLevel.VERBOSE : Logger.LogLevel.WARNING);
-
-        // Set the opt out flag when user updates a tracking preference.
-        /*
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        sp.registerOnSharedPreferenceChangeListener(
-                new SharedPreferences.OnSharedPreferenceChangeListener() {
-                    @Override
-                    public void onSharedPreferenceChanged(SharedPreferences pref, String key) {
-                        if (key.equals(TRACKING_PREF_KEY)) {
-                            GoogleAnalytics.getInstance(getApplicationContext()).setAppOptOut(
-                                    pref.getBoolean(key, false));
-                        }
-                    }
-                });
-                */
-    }
-
-    synchronized Tracker getTracker() {
-        if (gaTracker == null) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            gaTracker = analytics.newTracker(GLOBAL_PROPERTY_ID);
-        }
-        return gaTracker;
-    }
-
-    public void sendAnalyticsScreen(String screenName) {
-
-        Tracker tracker = getTracker();
-
-        if (tracker == null) return;
-
-        // Set the screen name.
-        tracker.setScreenName(screenName);
-
-        // Send AppView hit.
-        tracker.send(new HitBuilders.ScreenViewBuilder().build());
-    }
-
-    public void sendAnalyticsTiming(HitBuilders.TimingBuilder event) {
-        // Get tracker
-        Tracker tracker = getTracker();
-
-        if (tracker == null) return;
-
-        // Send TimingBuilder Map
-        tracker.send(event.build());
     }
 }

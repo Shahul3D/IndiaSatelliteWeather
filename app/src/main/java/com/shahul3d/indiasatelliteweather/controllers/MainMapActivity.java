@@ -62,10 +62,9 @@ import de.greenrobot.event.EventBus;
 
 @EActivity(R.layout.activity_main_map)
 public class MainMapActivity extends AppCompatActivity {
+
     @ViewById(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-
-    ActionBarDrawerToggle drawerToggle;
 
     @ViewById(R.id.navdrawer)
     ListView mDrawerList;
@@ -83,6 +82,7 @@ public class MainMapActivity extends AppCompatActivity {
     SlidingTabLayout slidingTabLayout;
 
     EventBus bus = EventBus.getDefault();
+    ActionBarDrawerToggle drawerToggle;
     private MenuItem refreshItem;
     private boolean isLoading = Boolean.FALSE;
     Integer currentPage = 0;
@@ -106,7 +106,7 @@ public class MainMapActivity extends AppCompatActivity {
         }
         downloadingMapsList = new ConcurrentHashMap<String, Integer>();
         applicationContext = (WeatherApplication) getApplicationContext();
-//        applicationContext.sendAnalyticsScreen(getString(R.string.home_page));
+//        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.home_page));
         AppRater.app_launched(this);
 
         changeLogLib = new ChangeLog(this);
@@ -183,7 +183,7 @@ public class MainMapActivity extends AppCompatActivity {
                     case 4:
                         AppRater.setDontRemindButtonVisible(true);
                         AppRater.showRateDialog(context);
-                        applicationContext.sendAnalyticsScreen(getString(R.string.rating_page));
+                        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.rating_page));
                         break;
                     case 5:
                         new LibsBuilder()
@@ -192,7 +192,7 @@ public class MainMapActivity extends AppCompatActivity {
                                 .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                                 .withLibraries("androidAnnotations")
                                 .start(context);
-                        applicationContext.sendAnalyticsScreen(getString(R.string.about_page));
+                        WeatherApplication.analyticsHandler.trackScreen(getString(R.string.about_page));
                         break;
                 }
             }
@@ -248,7 +248,7 @@ public class MainMapActivity extends AppCompatActivity {
                 syncDownloadProgress(mapID);
                 currentPage = mapID;
 
-                applicationContext.sendAnalyticsScreen(AppConstants.getMapType(mapID, currentMapType.value));
+                WeatherApplication.analyticsHandler.trackScreen(AppConstants.getMapType(mapID, currentMapType.value));
                 //Check for update while switching MAPs
                 handleAutoRefreshMaps();
             }

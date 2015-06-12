@@ -62,7 +62,7 @@ public class GA_TimeElapseUtils {
         if (timeObj == null) return;
 
         // Analytics Tracking
-        ((WeatherApplication) mContext.getApplicationContext()).sendAnalyticsTiming(
+        WeatherApplication.analyticsHandler.sendAnalyticsTiming(
                 new HitBuilders.TimingBuilder()
                         .setCategory(timeObj.category)
                         .setVariable(timeObj.name)
