@@ -17,12 +17,15 @@ package com.shahul3d.indiasatelliteweather.controllers;
 
 import android.app.Application;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+import com.shahul3d.indiasatelliteweather.R;
+
 import io.fabric.sdk.android.Fabric;
 
 public class WeatherApplication extends Application {
@@ -45,6 +48,10 @@ public class WeatherApplication extends Application {
         super.onCreate();
         mContext = getApplicationContext();
         Fabric.with(this, new Crashlytics());
+
+        //Initializing default values for preferences at first app launch.
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
         // Initialization for Google Analytics Instance.
         initializeGa();
     }
