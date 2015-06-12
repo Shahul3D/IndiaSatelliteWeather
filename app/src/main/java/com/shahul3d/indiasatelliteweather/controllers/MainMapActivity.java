@@ -256,7 +256,7 @@ public class MainMapActivity extends AppCompatActivity {
         }
 
         final long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(AppConstants.getMapType(currentPage, currentMapType.value));
-        if (lastUpdatedDateTime < 1) {
+        if (lastUpdatedDateTime < 0) {
             return;
         }
 
