@@ -26,19 +26,14 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
-            <!--
-                        <ProgressBar
-                            android:id="@+id/loadingIndicator" style="?android:attr/progressBarStyle"
-                            android:indeterminate="true"
-                            android:layout_width="100dp" android:layout_height="100dp"
-                            android:gravity="center_vertical|center_horizontal|center"/>
-            -->
+
             <TextView
                 android:id="@+id/noImageBanner"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:gravity="center_vertical|center_horizontal|center"
                 android:text="@string/no_data_message"
+                android:textColor="@android:color/white"
                 android:visibility="gone" />
         </LinearLayout>
 
@@ -47,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </RelativeLayout>
+
     <TextView
         android:id="@+id/map_updated_time"
         android:layout_width="wrap_content"
@@ -56,5 +52,5 @@
         android:background="#AA000000"
         android:padding="5dip"
         android:text=""
-        android:textColor="#ffffffff" />
+        android:textColor="@android:color/white" />
 </FrameLayout>
