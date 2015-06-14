@@ -20,8 +20,8 @@ def AAVersion = '3.2'
 dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
-    compile 'com.google.android.gms:play-services:7.3.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.2.4@aar') {
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.3.2@aar') {
         transitive = true;
     }
 }
@@ -41,8 +41,8 @@ android {
         applicationId "com.shahul3d.indiasatelliteweather"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 8
-        versionName "3.2-beta"
+        versionCode 9
+        versionName "3.2"
     }
     buildTypes {
         release {
@@ -63,11 +63,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.noveogroup.android:android-logger:1.3.5'
     compile 'de.greenrobot:eventbus:2.4.0'
-    compile 'com.squareup.okhttp:okhttp:2.3.0'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'com.github.codechimp-org.apprater:library:1.0.28'
     compile 'de.cketti.library.changelog:ckchangelog:1.2.2'
-    compile('com.mikepenz.aboutlibraries:library:5.0.0@aar') {
+    compile('com.mikepenz:aboutlibraries:5.0.3@aar') {
         transitive = true
     }
 }
