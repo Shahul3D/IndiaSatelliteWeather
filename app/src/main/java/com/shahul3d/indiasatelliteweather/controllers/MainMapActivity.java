@@ -256,7 +256,7 @@ public class MainMapActivity extends AppCompatActivity {
         }
 
         final long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(AppConstants.getMapType(currentPage, currentMapType.value));
-        if (lastUpdatedDateTime < 0) {
+        if (lastUpdatedDateTime < 1) {
             return;
         }
 
@@ -449,6 +449,7 @@ public class MainMapActivity extends AppCompatActivity {
 
     public void onEvent(DownloadStatusEvent downloadStatus) {
         int completedMapID = downloadStatus.mapID;
+        Log.d("UI: Download complete event received. mapid:" + completedMapID + " status:" + downloadStatus.status);
         updateActiveDownloadsList(downloadStatus.mapType, completedMapID, -1);
 
         if (currentMapType.value == downloadStatus.mapType && currentPage == completedMapID) {

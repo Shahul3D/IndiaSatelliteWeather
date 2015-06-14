@@ -42,12 +42,13 @@ public class MAPDownloadController {
     }
 
     public void downloadMAPRequest(int mapID, int mapType) {
+        Log.d("downloadMAPRequest called");
         if (!performDuplicateDownloadCheck(mapID)) {
-            Log.d("Duplicate download request for the same map type");
+            Log.e("Duplicate download request for the same map type");
             return;
         }
         String mapFileName = AppConstants.getMapType(mapID, mapType);
-        Log.d("Download initiated for MAP type: " + mapFileName);
+        Log.d("Download initiated for fileName:" + mapFileName + "  mapType:" + mapType + " mapID:" + mapID);
 
         //Marking current map type as in progress.
         activeDownloadsList[mapID] = true;
@@ -60,10 +61,11 @@ public class MAPDownloadController {
         final HashMap<String, Object> downloadResult = downloadMap(URL, mapID, mapType);
         if (downloadResult == null || downloadResult.get("map") == null) {
             //Download failed
+            Log.e("Download Failed:" + mapFileName + "  mapType:" + mapType + " mapID:" + mapID);
             markDownloadComplete(mapType, mapID, false);
             return;
         }
-
+        Log.a("Download Success:" + mapFileName + "  mapType:" + mapType + " mapID:" + mapID);
         Bitmap downloadedMAP = (Bitmap) downloadResult.get("map");
         String lastModifiedHeader = (String) downloadResult.get("lost_modified");
 
@@ -76,12 +78,14 @@ public class MAPDownloadController {
         try {
             saveDownloadedMap(mapFileName, downloadedMAP);
         } catch (Exception e) {
-            //Download failed
+            //Store Map failed
+            Log.e("Storing MAPS failed:" + mapFileName + "  mapType:" + mapType + " mapID:" + mapID);
             CrashUtils.trackException("Error while storing map on DISK", e);
             markDownloadComplete(mapType, mapID, false);
             return;
         }
         //Download & Everything successful.
+        Log.d("Storing MAPS success:" + mapFileName + "  mapType:" + mapType + " mapID:" + mapID);
         mapDownloadBroadcastHelper.broadcastDownloadProgress(mapType, mapID, 100);
 
         PreferenceUtil.updateLastModifiedTime(mapFileName, lastModifiedHeader);
@@ -208,6 +212,7 @@ public class MAPDownloadController {
     }
 
     public void markDownloadComplete(int mapType, int mapID, boolean status) {
+        Log.d("Marking Download as complete for mapType:" + mapType + " mapID:" + mapID + " status:" + status);
         //Updating the controller flag about the specific map type is no more on progress.
         activeDownloadsList[mapID] = false;
         mapDownloadBroadcastHelper.broadcastDownloadStatus(mapType, mapID, status);
