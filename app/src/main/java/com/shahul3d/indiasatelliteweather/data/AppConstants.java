@@ -1,16 +1,18 @@
 /*
- * ******************************************************************************
- *  * Copyright (c) 2015.  Shahul Hameed.
- *  *
- *  * Licensed under GNU GENERAL PUBLIC LICENSE;
- *  * you may not use this file except in compliance with the License.
- *  *
- *  * Unless required by applicable law or agreed to in writing, software
- *  * distributed under the License is distributed on an "AS IS" BASIS,
- *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  * See the License for the specific language governing permissions and
- *  * limitations under the License.
- *  ******************************************************************************
+ *
+ *  * ******************************************************************************
+ *  *  * Copyright (c) 2015.  Shahul Hameed.
+ *  *  *
+ *  *  * Licensed under GNU GENERAL PUBLIC LICENSE;
+ *  *  * you may not use this file except in compliance with the License.
+ *  *  *
+ *  *  * Unless required by applicable law or agreed to in writing, software
+ *  *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  *  * See the License for the specific language governing permissions and
+ *  *  * limitations under the License.
+ *  *  ******************************************************************************
+ *
  */
 
 package com.shahul3d.indiasatelliteweather.data;
@@ -20,7 +22,7 @@ import java.util.Map;
 
 public class AppConstants {
     //Tab Labels
-    public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Ultra Violet", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
+    public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Visible", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
     public static final String FORECAST_TAB_LABELS[] = new String[]{"24 Hours", "48 Hours", "72 Hours", "96 Hours", "120 Hours", "144 Hours", "168 Hours"};
     //Weather Map Types.
     public static final String MAP_UV = "map_uv";
@@ -61,10 +63,10 @@ public class AppConstants {
 
     static {
         MAP_URL = new HashMap<String, String>();
-        MAP_URL.put(MAP_UV, "http://www.imd.gov.in/section/satmet/img/sector-eir.jpg");
+        MAP_URL.put(MAP_UV, "http://202.54.31.45/img/3Dasiasec_ir1.jpg");
         MAP_URL.put(MAP_COLOR, "http://tropic.ssec.wisc.edu/real-time/indian/images/xxirm5bbm.jpg");
         MAP_URL.put(MAP_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
-        MAP_URL.put(MAP_HEAT, "http://www.imd.gov.in/section/satmet/img/3Dasiasec_ir1_temp.jpg");
+        MAP_URL.put(MAP_HEAT, "http://202.54.31.45/img/3Dasiasec_bt1.jpg");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
 
         MAP_URL.put(FORCAST_24, "http://www.imd.gov.in/section/nhac/img/24hGFS574rain.gif");

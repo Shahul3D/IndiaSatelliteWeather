@@ -172,9 +172,7 @@ public class MAPDownloadController {
         //Try to remove unwanted parts from MAP. return the original MAP in case of any errors.
         try {
             //Trim the unwanted area from the Ultra Violet Map.
-            if (mapFileName.equals(AppConstants.MAP_UV)) {
-                return Bitmap.createBitmap(bmp, 110, 230, 800, 800);
-            } else if (mapFileName.equals(AppConstants.MAP_HEAT)) {
+            if (mapFileName.equals(AppConstants.MAP_UV) || mapFileName.equals(AppConstants.MAP_HEAT)) {
                 return Bitmap.createBitmap(bmp, 0, 180, 1250, 1400);
             }
         } catch (Exception e) {
