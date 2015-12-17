@@ -1,10 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ /*
+  ~  * ******************************************************************************
+  ~  *  * Copyright (c) 2015.  Shahul Hameed.
+  ~  *  *
+  ~  *  * Licensed under GNU GENERAL PUBLIC LICENSE;
+  ~  *  * you may not use this file except in compliance with the License.
+  ~  *  *
+  ~  *  * Unless required by applicable law or agreed to in writing, software
+  ~  *  * distributed under the License is distributed on an "AS IS" BASIS,
+  ~  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~  *  * See the License for the specific language governing permissions and
+  ~  *  * limitations under the License.
+  ~  *  ******************************************************************************
+  ~  */
+  -->
+
 <changelog>
+    <release
+        version="3.3 (17 Dec 15)"
+        versioncode="10">
+        <change>Fixed the broken maps.</change>
+    </release>
     <release
         version="3.2 (13 June 15)"
         versioncode="9">
         <change>Provided option to auto refresh MAPS based on configurable intervals.</change>
-        <change>Added new Settings page (for auto refresh configuration) </change>
+        <change>Added new Settings page (for auto refresh configuration)</change>
     </release>
     <release
         version="3.1 (24 May 15)"
