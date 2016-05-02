@@ -17,6 +17,11 @@
 
 <changelog>
     <release
+        version="3.3.1 (2 May 2016)"
+        versioncode="11">
+        <change>Fixed the broken map references.</change>
+    </release>
+    <release
         version="3.3 (17 Dec 15)"
         versioncode="10">
         <change>Fixed the broken maps.</change>
