@@ -63,10 +63,10 @@ public class AppConstants {
 
     static {
         MAP_URL = new HashMap<String, String>();
-        MAP_URL.put(MAP_UV, "http://202.54.31.45/img/3Dasiasec_ir1.jpg");
+        MAP_URL.put(MAP_UV, "http://satellite.imd.gov.in/img/3Dasiasec_ir1.jpg");
         MAP_URL.put(MAP_COLOR, "http://tropic.ssec.wisc.edu/real-time/indian/images/xxirm5bbm.jpg");
         MAP_URL.put(MAP_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
-        MAP_URL.put(MAP_HEAT, "http://202.54.31.45/img/3Dasiasec_bt1.jpg");
+        MAP_URL.put(MAP_HEAT, "http://satellite.imd.gov.in/img/3Dasiasec_bt1.jpg");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
 
         MAP_URL.put(FORCAST_24, "http://www.imd.gov.in/section/nhac/img/24hGFS574rain.gif");
