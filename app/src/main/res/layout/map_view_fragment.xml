@@ -47,10 +47,10 @@
         android:id="@+id/map_updated_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="10dip"
-        android:background="#AA000000"
-        android:padding="5dip"
+        android:layout_gravity="right|top"
+        android:background="#64000000"
+        android:padding="2dip"
         android:text=""
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_marginTop="1dip" />
 </FrameLayout>

@@ -137,7 +137,7 @@ public class MapViewFragment extends Fragment {
         if (lastUpdatedDateTime > 0) {
             timeAgo = FormatUtils.getTimeAgo(lastUpdatedDateTime);
         }
-        map_updated_time.setText("Updated: " + timeAgo);
+        map_updated_time.setText(timeAgo);
     }
 
     public void onEvent(DownloadStatusEvent downloadStatus) {
