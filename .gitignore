@@ -4,6 +4,7 @@ local.properties
 .idea/
 *.iml
 **/*.iml
+**/*.properties
 *.swp
 target/
 tmp/
