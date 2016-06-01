@@ -23,7 +23,7 @@ import java.util.Map;
 public class AppConstants {
     //Tab Labels
     public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Visible", "Color Composite", "Infra Red", "Heat Map", "Wind Direction"};
-    public static final String FORECAST_TAB_LABELS[] = new String[]{"24 Hours", "48 Hours", "72 Hours", "96 Hours", "120 Hours", "144 Hours", "168 Hours"};
+    public static final String FORECAST_TAB_LABELS[] = new String[]{"Today", "Tomorrow", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"};
     //Weather Map Types.
     public static final String MAP_UV = "map_uv";
     public static final String MAP_IR = "map_ir";
