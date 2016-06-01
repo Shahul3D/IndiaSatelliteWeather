@@ -21,11 +21,15 @@ import java.util.Date;
 import java.util.Locale;
 
 public class FormatUtils {
+    public static final int SECOND_MILLIS = 1000;
+    public static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    public static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    public static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
     public static String getTimeAgo(long time) {
-        final int SECOND_MILLIS = 1000;
-        final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-        final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-        final int DAY_MILLIS = 24 * HOUR_MILLIS;
+        if (time <= 0) {
+            return null;
+        }
 
         if (time < 1000000000000L) {
             // if timestamp given in seconds, convert to millis
@@ -33,19 +37,19 @@ public class FormatUtils {
         }
 
         long now = System.currentTimeMillis();
-        if (time > now || time <= 0) {
-            return null;
+        if (time > now) {
+            return "right now"; //Happening at this moment.
         }
 
         final long diff = now - time;
         if (diff < MINUTE_MILLIS) {
-            return "just now";
+            return "just now"; //Very near past
         } else if (diff < 2 * MINUTE_MILLIS) {
-            return "a minute ago";
+            return "a min ago";
         } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " minutes ago";
+            return diff / MINUTE_MILLIS + " mins ago";
         } else if (diff < 90 * MINUTE_MILLIS) {
-            return "an hour ago";
+            return "1 hour ago";
         } else if (diff < 24 * HOUR_MILLIS) {
             return diff / HOUR_MILLIS + " hours ago";
         } else if (diff < 48 * HOUR_MILLIS) {
