@@ -17,6 +17,16 @@
 
 <changelog>
     <release
+        version="4.0 (2 June 2016)"
+        versioncode="12">
+        <change>Moved downloaded timestamp to TOP for easy accessing of map Legends.</change>
+        <change>Fixed: map updated time showing as null.</change>
+        <change>Rearranged map labels based on its actual type.</change>
+        <change>Renamed Forecast Rainfall's Tab names into more readable format.</change>
+        <change>Updated dependent libraries. Can expect some boost in performance.</change>
+        <change>Added Credits to image sources.</change>
+    </release>
+    <release
         version="3.3.1 (2 May 2016)"
         versioncode="11">
         <change>Fixed the broken map references.</change>
