@@ -17,6 +17,11 @@
 
 <changelog>
     <release
+        version="4.1 (3 June 2016)"
+        versioncode="18">
+        <change>Added new Temperature prediction maps</change>
+    </release>
+    <release
         version="4.0 (2 June 2016)"
         versioncode="12">
         <change>Moved downloaded timestamp to TOP for easy accessing of map Legends.</change>
