@@ -47,7 +47,7 @@
         android:id="@+id/map_updated_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
+        android:layout_gravity="end|top"
         android:background="#64000000"
         android:padding="2dip"
         android:text=""

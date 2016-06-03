@@ -45,5 +45,6 @@
         ]]>
     </string>
     <string name="title_live_map">LIVE Weather</string>
-    <string name="title_forecast_map">Forecast Rainfall</string>
+    <string name="title_forecast_map">Rainfall Forecast</string>
+    <string name="title_temp_forecast_map">Temperature Forecast</string>
 </resources>

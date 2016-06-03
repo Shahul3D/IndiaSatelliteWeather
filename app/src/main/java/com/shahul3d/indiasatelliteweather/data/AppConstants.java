@@ -24,6 +24,7 @@ public class AppConstants {
     //Tab Labels
     public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Infra Red","Satellite", "Color Composite" , "Heat Map", "Wind Direction"};
     public static final String FORECAST_TAB_LABELS[] = new String[]{"Today", "Tomorrow", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"};
+    public static final String TEMP_FORECAST_TAB_LABELS[] = new String[]{"ALL", "South", "North", "East", "West"};
     //Weather Map Types.
     public static final String MAP_UV = "map_uv";
     public static final String MAP_IR = "map_ir";
@@ -31,7 +32,7 @@ public class AppConstants {
     public static final String MAP_HEAT = "map_heat";
     public static final String MAP_WIND_FLOW = "map_windflow";
 
-    //Forcast Map Types
+    //Forecast Map Types
     public static final String FORCAST_24 = "forcast_24";
     public static final String FORCAST_48 = "forcast_48";
     public static final String FORCAST_72 = "forcast_72";
@@ -40,8 +41,15 @@ public class AppConstants {
     public static final String FORCAST_144 = "forcast_144";
     public static final String FORCAST_168 = "forcast_168";
 
+    //Temperature Forecast Map Types
+    public static final String TEMP_FORECAST_ALL = "temp_forecast_all";
+    public static final String TEMP_FORECAST_SOUTH = "temp_forecast_south";
+    public static final String TEMP_FORECAST_NORTH = "temp_forecast_north";
+    public static final String TEMP_FORECAST_EAST = "temp_forecast_east";
+    public static final String TEMP_FORECAST_WEST = "temp_forecast_west";
+
     public enum MapType {
-        LIVE(0), FORECAST(1);
+        LIVE(0), FORECAST(1),TEMP_FORECAST(2);
         public int value;
 
         MapType(int value) {
@@ -76,6 +84,12 @@ public class AppConstants {
         MAP_URL.put(FORCAST_120, "http://www.imd.gov.in/section/nhac/img/120hGFS574rain.gif");
         MAP_URL.put(FORCAST_144, "http://www.imd.gov.in/section/nhac/img/144hGFS574rain.gif");
         MAP_URL.put(FORCAST_168, "http://www.imd.gov.in/section/nhac/img/168hGFS574rain.gif");
+
+        MAP_URL.put(TEMP_FORECAST_ALL, "http://www.monsoondata.org/wx2/temp12.png");
+        MAP_URL.put(TEMP_FORECAST_SOUTH, "http://www.monsoondata.org/wx2/ezindia1_day1.png");
+        MAP_URL.put(TEMP_FORECAST_NORTH, "http://www.monsoondata.org/wx2/ezindia3_day1.png");
+        MAP_URL.put(TEMP_FORECAST_EAST, "http://www.monsoondata.org/wx2/ezindia4_day1.png");
+        MAP_URL.put(TEMP_FORECAST_WEST, "http://www.monsoondata.org/wx2/ezindia2_day1.png");
     }
 
     //Download configurations
@@ -83,10 +97,10 @@ public class AppConstants {
     //Remaining 10% is for Trimming the image & storing it on disk.
     public static final long MAX_DOWNLOAD_PROGRESS = 90;
 
-    public static String getMapType(int mapID, int mapType) {
+    public static String getMapType(int tabID, int mapType) {
         String mapFileName = "";
         if (mapType == MapType.LIVE.value) {
-            switch (mapID) {
+            switch (tabID) {
                 case 0:
                     mapFileName = MAP_UV;
                     break;
@@ -104,7 +118,7 @@ public class AppConstants {
                     break;
             }
         } else if (mapType == MapType.FORECAST.value) {
-            switch (mapID) {
+            switch (tabID) {
                 case 0:
                     mapFileName = FORCAST_24;
                     break;
@@ -128,6 +142,26 @@ public class AppConstants {
                     break;
             }
         }
+        else if (mapType == MapType.TEMP_FORECAST.value) {
+            switch (tabID) {
+                case 0:
+                    mapFileName = TEMP_FORECAST_ALL;
+                    break;
+                case 1:
+                    mapFileName = TEMP_FORECAST_SOUTH;
+                    break;
+                case 2:
+                    mapFileName = TEMP_FORECAST_NORTH;
+                    break;
+                case 3:
+                    mapFileName = TEMP_FORECAST_EAST;
+                    break;
+                case 4:
+                    mapFileName = TEMP_FORECAST_WEST;
+                    break;
+            }
+        }
+
         return mapFileName;
     }
 

@@ -151,7 +151,7 @@ public class MainMapActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Live Weather", "Forecast Rainfall", "Settings", "What's New", "Do you like this Work ?", "About"
+                "Live Weather","Temperature Forecast", "Rainfall Forecast", "Settings", "What's New", "Do you like this Work ?", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_navbar, values);
         mDrawerList.setAdapter(adapter);
@@ -162,22 +162,25 @@ public class MainMapActivity extends AppCompatActivity {
 
                 switch (position) {
                     case 0:
-                        showLiveMAPs();
+                        toggleMapView(AppConstants.MapType.LIVE);
                         break;
                     case 1:
-                        showForcastMAPs();
+                        toggleMapView(AppConstants.MapType.TEMP_FORECAST);
                         break;
                     case 2:
+                        toggleMapView(AppConstants.MapType.FORECAST);
+                        break;
+                    case 3:
                         Intent intent = new Intent(context, GeneralPreference.class);
                         startActivity(intent);
                         break;
-                    case 3:
+                    case 4:
                         changeLogLib.getLogDialog().show();
                         break;
-                    case 4:
+                    case 5:
                         showRateAppDialog(context);
                         break;
-                    case 5:
+                    case 6:
                         showAboutDeveloperPage(context);
                         break;
                 }
@@ -185,13 +188,8 @@ public class MainMapActivity extends AppCompatActivity {
         });
     }
 
-    private void showForcastMAPs() {
-        currentMapType = AppConstants.MapType.FORECAST;
-        reInitializeTabs();
-    }
-
-    private void showLiveMAPs() {
-        currentMapType = AppConstants.MapType.LIVE;
+    private void toggleMapView(AppConstants.MapType mapType){
+        currentMapType = mapType;
         reInitializeTabs();
     }
 
@@ -269,7 +267,7 @@ public class MainMapActivity extends AppCompatActivity {
         long diff = now - lastUpdatedDateTime;
         boolean status = false;
 
-        if (currentMapType == AppConstants.MapType.FORECAST) {
+        if (currentMapType != AppConstants.MapType.LIVE) {
             //Forecast maps will be updated only once a day.
             //So setting its default update interval as 1 day.
             autoRefreshInterval = 1;
@@ -304,6 +302,8 @@ public class MainMapActivity extends AppCompatActivity {
     private String[] getTabTitles(AppConstants.MapType mapType) {
         if (mapType == AppConstants.MapType.LIVE) {
             return AppConstants.LIVE_MAP_TAB_LABELS;
+        } else if (mapType == AppConstants.MapType.TEMP_FORECAST) {
+            return AppConstants.TEMP_FORECAST_TAB_LABELS;
         } else {
             return AppConstants.FORECAST_TAB_LABELS;
         }
@@ -311,8 +311,11 @@ public class MainMapActivity extends AppCompatActivity {
 
     private void updateToolbarTitle(AppConstants.MapType mapType) {
         String title;
+        //TODO: avoid if else with key value pairs
         if (mapType == AppConstants.MapType.LIVE) {
             title = getString(R.string.title_live_map);
+        } else if (mapType == AppConstants.MapType.TEMP_FORECAST) {
+            title = getString(R.string.title_temp_forecast_map);
         } else {
             title = getString(R.string.title_forecast_map);
         }
