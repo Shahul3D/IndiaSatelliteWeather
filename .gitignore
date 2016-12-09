@@ -1,6 +1,7 @@
 build/
 local.properties
 .gradle
+gradle/**
 .idea/
 *.iml
 **/*.iml
@@ -12,3 +13,5 @@ tmp/
 app/crashlytics.properties
 **/com_crashlytics_export_strings.xml
 **/crashlytics-build.properties
+gradlew
+gradle-wrapper.jar
