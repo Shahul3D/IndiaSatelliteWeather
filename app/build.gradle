@@ -41,8 +41,8 @@ android {
         applicationId "com.shahul3d.indiasatelliteweather"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 18
-        versionName "4.1"
+        versionCode 19
+        versionName "4.2"
         multiDexEnabled true
     }
     buildTypes {

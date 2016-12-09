@@ -17,6 +17,13 @@
 
 <changelog>
     <release
+        version="4.2 (9 Dec 2016)"
+        versioncode="19">
+        <change>Fixed broken rainfall prediction maps</change>
+        <change>Extended max prediction range from 7 days to 10 days</change>
+        <change>Provided support to move the app to SD Card</change>
+    </release>
+    <release
         version="4.1 (3 June 2016)"
         versioncode="18">
         <change>Added new Temperature prediction maps</change>

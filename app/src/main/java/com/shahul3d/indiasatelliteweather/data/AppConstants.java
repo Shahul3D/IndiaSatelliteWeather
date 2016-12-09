@@ -23,7 +23,7 @@ import java.util.Map;
 public class AppConstants {
     //Tab Labels
     public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Infra Red","Satellite", "Color Composite" , "Heat Map", "Wind Direction"};
-    public static final String FORECAST_TAB_LABELS[] = new String[]{"Today", "Tomorrow", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7"};
+    public static final String FORECAST_TAB_LABELS[] = new String[]{"Tomorrow", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7", "Day 8", "Day 9", "Day 10"};
     public static final String TEMP_FORECAST_TAB_LABELS[] = new String[]{"ALL", "South", "North", "East", "West"};
     //Weather Map Types.
     public static final String MAP_UV = "map_uv";
@@ -40,6 +40,9 @@ public class AppConstants {
     public static final String FORCAST_120 = "forcast_120";
     public static final String FORCAST_144 = "forcast_144";
     public static final String FORCAST_168 = "forcast_168";
+    public static final String FORCAST_192 = "forcast_192";
+    public static final String FORCAST_216 = "forcast_216";
+    public static final String FORCAST_240 = "forcast_240";
 
     //Temperature Forecast Map Types
     public static final String TEMP_FORECAST_ALL = "temp_forecast_all";
@@ -77,13 +80,16 @@ public class AppConstants {
         MAP_URL.put(MAP_HEAT, "http://satellite.imd.gov.in/img/3Dasiasec_bt1.jpg");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
 
-        MAP_URL.put(FORCAST_24, "http://www.imd.gov.in/section/nhac/img/24hGFS574rain.gif");
-        MAP_URL.put(FORCAST_48, "http://www.imd.gov.in/section/nhac/img/48hGFS574rain.gif");
-        MAP_URL.put(FORCAST_72, "http://www.imd.gov.in/section/nhac/img/72hGFS574rain.gif");
-        MAP_URL.put(FORCAST_96, "http://www.imd.gov.in/section/nhac/img/96hGFS574rain.gif");
-        MAP_URL.put(FORCAST_120, "http://www.imd.gov.in/section/nhac/img/120hGFS574rain.gif");
-        MAP_URL.put(FORCAST_144, "http://www.imd.gov.in/section/nhac/img/144hGFS574rain.gif");
-        MAP_URL.put(FORCAST_168, "http://www.imd.gov.in/section/nhac/img/168hGFS574rain.gif");
+        MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/24hGFS574rain.gif");
+        MAP_URL.put(FORCAST_48, "http://nwp.imd.gov.in/gfs/48hGFS574rain.gif");
+        MAP_URL.put(FORCAST_72, "http://nwp.imd.gov.in/gfs/72hGFS574rain.gif");
+        MAP_URL.put(FORCAST_96, "http://nwp.imd.gov.in/gfs/96hGFS574rain.gif");
+        MAP_URL.put(FORCAST_120, "http://nwp.imd.gov.in/gfs/120hGFS574rain.gif");
+        MAP_URL.put(FORCAST_144, "http://nwp.imd.gov.in/gfs/144hGFS574rain.gif");
+        MAP_URL.put(FORCAST_168, "http://nwp.imd.gov.in/gfs/168hGFS574rain.gif");
+        MAP_URL.put(FORCAST_192, "http://nwp.imd.gov.in/gfs/192hGFS574rain.gif");
+        MAP_URL.put(FORCAST_216, "http://nwp.imd.gov.in/gfs/216hGFS574rain.gif");
+        MAP_URL.put(FORCAST_240, "http://nwp.imd.gov.in/gfs/240hGFS574rain.gif");
 
         MAP_URL.put(TEMP_FORECAST_ALL, "http://www.monsoondata.org/wx2/temp12.png");
         MAP_URL.put(TEMP_FORECAST_SOUTH, "http://www.monsoondata.org/wx2/ezindia1_day1.png");
@@ -139,6 +145,15 @@ public class AppConstants {
                     break;
                 case 6:
                     mapFileName = FORCAST_168;
+                    break;
+                case 7:
+                    mapFileName = FORCAST_192;
+                    break;
+                case 8:
+                    mapFileName = FORCAST_216;
+                    break;
+                case 9:
+                    mapFileName = FORCAST_240;
                     break;
             }
         }
