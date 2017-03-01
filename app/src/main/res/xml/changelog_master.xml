@@ -17,6 +17,11 @@
 
 <changelog>
     <release
+        version="4.3 (16 Jan 2017)"
+        versioncode="20">
+        <change>Fixed broken rainfall prediction maps</change>
+    </release>
+    <release
         version="4.2 (9 Dec 2016)"
         versioncode="19">
         <change>Fixed broken rainfall prediction maps</change>

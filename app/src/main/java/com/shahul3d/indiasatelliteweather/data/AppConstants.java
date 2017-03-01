@@ -80,16 +80,16 @@ public class AppConstants {
         MAP_URL.put(MAP_HEAT, "http://satellite.imd.gov.in/img/3Dasiasec_bt1.jpg");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
 
-        MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/24hGFS574rain.gif");
-        MAP_URL.put(FORCAST_48, "http://nwp.imd.gov.in/gfs/48hGFS574rain.gif");
-        MAP_URL.put(FORCAST_72, "http://nwp.imd.gov.in/gfs/72hGFS574rain.gif");
-        MAP_URL.put(FORCAST_96, "http://nwp.imd.gov.in/gfs/96hGFS574rain.gif");
-        MAP_URL.put(FORCAST_120, "http://nwp.imd.gov.in/gfs/120hGFS574rain.gif");
-        MAP_URL.put(FORCAST_144, "http://nwp.imd.gov.in/gfs/144hGFS574rain.gif");
-        MAP_URL.put(FORCAST_168, "http://nwp.imd.gov.in/gfs/168hGFS574rain.gif");
-        MAP_URL.put(FORCAST_192, "http://nwp.imd.gov.in/gfs/192hGFS574rain.gif");
-        MAP_URL.put(FORCAST_216, "http://nwp.imd.gov.in/gfs/216hGFS574rain.gif");
-        MAP_URL.put(FORCAST_240, "http://nwp.imd.gov.in/gfs/240hGFS574rain.gif");
+        MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/24hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_48, "http://nwp.imd.gov.in/gfs/48hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_72, "http://nwp.imd.gov.in/gfs/72hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_96, "http://nwp.imd.gov.in/gfs/96hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_120, "http://nwp.imd.gov.in/gfs/120hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_144, "http://nwp.imd.gov.in/gfs/144hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_168, "http://nwp.imd.gov.in/gfs/168hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_192, "http://nwp.imd.gov.in/gfs/192hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_216, "http://nwp.imd.gov.in/gfs/216hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_240, "http://nwp.imd.gov.in/gfs/240hGFS1534rain.gif");
 
         MAP_URL.put(TEMP_FORECAST_ALL, "http://www.monsoondata.org/wx2/temp12.png");
         MAP_URL.put(TEMP_FORECAST_SOUTH, "http://www.monsoondata.org/wx2/ezindia1_day1.png");
