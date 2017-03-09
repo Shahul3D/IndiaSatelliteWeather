@@ -17,6 +17,11 @@
 
 <changelog>
     <release
+        version="4.4 (9 Mar 2017)"
+        versioncode="21">
+        <change>Included privacy policy</change>
+    </release>
+    <release
         version="4.3 (16 Jan 2017)"
         versioncode="20">
         <change>Fixed broken rainfall prediction maps</change>
