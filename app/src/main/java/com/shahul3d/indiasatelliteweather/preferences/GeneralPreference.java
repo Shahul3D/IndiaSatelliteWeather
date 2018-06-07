@@ -33,9 +33,14 @@ public class GeneralPreference extends PreferenceActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        prepareLayout();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+
+        //comment the above line and uncomment the below line to show the preferences with hierarchy level.
+        //prepareLayout();
+
     }
 
+    /*
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.pref_headers, target);
@@ -65,7 +70,7 @@ public class GeneralPreference extends PreferenceActivity {
             }
         });
     }
-
+*/
     public static class MyPreferenceFragment extends PreferenceFragment
     {
         @Override

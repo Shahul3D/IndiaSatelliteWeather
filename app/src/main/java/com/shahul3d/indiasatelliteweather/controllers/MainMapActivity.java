@@ -198,6 +198,7 @@ public class MainMapActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_ab_drawer);
             toolbar.inflateMenu(R.menu.menu_main_map);
+            toolbar.setTitleTextColor(Color.WHITE);
         }
     }
 
