@@ -17,6 +17,14 @@
 
 <changelog>
     <release
+        version="5.0 (8 Jun 2018)"
+        versioncode="22">
+        <change>Included new 3 Hour rain prediction map</change>
+        <change>Added option to choose(in Settings) default map type on launch</change>
+        <change>removed wind direction map temporarily (since its not accurate)</change>
+        <change>Fixed: long awaited empty settings screen bug</change>
+    </release>
+    <release
         version="4.4 (9 Mar 2017)"
         versioncode="21">
         <change>Included privacy policy</change>
