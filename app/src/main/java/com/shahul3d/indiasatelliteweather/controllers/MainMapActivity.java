@@ -357,7 +357,7 @@ public class MainMapActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void initiateDownload() {
+    public void initiateDownload() {
         startRefreshAnimation();
         Intent downloaderIntent = new Intent(getApplicationContext(), DownloaderService_.class);
         downloaderIntent.putExtra(AppConstants.DOWNLOAD_INTENT_NAME, currentPage);

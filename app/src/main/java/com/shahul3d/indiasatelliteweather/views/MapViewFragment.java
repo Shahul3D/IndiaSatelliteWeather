@@ -114,6 +114,7 @@ public class MapViewFragment extends Fragment {
             Log.e("File not exists: " + pageNumber);
             noImageBanner.setVisibility(View.VISIBLE);
             map_updated_time.setVisibility(View.GONE);
+            activityContext.initiateDownload();
             return;
         }
 
