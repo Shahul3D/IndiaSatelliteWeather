@@ -55,6 +55,15 @@ public class PreferenceUtil {
         return interval;
     }
 
+    public static int getDefaultMapType() {
+        final SharedPreferences defaultPreference = getDefaultSharedPreferences();
+        int type = 0;
+        if (defaultPreference != null) {
+            type = Integer.valueOf(defaultPreference.getString("defaultMAP", "0"));
+        }
+        return type;
+    }
+
     public static SharedPreferences getBackGroundPreference() {
         return WeatherApplication.getContext().getSharedPreferences("BackgroundPreference", Activity.MODE_PRIVATE);
     }

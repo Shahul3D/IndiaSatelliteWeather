@@ -92,8 +92,8 @@ public class MainMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Making Live map as default.
-        currentMapType = AppConstants.MapType.LIVE;
+        //Default map configuration
+        currentMapType = AppConstants.MapType.values()[PreferenceUtil.getDefaultMapType()];
 
         if (savedInstanceState != null) {
             // Restore values from saved state
@@ -151,7 +151,7 @@ public class MainMapActivity extends AppCompatActivity {
         drawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(drawerToggle);
         String[] values = new String[]{
-                "Live Weather","Temperature Forecast", "Rainfall Forecast", "Settings", "What's New", "Do you like this Work ?", "About"
+                "Live Weather", "Rainfall Forecast", "Temperature Forecast", "Settings", "What's New", "Do you like this Work ?", "About"
         };
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.row_navbar, values);
         mDrawerList.setAdapter(adapter);
@@ -165,10 +165,10 @@ public class MainMapActivity extends AppCompatActivity {
                         toggleMapView(AppConstants.MapType.LIVE);
                         break;
                     case 1:
-                        toggleMapView(AppConstants.MapType.TEMP_FORECAST);
+                        toggleMapView(AppConstants.MapType.FORECAST);
                         break;
                     case 2:
-                        toggleMapView(AppConstants.MapType.FORECAST);
+                        toggleMapView(AppConstants.MapType.TEMP_FORECAST);
                         break;
                     case 3:
                         Intent intent = new Intent(context, GeneralPreference.class);

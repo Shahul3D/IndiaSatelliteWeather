@@ -31,4 +31,17 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
+    <string-array name="defaultMAPKeys">
+        <item>Live Weather</item>
+        <item>Rainfall Forecast</item>
+        <item>Temperature Forecast</item>
+    </string-array>
+
+    <string-array name="defaultMAPValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

@@ -22,8 +22,8 @@ import java.util.Map;
 
 public class AppConstants {
     //Tab Labels
-    public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Infra Red","Satellite", "Color Composite" , "Heat Map", "Wind Direction"};
-    public static final String FORECAST_TAB_LABELS[] = new String[]{"Tomorrow", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7", "Day 8", "Day 9", "Day 10"};
+    public static final String LIVE_MAP_TAB_LABELS[] = new String[]{"Infra Red","Satellite", "Color Composite" , "Heat Map"};//, "Wind Direction"};
+    public static final String FORECAST_TAB_LABELS[] = new String[]{"3 Hour","Tomorrow", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7", "Day 8", "Day 9", "Day 10"};
     public static final String TEMP_FORECAST_TAB_LABELS[] = new String[]{"ALL", "South", "North", "East", "West"};
     //Weather Map Types.
     public static final String MAP_UV = "map_uv";
@@ -33,6 +33,7 @@ public class AppConstants {
     public static final String MAP_WIND_FLOW = "map_windflow";
 
     //Forecast Map Types
+    public static final String FORCAST_3 = "forcast_3";
     public static final String FORCAST_24 = "forcast_24";
     public static final String FORCAST_48 = "forcast_48";
     public static final String FORCAST_72 = "forcast_72";
@@ -80,6 +81,7 @@ public class AppConstants {
         MAP_URL.put(MAP_HEAT, "http://satellite.imd.gov.in/img/3Dasiasec_bt1.jpg");
         MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
 
+        MAP_URL.put(FORCAST_3, "http://satellite.imd.gov.in/img/3Dhalfhr_qpe.jpg");
         MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/24hGFS1534rain.gif");
         MAP_URL.put(FORCAST_48, "http://nwp.imd.gov.in/gfs/48hGFS1534rain.gif");
         MAP_URL.put(FORCAST_72, "http://nwp.imd.gov.in/gfs/72hGFS1534rain.gif");
@@ -126,33 +128,36 @@ public class AppConstants {
         } else if (mapType == MapType.FORECAST.value) {
             switch (tabID) {
                 case 0:
-                    mapFileName = FORCAST_24;
+                    mapFileName = FORCAST_3;
                     break;
                 case 1:
-                    mapFileName = FORCAST_48;
+                    mapFileName = FORCAST_24;
                     break;
                 case 2:
-                    mapFileName = FORCAST_72;
+                    mapFileName = FORCAST_48;
                     break;
                 case 3:
-                    mapFileName = FORCAST_96;
+                    mapFileName = FORCAST_72;
                     break;
                 case 4:
-                    mapFileName = FORCAST_120;
+                    mapFileName = FORCAST_96;
                     break;
                 case 5:
-                    mapFileName = FORCAST_144;
+                    mapFileName = FORCAST_120;
                     break;
                 case 6:
-                    mapFileName = FORCAST_168;
+                    mapFileName = FORCAST_144;
                     break;
                 case 7:
-                    mapFileName = FORCAST_192;
+                    mapFileName = FORCAST_168;
                     break;
                 case 8:
-                    mapFileName = FORCAST_216;
+                    mapFileName = FORCAST_192;
                     break;
                 case 9:
+                    mapFileName = FORCAST_216;
+                    break;
+                case 10:
                     mapFileName = FORCAST_240;
                     break;
             }

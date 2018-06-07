@@ -16,6 +16,13 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/defaultMAPKeys"
+        android:entryValues="@array/defaultMAPValues"
+        android:key="defaultMAP"
+        android:summary="What MAP section should be opened by default while launching the app"
+        android:title="Default MAP on Launch" />
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="autoUpdateMaps"
