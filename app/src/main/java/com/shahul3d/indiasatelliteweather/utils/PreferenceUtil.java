@@ -45,7 +45,7 @@ public class PreferenceUtil {
 
     public static int getAutoRefreshInterval() {
         final SharedPreferences defaultPreference = getDefaultSharedPreferences();
-        int interval = -1;
+        int interval = 0;
         if (defaultPreference != null) {
             final boolean isAutoUpdateEnabled = defaultPreference.getBoolean("autoUpdateMaps", false);
             if (isAutoUpdateEnabled) {

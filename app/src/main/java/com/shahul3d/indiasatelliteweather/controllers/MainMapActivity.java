@@ -210,7 +210,7 @@ public class MainMapActivity extends AppCompatActivity {
         updateToolbarTitle(currentMapType);
         pager.setAdapter(new TouchImagePageAdapter(getSupportFragmentManager(), getTabTitles(currentMapType), currentMapType));
         slidingTabLayout.setViewPager(pager);
-        slidingTabLayout.setDistributeEvenly(true);
+//        slidingTabLayout.setDistributeEvenly(true);
         number_progress_bar.setSuffix("% Downloading ");
         slidingTabLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -250,12 +250,16 @@ public class MainMapActivity extends AppCompatActivity {
 
     private void autoRefreshMAP() {
         int autoRefreshInterval = PreferenceUtil.getAutoRefreshInterval();
-        if (autoRefreshInterval == -1) {
+        if (autoRefreshInterval == 0) { //auto update disabled
+            return;
+        }else if(autoRefreshInterval == 0){ //something went wrong on fetching auto refresh settings values.
+            initiateDownload();
             return;
         }
 
         final long lastUpdatedDateTime = PreferenceUtil.getLastModifiedTime(AppConstants.getMapType(currentPage, currentMapType.value));
-        if (lastUpdatedDateTime < 1) {
+        if (lastUpdatedDateTime < 1) { //something went wrong on fetching last update time. as a fallback, check for update!
+            initiateDownload();
             return;
         }
 
@@ -268,7 +272,7 @@ public class MainMapActivity extends AppCompatActivity {
         long diff = now - lastUpdatedDateTime;
         boolean status = false;
 
-        if (currentMapType != AppConstants.MapType.LIVE) {
+        if (currentMapType != AppConstants.MapType.LIVE && currentPage > 0) {
             //Forecast maps will be updated only once a day.
             //So setting its default update interval as 1 day.
             autoRefreshInterval = 1;

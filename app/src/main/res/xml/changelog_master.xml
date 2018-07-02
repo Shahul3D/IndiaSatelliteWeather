@@ -17,8 +17,13 @@
 
 <changelog>
     <release
-        version="5.0 (8 Jun 2018)"
-        versioncode="22">
+        version="5.0.2 (10 Jun 2018)"
+        versioncode="26">
+        <change>Added back wind direction map due to community request</change>
+    </release>
+    <release
+        version="5.0.1 (8 Jun 2018)"
+        versioncode="24">
         <change>Included new 3 Hour rain prediction map</change>
         <change>Added option to choose(in Settings) default map type on launch</change>
         <change>removed wind direction map temporarily (since its not accurate)</change>
