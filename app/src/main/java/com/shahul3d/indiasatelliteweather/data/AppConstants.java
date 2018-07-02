@@ -79,7 +79,7 @@ public class AppConstants {
         MAP_URL.put(MAP_COLOR, "http://tropic.ssec.wisc.edu/real-time/indian/images/xxirm5bbm.jpg");
         MAP_URL.put(MAP_IR, "http://tropic.ssec.wisc.edu/real-time/indian/images/irnm5.GIF");
         MAP_URL.put(MAP_HEAT, "http://satellite.imd.gov.in/img/3Dasiasec_bt1.jpg");
-        MAP_URL.put(MAP_WIND_FLOW, "http://tropic.ssec.wisc.edu/real-time/indian/winds/wm5midshr.GIF");
+        MAP_URL.put(MAP_WIND_FLOW, "http://www.monsoondata.org/wx2/india4.00hr.png");
 
         MAP_URL.put(FORCAST_3, "http://satellite.imd.gov.in/img/3Dhalfhr_qpe.jpg");
         MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/24hGFS1534rain.gif");

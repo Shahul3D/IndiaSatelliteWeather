@@ -17,9 +17,9 @@
 
 <changelog>
     <release
-        version="5.0.2 (10 Jun 2018)"
-        versioncode="26">
-        <change>Added back wind direction map due to community request</change>
+        version="5.0.4 (3 July 2018)"
+        versioncode="27">
+        <change>Updated wind direction map with a new one</change>
     </release>
     <release
         version="5.0.1 (8 Jun 2018)"
