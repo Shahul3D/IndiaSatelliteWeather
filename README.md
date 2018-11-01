@@ -10,7 +10,7 @@ This application fetches the weather data directly from the Official Indian Gove
 
 It very well equipped with data caching capabilities and will never download any duplicate map data from the server. The downloaded weather maps will stored locally and can be accessed offline.
 
-> NOTE: The code base on master branch is currently outdated. Im working on the revamped 2.0 version and will update the WIP branch soon.`
+> NOTE: The code base is outdated. Avoid it from referencing for Development/Architecure/Design related activities. I'm just keeping the app alive since I moved my primary focus into IoT.
 
 ## Statistics
 
