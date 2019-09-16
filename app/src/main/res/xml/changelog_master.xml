@@ -17,6 +17,11 @@
 
 <changelog>
     <release
+        version="5.0.5 (15 Sep 2019)"
+        versioncode="28">
+        <change>Updated broken rainfall prediction MAPs</change>
+    </release>
+    <release
         version="5.0.4 (3 July 2018)"
         versioncode="27">
         <change>Updated wind direction map with a new one</change>

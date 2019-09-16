@@ -82,16 +82,16 @@ public class AppConstants {
         MAP_URL.put(MAP_WIND_FLOW, "http://www.monsoondata.org/wx2/india4.00hr.png");
 
         MAP_URL.put(FORCAST_3, "http://satellite.imd.gov.in/img/3Dhalfhr_qpe.jpg");
-        MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/24hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_48, "http://nwp.imd.gov.in/gfs/48hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_72, "http://nwp.imd.gov.in/gfs/72hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_96, "http://nwp.imd.gov.in/gfs/96hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_120, "http://nwp.imd.gov.in/gfs/120hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_144, "http://nwp.imd.gov.in/gfs/144hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_168, "http://nwp.imd.gov.in/gfs/168hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_192, "http://nwp.imd.gov.in/gfs/192hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_216, "http://nwp.imd.gov.in/gfs/216hGFS1534rain.gif");
-        MAP_URL.put(FORCAST_240, "http://nwp.imd.gov.in/gfs/240hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_24, "http://nwp.imd.gov.in/gfs/00/24hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_48, "http://nwp.imd.gov.in/gfs/00/48hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_72, "http://nwp.imd.gov.in/gfs/00/72hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_96, "http://nwp.imd.gov.in/gfs/00/96hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_120, "http://nwp.imd.gov.in/gfs/00/120hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_144, "http://nwp.imd.gov.in/gfs/00/144hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_168, "http://nwp.imd.gov.in/gfs/00/168hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_192, "http://nwp.imd.gov.in/gfs/00/192hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_216, "http://nwp.imd.gov.in/gfs/00/216hGFS1534rain.gif");
+        MAP_URL.put(FORCAST_240, "http://nwp.imd.gov.in/gfs/00/240hGFS1534rain.gif");
 
         MAP_URL.put(TEMP_FORECAST_ALL, "http://www.monsoondata.org/wx2/temp12.png");
         MAP_URL.put(TEMP_FORECAST_SOUTH, "http://www.monsoondata.org/wx2/ezindia1_day1.png");
