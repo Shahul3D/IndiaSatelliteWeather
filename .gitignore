@@ -1,16 +1,14 @@
 build/
 local.properties
 .gradle
-gradle/**
 .idea/
 *.iml
 **/*.iml
-**/*.properties
 *.swp
 target/
 tmp/
 .DS_Store
-app/crashlytics.properties
+app/fabric.properties
 **/com_crashlytics_export_strings.xml
 **/crashlytics-build.properties
 gradlew

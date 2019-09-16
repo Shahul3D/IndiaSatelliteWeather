@@ -21,7 +21,7 @@ allprojects {
     }
 }
 
-//Forcing to user graddle version 2.4 instead of 2.2 for faster compilation.
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.4'
-}
+////Forcing to user graddle version 2.4 instead of 2.2 for faster compilation.
+//task wrapper(type: Wrapper) {
+//    gradleVersion = '2.4'
+//}
