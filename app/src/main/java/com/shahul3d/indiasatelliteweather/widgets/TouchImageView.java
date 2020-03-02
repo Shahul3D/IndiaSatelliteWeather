@@ -119,7 +119,7 @@ public class TouchImageView extends ImageView {
         superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
         setImageMatrix(matrix);
         setScaleType(ScaleType.MATRIX);
-        setState(State.NONE);
+        this.state = State.NONE;
         onDrawReady = false;
         super.setOnTouchListener(new PrivateOnTouchListener());
     }
