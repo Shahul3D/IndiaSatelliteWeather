@@ -1,4 +1,4 @@
-# IndiaSatelliteWeather
+# IndianSatelliteWeather
 
 [![Get it on Google Play](images/google-play.png?raw=true)](https://play.google.com/store/apps/details?id=com.shahul3d.indiasatelliteweather)
 
