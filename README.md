@@ -4,7 +4,7 @@
 
 ## Concept:
 
-###NOTE: App rewrite is currently in progress. This outdated code will be replaced once the new version is ready
+### NOTE: App rewrite is currently in progress. This outdated code will be replaced once the new version is ready
 
 
 `A picture is worth a thousand words`. A complex weather data can be conveyed with a single image map. By observing the Cloud formations around your City, you can easy predict whether the day is going to be Hot or Rainy/Cloudy.
